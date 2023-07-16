@@ -1,0 +1,40 @@
+@import url('./fonts/proxima-nova/proxima-nova.css');
+
+:root {
+    --bs-body-font-weight: 500;
+
+    --dark-blue-500:#0b344e;
+    --light-blue-500: #37C5F3;
+    --pink-500: #ff41ad;
+}
+
+body{
+    font-family: Proxima Nova;
+    color: var(--dark-blue-500);
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+    color: inherit;
+}
