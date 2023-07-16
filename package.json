@@ -1,6 +1,7 @@
 {
   "name": "tcc.site",
-  "private": true,
+  "private": false,
+  "homepage": "https://mlasa.github.io/tcc.site"
   "version": "0.0.0",
   "type": "module",
   "scripts": {
