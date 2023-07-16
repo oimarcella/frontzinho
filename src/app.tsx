@@ -14,7 +14,7 @@ import LoginPage from "./pages/login";
 function App() {
   return (
     <IntlProvider messages={getLangJson()} locale="pt-br" defaultLocale="en">
-      <BrowserRouter>
+      <BrowserRouter basename="/login">
         <Routes>
           <Route path={ERoutes.LOGIN} element={<LoginPage />} />
 
