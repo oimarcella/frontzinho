@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import "./app.css";
 import LayoutComponent from "./components/layout/layout";
 import HomePage from "./pages/home/home";
@@ -14,7 +14,7 @@ import LoginPage from "./pages/login";
 function App() {
   return (
     <IntlProvider messages={getLangJson()} locale="pt-br" defaultLocale="en">
-      <BrowserRouter basename="/">
+      <HashRouter basename="/">
         <Routes>
           <Route path={ERoutes.LOGIN} element={<LoginPage />} />
 
@@ -26,7 +26,7 @@ function App() {
 
           <Route path="*" element={<NotFoundPage404 />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </IntlProvider>
   );
 }
