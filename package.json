@@ -1,14 +1,16 @@
 {
   "name": "tcc.site",
   "private": false,
-  "homepage": "https://mlasa.github.io/tcc.site"
+  "homepage": "https://mlasa.github.io/tcc.site",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "start": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
