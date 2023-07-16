@@ -30,7 +30,7 @@ const Content = () => {
                         {/*<Form.Group className="mb-3" controlId="formBasicCheckbox">
                             <Form.Check type="checkbox" label="Check me out" />
                         </Form.Group>*/}
-                        <Button color="#FF41AD" outlined="none" type="submit">
+                        <Button color="#FF41AD" outlined="none">
                             Entrar
                         </Button>
                     </Form>
