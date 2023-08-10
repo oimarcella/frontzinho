@@ -1,7 +1,7 @@
-import { Container } from "react-bootstrap";
+import { Container, Form } from "react-bootstrap";
 import styled from "styled-components";
 
-export const ContentStyled = styled(Container)`
+export const ContainerStyled = styled(Container)`
     padding-top: 50px;
     padding-bottom: 50px;
 
@@ -9,5 +9,11 @@ export const ContentStyled = styled(Container)`
         padding-top: 40px;
         padding-bottom: 40px;
         min-height: unset;
+    }
+`;
+
+export const FormStyled = styled(Form)`
+    >div{
+        width: 100%;
     }
 `;

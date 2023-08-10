@@ -3,12 +3,13 @@
 :root {
     --bs-body-font-weight: 500;
 
-    --dark-blue-500:#0b344e;
-    --light-blue-500: #37C5F3;
-    --pink-500: #ff41ad;
+    --dark-blue-500: #0b344e;
+    --light-blue-500: #4191b3;
+    --pink-500: #fe51b3;
+    /*--yellow-500: #f6f4e5;*/
 }
 
-body{
+body {
     font-family: Proxima Nova;
     color: var(--dark-blue-500);
 }
@@ -37,4 +38,8 @@ a {
     text-decoration: none;
     cursor: pointer;
     color: inherit;
+}
+
+.text-color-secondary-blue {
+    color: var(--light-blue-500) !important;
 }

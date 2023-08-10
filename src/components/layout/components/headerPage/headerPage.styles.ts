@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Container } from 'react-bootstrap';
 
 export const HeaderPageStyled = styled(Container)`
-  margin-top: 80px;
+  //margin-top: 80px;
   margin-bottom: 60px;
 
   @media (max-width: 1000px) {
@@ -15,6 +15,7 @@ export const TitleStyled = styled.p`
   font-weight: 700;
   font-size: 15px;
   text-align: center;
+  color: var(--light-blue-500);
 `;
 export const TextStyled = styled.h1`
   font-style: normal;

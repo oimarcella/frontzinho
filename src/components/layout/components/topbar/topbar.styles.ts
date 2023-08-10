@@ -1,20 +1,23 @@
 import { Nav, Navbar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import styled, {css} from "styled-components";
+import styled, { css } from "styled-components";
 
 export const NavBarStyled = styled(Navbar)`
     padding: 24px 1rem;
     z-index: 3;
     /*Quando estiver na rota home o navbar será absolute*/
-    /*Nas outras ele será relative*/
+    /*Nas outras ele será relative
+    Isso só será necessário se eu quiser fazer algum tipo de 
+    banner e o header seja transparente por cima
+    */
     ${props =>
-        props.isHome?
-        css`
-        position:absolute!important;
+        props.isHome ?
+            css`
+        position:relative!important;
         width: 100%;
         background: transparent;
         `:
-        `
+            `
             position:relative;
             background: white;
             border-bottom: 2px solid #D1E8F5;

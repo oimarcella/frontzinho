@@ -4,5 +4,6 @@ export enum ERoutes {
   ABOUT_US = "/sobre-nos",
   LOGIN = "/login",
   DISCOVER = "/descubra",
-  PROFILE = "perfil"
+  PROFILE = "perfil",
+  SIGNUP = "/criar-conta"
 }

@@ -5,7 +5,6 @@ import Footer from "./components/footer/footer";
 
 
 const LayoutComponent = () => {
-  //códigos
 
   return (
     <>
@@ -13,7 +12,7 @@ const LayoutComponent = () => {
       <ContentWrapper>
         <Outlet />
       </ContentWrapper>
-      <Footer/>
+      <Footer />
     </>
   );
 };

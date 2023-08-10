@@ -8,25 +8,26 @@ import Button from "../button/button";
 const TopBarComponent = () => {
 
 	const currentRoute = useLocation().pathname;
-	const isHome = currentRoute == "/" ? true : false;
+	const isHomeRoute = currentRoute == "/" ? true : false;
+	const isLoginRoute = currentRoute == "/login" ? true : false;
+	const userIsLogged = false;
 
 	function redirect(link: string) {
 		window.location.replace(link);
 	}
 
 	return (
-		<NavBarStyled isHome={isHome} expand="lg">
+		<NavBarStyled isHome={isHomeRoute || isLoginRoute} expand="lg">
 			<Container>
-				<Navbar.Brand as={Link} to={ERoutes.HOME}>
-					{/*<img src="/src/assets/images/logo-clube.svg" className="img-fluid" />*/}
-					<h1>AmePet</h1>
+				<Navbar.Brand as={Link} to={userIsLogged ? ERoutes.HOME : ERoutes.LOGIN}>
+					<img style={{}} src="/src/assets/images/petpass_small_dark-v1.svg" className="img-fluid" />
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<NavStyled className="me-auto d-flex flex-row align-items-center justify-content-between">
 
 						<div className="d-flex flex-column flex-lg-row">
-							{((currentRoute !== "/login") && (currentRoute !== "/not-found")) &&
+							{((currentRoute !== "/login") && (currentRoute !== "/not-found") && (userIsLogged)) &&
 								<NavLinkStyled as={Link} to={ERoutes.PROFILE}>
 									<FormattedMessage
 										id="topbar_profile_link"
@@ -39,8 +40,7 @@ const TopBarComponent = () => {
 						{
 							currentRoute == "/login" &&
 							<div className="d-flex flex-column flex-lg-row">
-								<Button outlined="outlined" color="#0B344E" className="mt-2 mt-lg-0" onClick={() => { redirect("/") }}>Já sou cliente, login</Button>
-								<Button color="#FF41AD" className="mt-2 mt-lg-0 ms-0 ms-lg-2" onClick={() => redirect("/")}>Começar teste grátis</Button>
+								<Button outlined="outlined" color="#0B344E" className="mt-2 mt-lg-0" onClick={() => { redirect(ERoutes.ORIGIN) }}>Criar conta</Button>
 							</div>
 						}
 					</NavStyled>

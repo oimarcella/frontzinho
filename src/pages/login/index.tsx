@@ -4,6 +4,10 @@ import Button from "../../components/layout/components/button/button";
 import Footer from "../../components/layout/components/footer/footer";
 import { ContentStyled } from "./styles";
 import HeaderPage from "../../components/layout/components/headerPage/headerPage";
+import { useLocation } from "react-router-dom";
+import { ERoutes } from "../../core/enums/routes";
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Content = () => {
     return (
@@ -13,7 +17,7 @@ const Content = () => {
                     <HeaderPage
                         textToStyle="login"
                         style={{ color: "#FF41AD" }}
-                        title="AmePet!"
+                        title="Olá, seja bem vindo(a)!"
                         text="Faça seu login"
                     />
                     <Form>
@@ -30,9 +34,12 @@ const Content = () => {
                         {/*<Form.Group className="mb-3" controlId="formBasicCheckbox">
                             <Form.Check type="checkbox" label="Check me out" />
                         </Form.Group>*/}
-                        <Button color="#FF41AD" outlined="none">
-                            Entrar
-                        </Button>
+                        <div className="d-flex flex-column align-items-center">
+                            <Button color="#FF41AD" outlined="none" customStyles={{ width: '100%' }}>
+                                Entrar
+                            </Button>
+                            <a href={ERoutes.SIGNUP} className="mt-3 d-flex align-items-center">Criar conta <FontAwesomeIcon className="ms-1" icon={faArrowRight} /></a>
+                        </div>
                     </Form>
                 </Col>
             </Row>
@@ -41,15 +48,16 @@ const Content = () => {
 }
 
 const LoginPage = () => {
-
+    const currentRoute = useLocation().pathname;
+    const isLoginRoute = currentRoute == "/login" ? true : false;
 
     return (
         <>
-            <TopBarComponent />
+            {isLoginRoute && <TopBarComponent />}
 
             <Content />
 
-            <Footer />
+            {isLoginRoute && <Footer />}
         </>
     );
 };

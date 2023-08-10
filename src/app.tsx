@@ -8,8 +8,9 @@ import { IntlProvider } from "react-intl";
 import { ERoutes } from "./core/enums/routes";
 import { getLangJson } from "./core/utils/lang.util";
 import AboutUsPage from "./pages/about-us/about-us";
-import NotFoundPage404 from "./pages/not-found-404/not-found-404";
+import NotFoundPage404 from "./pages/not-found-404";
 import LoginPage from "./pages/login";
+import SignUpPage from "./pages/sign-up";
 
 function App() {
   return (
@@ -19,9 +20,11 @@ function App() {
           <Route path={ERoutes.LOGIN} element={<LoginPage />} />
 
           <Route path={ERoutes.ORIGIN} element={<LayoutComponent />}>
-            <Route index element={<HomePage />} />
+            <Route index element={<LoginPage />} />
+            <Route path={'/'} element={<HomePage />} />
             <Route path={ERoutes.HOME} element={<HomePage />} />
             <Route path={ERoutes.ABOUT_US} element={<AboutUsPage />} />
+            <Route path={ERoutes.SIGNUP} element={<SignUpPage />} />
           </Route>
 
           <Route path="*" element={<NotFoundPage404 />} />
