@@ -2,7 +2,7 @@ import { Container } from "react-bootstrap";
 import styled from "styled-components";
 
 export const PageStyled = styled.div`
-    background-image: url('src/assets/images/petfoot.jpg');
+    background-image: url('src/images/petfoot.jpg');
     background-position:  top;
     background-repeat: no-repeat;
     background-size: cover;

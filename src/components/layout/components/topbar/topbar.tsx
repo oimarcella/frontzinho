@@ -20,7 +20,7 @@ const TopBarComponent = () => {
 		<NavBarStyled isHome={isHomeRoute || isLoginRoute} expand="lg">
 			<Container>
 				<Navbar.Brand as={Link} to={userIsLogged ? ERoutes.HOME : ERoutes.LOGIN}>
-					<img style={{}} src="/src/assets/images/petpass_small_dark-v1.svg" className="img-fluid" />
+					<img style={{}} src="/src/images/petpass_small_dark-v1.svg" className="img-fluid" />
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">

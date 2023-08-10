@@ -14,7 +14,7 @@ const Footer = () => {
         <ContentStyled className='d-flex flex-column justify-content-around'>
           <RowStyled className='d-flex flex-wrap justify-content-between'>
             <LogoStyled className='col-md-6 col-12 d-flex'>
-              <img style={{}} src="/src/assets/images/petpass_small_dark-v1.svg" className="img-fluid" />
+              <img style={{}} src="/src/images/petpass_small_dark-v1.svg" className="img-fluid" />
             </LogoStyled>
             <Button color="#212529" outlined='outlined' onClick={() => setIsModalContactOpen(true)}>Fale conosco</Button>
           </RowStyled>
