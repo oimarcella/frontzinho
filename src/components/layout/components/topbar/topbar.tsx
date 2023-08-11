@@ -8,16 +8,18 @@ import Button from "../button/button";
 const TopBarComponent = () => {
 
 	const currentRoute = useLocation().pathname;
-	const isHomeRoute = currentRoute == "/" ? true : false;
-	const isLoginRoute = currentRoute == "/login" ? true : false;
+	const isHomeRoute = currentRoute == "/";
+	const isLoginRoute = currentRoute == "/login";
+	const isDiscoverRoute = currentRoute == "/ola";
 	const userIsLogged = false;
+	const styleMustBeDifferent = isHomeRoute || isLoginRoute || isDiscoverRoute;
 
 	function redirect(link: string) {
 		window.location.replace(link);
 	}
 
 	return (
-		<NavBarStyled isHome={isHomeRoute || isLoginRoute} expand="lg">
+		<NavBarStyled styleMustBeDifferent={styleMustBeDifferent} expand="lg">
 			<Container>
 				<Navbar.Brand as={Link} to={userIsLogged ? ERoutes.HOME : ERoutes.LOGIN}>
 					<img style={{}} src="/images/petpass_small_dark-v1.svg" className="img-fluid" />

@@ -5,18 +5,18 @@ type ButtonStyledType = {
   outlined?: string;
 };
 export const ButtonStyled = styled.button.attrs((props: ButtonStyledType) => ({
-  
-}))<ButtonStyledType>`
+
+})) <ButtonStyledType>`
   font-size: 16px;
   padding: 6px 12px;
-  border-radius: 50px;
+  border-radius: 6px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
   transition: 0.3s;
   
-  ${(props) => 
-      props.outlined && props.outlined == "outlined"?
+  ${(props) =>
+    props.outlined && props.outlined == "outlined" ?
       css`
         background-color: transparent;
         border: 1px solid ${props.color} !important;
@@ -36,7 +36,7 @@ export const ButtonStyled = styled.button.attrs((props: ButtonStyledType) => ({
           color: white !important;
         }
       `
-    } 
+  } 
   
 
 `;

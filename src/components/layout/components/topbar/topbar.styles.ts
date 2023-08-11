@@ -11,7 +11,7 @@ export const NavBarStyled = styled(Navbar)`
     banner e o header seja transparente por cima
     */
     ${props =>
-        props.isHome ?
+        props.styleMustBeDifferent ?
             css`
         position:relative!important;
         width: 100%;

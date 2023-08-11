@@ -3,15 +3,18 @@ import styled from "styled-components";
 
 export const PageStyled = styled.div`
     background-image: url('/images/petfoot.jpg');
-    background-position:  top;
+    background-position:  center top -100px;
     background-repeat: no-repeat;
     background-size: cover;
+
+    @media (max-width: 999px) {
+        background-position:  center top 0px;   
+    }
 `;
 
 export const ContentStyled = styled(Container)`
     padding-top: 50px;
     padding-bottom: 50px;
-    min-height: 80vh;
 
     .formWrapper{
         background: white;

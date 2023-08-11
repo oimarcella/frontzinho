@@ -3,7 +3,7 @@ export enum ERoutes {
   HOME = "/home",
   ABOUT_US = "/sobre-nos",
   LOGIN = "/login",
-  DISCOVER = "/descubra",
   PROFILE = "perfil",
-  SIGNUP = "/criar-conta"
+  SIGNUP = "/criar-conta",
+  DISCOVER = "/ola"
 }

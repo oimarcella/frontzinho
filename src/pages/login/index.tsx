@@ -14,8 +14,8 @@ const Content = () => {
         <PageStyled>
             <WrapperOverflow>
                 <ContentStyled>
-                    <Row className="d-flex align-items-center justify-content-center" style={{ height: "100%" }}>
-                        <Col lg="5">
+                    <Row className="d-flex flex-column align-items-center justify-content-center">
+                        <Col md={5}>
                             <div className="formWrapper">
                                 <HeaderPage
                                     textToStyle="login"
