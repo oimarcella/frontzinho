@@ -52,15 +52,10 @@ function ContactModal(props: ContactModalT) {
                 </Form.Group>
               </Col>
             </Row>
-            <Row xs={1} md={2}>
-              <Col >
-                <Form.Group className="mb-3" controlId="Ocupation">
-                  <Form.Control type="text" placeholder="Cargo" />
-                </Form.Group>
-              </Col>
+            <Row md={12}>
               <Col>
-                <Form.Group className="mb-3" controlId="CNPJ">
-                  <Form.Control type="text" placeholder="CNPJ da farmácia" />
+                <Form.Group className="mb-3" controlId="message">
+                  <Form.Control as="textarea" rows={3} type="text" placeholder="Escreva sua mensagem aqui..." />
                 </Form.Group>
               </Col>
             </Row>
@@ -70,12 +65,6 @@ function ContactModal(props: ContactModalT) {
             </Form.Group>
 
             <small>*Ao enviar seu contato, você está de acordo com nossa <a target="_blank" href={politicsAndPrivacy}>Política de Privacidade</a></small>
-            <ReCaptcha siteKey='6Lel9NIZAAAAAKUbE4MgR8hfbNLVkZYH45m7sPER' onVerify={handleVerify} />
-            {
-              verified &&
-              <small>Verificado</small>
-            }
-
           </Form>
         </Modal.Body>
         <Modal.Footer className='d-flex flex-row justify-content-center'>

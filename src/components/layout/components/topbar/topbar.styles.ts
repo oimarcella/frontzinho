@@ -1,4 +1,4 @@
-import { Nav, Navbar } from "react-bootstrap";
+import { Nav, Navbar, NavbarBrand } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
@@ -66,4 +66,8 @@ export const NavLinkStyled = styled(NavLink)`
     &:hover{
         color: #186ea5;
     }
+`;
+
+export const NavbarBrandStyled = styled(NavbarBrand)`
+    max-width: 140px;
 `;

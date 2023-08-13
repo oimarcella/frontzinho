@@ -7,8 +7,8 @@ export const StyledFooter = styled.footer`
     display: block;
 `;
 export const ContentStyled = styled(Container)`
-	padding-top: 70px;
-	padding-bottom: 70px;
+	padding-top: 40px;
+	padding-bottom: 40px;
 	img {
 		height: 41px;
 		display: inline-block;
@@ -18,7 +18,7 @@ export const RowStyled = styled.div`
 	@media screen and (max-width: 767px) {
 		button:nth-child(2){
 			margin-top: 15px;
-			margin-left: 35%;
+			margin-left: 30%;
 		}
 	}
 `;

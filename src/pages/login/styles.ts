@@ -1,4 +1,4 @@
-import { Container } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 
 export const PageStyled = styled.div`
@@ -6,6 +6,8 @@ export const PageStyled = styled.div`
     background-position:  center top -100px;
     background-repeat: no-repeat;
     background-size: cover;
+
+    height: 90vh;
 
     @media (max-width: 999px) {
         background-position:  center top 0px;   
@@ -15,6 +17,7 @@ export const PageStyled = styled.div`
 export const ContentStyled = styled(Container)`
 padding-top: 50px;
 padding-bottom: 50px;
+height: 100%;
 
 .formWrapper{
     background: white;
@@ -32,4 +35,6 @@ padding-bottom: 50px;
 export const WrapperOverflow = styled.div`
     background: rgb(231,242,248);
     background: linear-gradient(180deg, rgba(210,231,242,0.6) 4%, rgba(205,228,241,0.6) 4%);
+
+    height: 100%;
 `;
