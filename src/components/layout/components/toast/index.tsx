@@ -1,27 +1,31 @@
 import { Toast } from "react-bootstrap";
 import { ToastStyled } from "./styles";
 import { useEffect, useState } from "react";
+import { connect, useSelector, useDispatch } from "react-redux";
+import { selectToast, close } from "../../../../redux/toastSlice";
 
 type MyToastT = {
+    isOpen: boolean;
     type?: string;
     message: string;
     delay?: number;
 }
 
-const MyToast = ({ message, delay = 3000, type = "info" }: MyToastT) => {
-    const [show, setShow] = useState(false);
+const MyToast = () => {
+    const toast: MyToastT = useSelector(selectToast);
+    const dispatch = useDispatch();
 
-    useEffect(() => {
-        show && setShow(true);
-    }, [show]);
+    function closeToast() {
+        dispatch(close());
+    }
 
     return (
         <ToastStyled
             className="d-inline-block m-1"
-            bg={type.toLowerCase()}
-            onClose={() => setShow(false)} show={show} delay={delay} autohide>
+            bg={toast.type}
+            onClose={() => closeToast()} show={toast.isOpen} delay={toast.delay} autohide>
             <Toast.Body className='text-white'>
-                {message}
+                {toast.message}
             </Toast.Body>
         </ToastStyled>
     )

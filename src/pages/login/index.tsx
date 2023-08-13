@@ -1,8 +1,8 @@
-import { Form, Col, Row } from "react-bootstrap";
+import { Form, Col } from "react-bootstrap";
 import TopBarComponent from "../../components/layout/components/topbar/topbar";
 import Button from "../../components/layout/components/button/button";
 import Footer from "../../components/layout/components/footer/footer";
-import { ContentStyled, PageStyled, RowStyled, WrapperOverflow } from "./styles";
+import { ContentStyled, PageStyled, WrapperOverflow } from "./styles";
 import HeaderPage from "../../components/layout/components/headerPage/headerPage";
 import { useLocation } from "react-router-dom";
 import { ERoutes } from "../../core/enums/routes";
@@ -11,17 +11,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import api from "../../services/api";
 import { useState } from "react";
 import { EHttpResponse } from "../../core/enums/http-responses";
+import { useDispatch } from 'react-redux';
+import { show } from "../../redux/toastSlice";
+
 
 const Content = () => {
     const [userCredentials, setUserCredentials] = useState({ email: "", pwd: "" });
+    const dispatch = useDispatch();
 
     async function login(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         try {
-            await api.post("/login", userCredentials);
+            const { data } = await api.post("/login", userCredentials);
+            localStorage.setItem("@petpass-token", data.token);
+            //redirecionar para area logada
         } catch (error) {
-            alert(EHttpResponse._403);
+            dispatch(show({ message: EHttpResponse[`error${error.response.status}`], type: "danger" }));
         }
     }
 
@@ -29,7 +35,7 @@ const Content = () => {
         <PageStyled>
             <WrapperOverflow>
                 <ContentStyled className="d-flex flex-column align-items-center justify-content-center">
-                    <Col md={5}>
+                    <Col md={12} lg={6}>
                         <div className="formWrapper">
                             <HeaderPage
                                 textToStyle="login"
@@ -47,9 +53,6 @@ const Content = () => {
                                     <Form.Control type="password" placeholder="Senha" value={userCredentials.pwd}
                                         onChange={(e) => setUserCredentials(prev => ({ ...prev, pwd: e.target.value }))} />
                                 </Form.Group>
-                                {/*<Form.Group className="mb-3" controlId="formBasicCheckbox">
-                                        <Form.Check type="checkbox" label="Check me out" />
-                                    </Form.Group>*/}
                                 <div className="d-flex flex-column align-items-center">
                                     <Button color="#FF41AD" outlined="none" customStyles={{ width: '100%' }}
                                         onClick={login}
