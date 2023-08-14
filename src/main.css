@@ -9,6 +9,10 @@
     /*--yellow-500: #f6f4e5;*/
 }
 
+#root {
+    height: 100vh;
+}
+
 body {
     font-family: Proxima Nova;
     color: var(--dark-blue-500);

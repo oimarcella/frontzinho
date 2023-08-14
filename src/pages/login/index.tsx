@@ -60,7 +60,7 @@ const Content = () => {
         <PageStyled>
             <WrapperOverflow>
                 <ContentStyled className="d-flex flex-column align-items-center justify-content-center">
-                    <Col md={12} lg={6}>
+                    <Col sm={12} md={8} lg={6}>
                         <div className="formWrapper">
                             <HeaderPage
                                 textToStyle="login"
