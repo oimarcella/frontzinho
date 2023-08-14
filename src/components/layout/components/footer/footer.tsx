@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { StyledFooter, ContentStyled, LgpdStyled, LogoStyled, RowStyled } from './footer.styles'
 import Button from '../button/button';
 import ContactModal from '../contactModal/contactModal';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../../../redux/userSlice';
 
 const Footer = () => {
   const [isModalContactOpen, setIsModalContactOpen] = useState(false);
-  const userIsLogged = false;
+  const user = useSelector(selectUser);
 
   return (
     <>
@@ -19,7 +21,7 @@ const Footer = () => {
             <Button color="#0B344E" outlined='outlined' onClick={() => setIsModalContactOpen(true)}>Fale conosco</Button>
           </RowStyled>
         </ContentStyled>
-        {!userIsLogged && <LgpdStyled>
+        {!user.id && <LgpdStyled>
           <p><strong>PetPass</strong> solicita sua coleta de dados para identificação do usuário com a finalidade de entrarmos em contato para fornecermos mais detalhes do tema desejado. <strong>Estes dados não serão utilizados para envio de SPAM.</strong></p>
         </LgpdStyled>}
       </StyledFooter>

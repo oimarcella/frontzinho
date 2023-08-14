@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const PageStyled = styled.div`
     background-image: url('/images/petfoot.jpg');
-    background-position:  center top -100px;
+    //background-position:  center top -100px;
     background-repeat: no-repeat;
     background-size: cover;
 

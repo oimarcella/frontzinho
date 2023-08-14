@@ -1,17 +1,17 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./app.css";
-import LayoutComponent from "./components/layout/layout";
-import HomePage from "./pages/home/home";
+import LayoutComponent from "../components/layout/layout";
+import HomePage from "../pages/home/home";
 
 import { IntlProvider } from "react-intl";
-import { ERoutes } from "./core/enums/routes";
-import { getLangJson } from "./core/utils/lang.util";
-import AboutUsPage from "./pages/about-us/about-us";
-import NotFoundPage404 from "./pages/not-found-404";
-import LoginPage from "./pages/login";
-import SignUpPage from "./pages/sign-up";
-import DiscoverPage from "./pages/discover";
+import { ERoutes } from "../core/enums/routes";
+import { getLangJson } from "../core/utils/lang.util";
+import AboutUsPage from "../pages/about-us/about-us";
+import NotFoundPage404 from "../pages/not-found-404";
+import LoginPage from "../pages/login";
+import SignUpPage from "../pages/sign-up";
+import DiscoverPage from "../pages/discover";
+import PanelPage from "../pages/panel";
 
 function App() {
   return (
@@ -27,6 +27,7 @@ function App() {
             <Route path={ERoutes.ABOUT_US} element={<AboutUsPage />} />
             <Route path={ERoutes.SIGNUP} element={<SignUpPage />} />
             <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
+            <Route path={ERoutes.PANEL} element={<PanelPage />} />
           </Route>
 
           <Route path="*" element={<NotFoundPage404 />} />

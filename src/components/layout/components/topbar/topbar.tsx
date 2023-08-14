@@ -40,9 +40,9 @@ const TopBarComponent = () => {
 						</div>
 
 						{
-							currentRoute == "/login" &&
+							(currentRoute == "/login" || currentRoute == "/") &&
 							<div className="d-flex flex-column flex-lg-row">
-								<Button outlined="outlined" color="#0B344E" className="mt-2 mt-lg-0" onClick={() => { redirect(ERoutes.ORIGIN) }}>Criar conta</Button>
+								<Button outlined="outlined" color="#0B344E" className="mt-2 mt-lg-0" onClick={() => { redirect(ERoutes.SIGNUP) }}>Criar conta</Button>
 							</div>
 						}
 					</NavStyled>
