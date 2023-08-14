@@ -1,7 +1,6 @@
 import { MouseEventHandler, ReactNode } from 'react';
 import { ButtonStyled } from './button.styles';
 import { CSSProperties } from 'styled-components';
-import { ButtonProps } from 'react-bootstrap';
 
 type ButtonType = {
   color: string;

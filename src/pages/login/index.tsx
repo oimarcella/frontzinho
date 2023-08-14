@@ -9,27 +9,38 @@ import { ERoutes } from "../../core/enums/routes";
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import api from "../../services/api";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { EHttpResponse } from "../../core/enums/http-responses";
 import { useDispatch } from 'react-redux';
 import { show } from "../../redux/toastSlice";
-
 
 const Content = () => {
     const [userCredentials, setUserCredentials] = useState({ email: "", pwd: "" });
     const dispatch = useDispatch();
 
-    async function login(event: React.FormEvent<HTMLFormElement>) {
+
+    const submit: MouseEventHandler<HTMLButtonElement> = async (event) => {
         event.preventDefault();
 
         try {
             const { data } = await api.post("/login", userCredentials);
             localStorage.setItem("@petpass-token", data.token);
             //redirecionar para area logada
-        } catch (error) {
-            dispatch(show({ message: EHttpResponse[`error${error.response.status}`], type: "danger" }));
+        } catch (error: any) {
+            if (error.response.status && typeof error.response.status === 'number') {
+                const status = error.response.status;
+
+                const errorMessage = EHttpResponse[status as keyof typeof EHttpResponse];
+
+                dispatch(show({ message: errorMessage, type: "danger" }));
+            } else {
+                dispatch(show({ message: "Não foi possível fazer login", type: "danger" }));
+            }
         }
     }
+    /*async function submit(event: React.FormEvent<HTMLFormElement>) {
+
+    }*/
 
     return (
         <PageStyled>
@@ -54,8 +65,11 @@ const Content = () => {
                                         onChange={(e) => setUserCredentials(prev => ({ ...prev, pwd: e.target.value }))} />
                                 </Form.Group>
                                 <div className="d-flex flex-column align-items-center">
-                                    <Button color="#FF41AD" outlined="none" customStyles={{ width: '100%' }}
-                                        onClick={login}
+                                    <Button
+                                        color="#FF41AD"
+                                        outlined="none"
+                                        customStyles={{ width: '100%' }}
+                                        onClick={submit}
                                     >
                                         Entrar
                                     </Button>
