@@ -1,7 +1,6 @@
 import { Toast } from "react-bootstrap";
 import { ToastStyled } from "./styles";
-import { useEffect, useState } from "react";
-import { connect, useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectToast, close } from "../../../../redux/toastSlice";
 
 type MyToastT = {

@@ -4,20 +4,26 @@ import Button from "../../components/layout/components/button/button";
 import Footer from "../../components/layout/components/footer/footer";
 import { ContentStyled, PageStyled, WrapperOverflow } from "./styles";
 import HeaderPage from "../../components/layout/components/headerPage/headerPage";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ERoutes } from "../../core/enums/routes";
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import api from "../../services/api";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { EHttpResponse } from "../../core/enums/http-responses";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { show } from "../../redux/toastSlice";
+import { selectUser, login } from "../../redux/userSlice";
 
 const Content = () => {
     const [userCredentials, setUserCredentials] = useState({ email: "", pwd: "" });
     const dispatch = useDispatch();
+    const user = useSelector(selectUser);
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        user.id && navigate(ERoutes.PANEL);
+    }, [])
 
     const submit: MouseEventHandler<HTMLButtonElement> = async (event) => {
         event.preventDefault();
@@ -25,7 +31,18 @@ const Content = () => {
         try {
             const { data } = await api.post("/login", userCredentials);
             localStorage.setItem("@petpass-token", data.token);
-            //redirecionar para area logada
+
+            dispatch(
+                login({
+                    id: data.user.id,
+                    name: data.user.name,
+                    email: data.user.email,
+                    jwtToken: data.token
+                })
+            )
+
+            navigate(ERoutes.PANEL);
+
         } catch (error: any) {
             if (error.response.status && typeof error.response.status === 'number') {
                 const status = error.response.status;
@@ -38,9 +55,6 @@ const Content = () => {
             }
         }
     }
-    /*async function submit(event: React.FormEvent<HTMLFormElement>) {
-
-    }*/
 
     return (
         <PageStyled>
