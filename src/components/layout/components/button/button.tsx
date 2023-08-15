@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from 'react';
+import { ButtonHTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import { ButtonStyled } from './button.styles';
 import { CSSProperties } from 'styled-components';
 
@@ -10,7 +10,7 @@ type ButtonType = {
   customStyles?: CSSProperties;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
-};
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = (props: ButtonType) => {
   return (

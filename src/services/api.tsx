@@ -3,10 +3,13 @@ import axios from 'axios';
 
 const currentLocation = window.location.href;
 
-let linkApi = import.meta.env.VITE_REACT_APP_LOCAL_BACKEND_URL;
+let linkApi = currentLocation.substring(7, 16) === "localhost" ?
+    import.meta.env.VITE_REACT_APP_LOCAL_BACKEND_URL
+    :
+    import.meta.env.VITE_REACT_APP_PROD_BACKEND_URL;
 
-if (currentLocation !== "http://localhost:5173/") linkApi = import.meta.env.VITE_REACT_APP_PROD_BACKEND_URL;
 
+console.log("🚀 ~ file: api.tsx:7 ~ linkApi:", linkApi)
 
 const api = axios.create({
     baseURL: linkApi,
