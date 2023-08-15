@@ -6,12 +6,12 @@ import { ERoutes } from "../../core/enums/routes";
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import api from "../../services/api";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { show } from "../../redux/toastSlice";
 import { EHttpResponse } from "../../core/enums/http-responses";
-import { login } from "../../redux/userSlice";
+import { login, selectUser } from "../../redux/userSlice";
 
 type userT = {
     name: string;
@@ -45,6 +45,11 @@ const SignUpPage = () => {
     const navigate = useNavigate();
     const [validated, setValidated] = useState(false);
     const [arePwdDifferent, setarePwdDifferent] = useState(false);
+    const userLogged = useSelector(selectUser);
+
+    useEffect(() => {
+        userLogged.id && navigate(ERoutes.PANEL);
+    }, [])
 
     async function send() {
         try {
