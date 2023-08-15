@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { show } from "../../redux/toastSlice";
 import { EHttpResponse } from "../../core/enums/http-responses";
+import { login } from "../../redux/userSlice";
 
 type userT = {
     name: string;
@@ -45,7 +46,6 @@ const SignUpPage = () => {
     const [validated, setValidated] = useState(false);
     const [arePwdDifferent, setarePwdDifferent] = useState(false);
 
-
     async function send() {
         try {
             const { data } = await api.post("/users", {
@@ -57,38 +57,42 @@ const SignUpPage = () => {
                 pwd: user.password,
                 activated: true
             });
-
             dispatch(
                 show({
-                    message: "Seu cadastro está pronto!",
+                    message: `${data.name}, seu cadastro está pronto!`,
                     type: "success"
                 })
             );
-            //Fazer login e redirecionar pro painel
-            //navigate(ERoutes.PANEL);
 
+            const loggedUser = await api.post("/login", { email: user.email, pwd: user.password });
+            localStorage.setItem("@petpass-token", loggedUser.data.user.token);
+            dispatch(
+                login({
+                    id: loggedUser.data.user.id,
+                    name: loggedUser.data.user.name,
+                    email: loggedUser.data.user.email,
+                    jwtToken: loggedUser.data.token
+                })
+            );
+            navigate(ERoutes.PANEL);
         } catch (error: any) {
             if (error.response.status && typeof error.response.status === 'number') {
                 const status = error.response.status;
-
                 const errorMessage = EHttpResponse[status as keyof typeof EHttpResponse];
-
                 dispatch(show({ message: errorMessage, type: "danger", delay: 4000 }));
             } else {
-                dispatch(show({ message: "Não foi possível fazer login", type: "danger", delay: 4000 }));
+                dispatch(show({ message: "Não foi possível finalizar o cadastro", type: "danger", delay: 4000 }));
             }
         }
     }
 
     const handleSubmit: MouseEventHandler<HTMLButtonElement> = async (event) => {
         event.preventDefault();
-
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
         }
-
         if (user.password !== user.passwordConfirm) {
             setarePwdDifferent(true);
             setValidated(false);
@@ -98,8 +102,6 @@ const SignUpPage = () => {
             setValidated(true);
             send();
         }
-
-
     }
 
     return (
