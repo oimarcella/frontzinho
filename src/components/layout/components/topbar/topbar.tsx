@@ -4,6 +4,8 @@ import { NavBarStyled, NavStyled, NavLinkStyled, NavbarBrandStyled } from "./top
 import { FormattedMessage } from "react-intl";
 import { ERoutes } from "../../../../core/enums/routes";
 import Button from "../button/button";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../redux/userSlice";
 
 const TopBarComponent = () => {
 
@@ -11,8 +13,9 @@ const TopBarComponent = () => {
 	const isHomeRoute = currentRoute == "/";
 	const isLoginRoute = currentRoute == "/login";
 	const isDiscoverRoute = currentRoute == "/ola";
-	const userIsLogged = false;
 	const styleMustBeDifferent = isHomeRoute || isLoginRoute || isDiscoverRoute;
+	const userLogged = useSelector(selectUser);
+	const userIsLogged = !!userLogged.id;
 
 	function redirect(link: string) {
 		window.location.replace(link);
@@ -21,9 +24,15 @@ const TopBarComponent = () => {
 	return (
 		<NavBarStyled styleMustBeDifferent={styleMustBeDifferent} expand="lg">
 			<Container>
-				<NavbarBrandStyled as={Link} to={userIsLogged ? ERoutes.HOME : ERoutes.LOGIN}>
-					<img src="/images/petpass_small_dark-v1.svg" className="img-fluid" />
-				</NavbarBrandStyled>
+				{!userIsLogged ?
+					<NavbarBrandStyled as={Link} to={ERoutes.LOGIN}>
+						<img src="/images/petpass_small_dark-v1.svg" className="img-fluid" />
+					</NavbarBrandStyled>
+					:
+					<div>
+						<strong>{userLogged.name.charAt(0).toUpperCase()}{userLogged.name.substring(1)}</strong>
+					</div>
+				}
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<NavStyled className="me-auto d-flex flex-row align-items-center justify-content-between">
