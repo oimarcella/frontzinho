@@ -14,7 +14,7 @@ const PanelPage = () => {
     const navigate = useNavigate();
     const pets = ["Didi", "Zup", "Lina", "Lik", "Lully"];
 
-    const generatePastelColor = (index) => {
+    const generatePastelColor = (index: number) => {
         const baseHue = (index * 137.5) % 360; // Varia o tom da cor com base no índice
         const saturation = 70; // Define a saturação
         const lightness = 80; // Define a luminosidade
