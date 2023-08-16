@@ -8,11 +8,13 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
 import 'swiper/css';
+import useWindowDimensions from "../../core/hooks/useWindowDimensions";
 
 const PanelPage = () => {
     const user = useSelector(selectUser);
     const navigate = useNavigate();
     const pets = ["Didi", "Zup", "Lina", "Lik", "Lully"];
+    const viewWidth = useWindowDimensions().width;
 
     const generatePastelColor = (index: number) => {
         const baseHue = (index * 137.5) % 360; // Varia o tom da cor com base no índice
@@ -32,8 +34,8 @@ const PanelPage = () => {
                     <h3>Pets</h3>
 
                     <Swiper
-                        spaceBetween={30}
-                        slidesPerView={2}
+                        spaceBetween={viewWidth > 1000 ? 30 : 10}
+                        slidesPerView={viewWidth > 1000 ? 3.3 : 1.3}
                         onSlideChange={() => { }}
                         onSwiper={(swiper) => { }}
                     >
@@ -41,9 +43,10 @@ const PanelPage = () => {
                             pets.map((pet, index) => {
                                 return <SwiperSlide key={pet}>
                                     <CardStyled
-                                        className="d-flex align-items-center justify-content-center"
+                                        className="d-flex flex-column align-items-center justify-content-center"
                                         style={{ background: generatePastelColor(index) }}
                                     >
+                                        <img src="./public/images/dog.png" alt="Cachorro" />
                                         {pet}
                                     </CardStyled>
                                 </SwiperSlide>

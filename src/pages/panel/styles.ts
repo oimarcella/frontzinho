@@ -14,5 +14,9 @@ export const CardStyled = styled(Card)`
     height: 150px;
 
     border: none;  
+
+    img{
+        width:20%;
+    }
     
 `;
