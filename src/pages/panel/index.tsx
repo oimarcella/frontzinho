@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../redux/userSlice";
 import { ERoutes } from "../../core/enums/routes";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
 import useWindowDimensions from "../../core/hooks/useWindowDimensions";
+import Button from "../../components/layout/components/button/button";
+import { show } from "../../redux/modalSlice";
+import MyModal from "../../components/layout/components/modal";
 
 const PanelPage = () => {
     const user = useSelector(selectUser);
@@ -16,15 +19,15 @@ const PanelPage = () => {
     const pets = ["Didi", "Zup", "Lina", "Lik", "Lully"];
     const viewWidth = useWindowDimensions().width;
     let slidesPerView = 0;
+    const dispatch = useDispatch();
 
     if (viewWidth > 1000) slidesPerView = 3.3;
     else if (viewWidth < 400) slidesPerView = 1.3;
     else slidesPerView = 2.3;
 
-
     const generatePastelColor = (index: number) => {
-        const baseHue = (index * 137.5) % 360; // Varia o tom da cor com base no índice
-        const saturation = 70; // Define a saturação
+        const baseHue = (index * 137.3) % 360; // Varia o tom da cor com base no índice
+        const saturation = 70; // Defi3e a saturação
         const lightness = 80; // Define a luminosidade
         return `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
     };
@@ -33,11 +36,25 @@ const PanelPage = () => {
         !user.id && navigate(ERoutes.LOGIN);
     }, []);
 
+    function handleAddPet() {
+        dispatch(show());
+    }
+
     return (
         <PagePanel>
             <ContainerStyled>
                 <section>
-                    <h3>Pets</h3>
+                    <div className="d-flex align-items-center justify-content-start mb-2">
+                        <h3>Seus pets</h3>
+                        <Button
+                            onClick={handleAddPet}
+                            color="#fe51b3" className="ms-2" customStyles={{
+                                fontSize: "1rem",
+                                borderRadius: "100%",
+                                width: "30px",
+                                height: "30px"
+                            }}>+</Button>
+                    </div>
 
                     <Swiper
                         spaceBetween={viewWidth > 1000 ? 30 : 10}

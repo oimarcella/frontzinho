@@ -12,10 +12,12 @@ import LoginPage from "../pages/login";
 import SignUpPage from "../pages/sign-up";
 import DiscoverPage from "../pages/discover";
 import PanelPage from "../pages/panel";
+import MyModal from "../components/layout/components/modal";
 
 function App() {
   return (
     <IntlProvider messages={getLangJson()} locale="pt-br" defaultLocale="en">
+      <MyModal />
       <BrowserRouter>
         <Routes>
           <Route path={ERoutes.LOGIN} element={<LoginPage />} />

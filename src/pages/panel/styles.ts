@@ -7,17 +7,19 @@ export const PagePanel = styled.div`
 `;
 
 export const ContainerStyled = styled(Container)`
+    h3{
+        font-weight: bold;
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
 `;
 
 export const CardStyled = styled(Card)`
     padding: 1rem;
-    //height: 150px;
-
     border: none;  
 
     img{
         width:60%;
         margin-bottom: 20px;
     }
-    
 `;

@@ -14,7 +14,7 @@ type ButtonType = {
 
 const Button = (props: ButtonType) => {
   return (
-    <ButtonStyled {...props} style={props.customStyles} className={props.className}>
+    <ButtonStyled {...props} style={props.customStyles} className={`${props.className} d-flex align-items-center justify-content-center`}>
       {props.children}
     </ButtonStyled>
   );
