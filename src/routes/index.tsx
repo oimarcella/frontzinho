@@ -13,11 +13,21 @@ import SignUpPage from "../pages/sign-up";
 import DiscoverPage from "../pages/discover";
 import PanelPage from "../pages/panel";
 import MyModal from "../components/layout/components/modal";
+import { useSelector } from "react-redux";
+import { selectModal } from "../redux/modalSlice";
 
 function App() {
+  const modal = useSelector(selectModal);
+
   return (
     <IntlProvider messages={getLangJson()} locale="pt-br" defaultLocale="en">
-      <MyModal />
+      <MyModal
+        contentBody={modal.bodyNode}
+        contentFooter={modal.footerNode}
+        title={modal.title}
+        hasFooter={modal.hasFooter}
+        hasHeader={modal.hasHeader}
+      />
       <BrowserRouter>
         <Routes>
           <Route path={ERoutes.LOGIN} element={<LoginPage />} />

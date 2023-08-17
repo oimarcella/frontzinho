@@ -1,20 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../redux/userSlice";
 import { ERoutes } from "../../core/enums/routes";
 import { useNavigate } from "react-router-dom";
-import { CardStyled, ContainerStyled, PagePanel } from "./styles";
+import { BodyNodeCadastroPet, CardStyled, ContainerStyled, PagePanel } from "./styles";
 import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
-import 'swiper/css';
 import useWindowDimensions from "../../core/hooks/useWindowDimensions";
 import Button from "../../components/layout/components/button/button";
 import { show } from "../../redux/modalSlice";
-import MyModal from "../../components/layout/components/modal";
+import { Form, Col, Row } from "react-bootstrap";
+
+// Import Swiper styles
+import 'swiper/css';
 
 const PanelPage = () => {
     const user = useSelector(selectUser);
+    const [pet, setPet] = useState({});
     const navigate = useNavigate();
     const pets = ["Didi", "Zup", "Lina", "Lik", "Lully"];
     const viewWidth = useWindowDimensions().width;
@@ -36,8 +37,48 @@ const PanelPage = () => {
         !user.id && navigate(ERoutes.LOGIN);
     }, []);
 
+    const bodyNode = <BodyNodeCadastroPet>
+        <Form>
+            <Row>
+                <Col>
+                    <Form.Group className="mb-3" controlId="name">
+                        <Form.Control required type="text" placeholder="Nome" onChange={e => setPet(prev => ({ ...prev, name: e.target.value }))} />
+                    </Form.Group>
+                </Col>
+            </Row>
+            <Row>
+                <Col md={4}>
+                    <Form.Group className="mb-3" controlId="weight">
+                        <Form.Control required type="text" placeholder="Peso aproximado em Kgs" onChange={e => setPet(prev => ({ ...prev, weight: e.target.value }))} />
+                    </Form.Group>
+                </Col>
+                <Col md={4}>
+                    <Form.Group className="mb-3" controlId="age">
+                        <Form.Control required type="text" placeholder="Idade" onChange={e => setPet(prev => ({ ...prev, age: e.target.value }))} />
+                    </Form.Group>
+                </Col>
+                <Col md={4}>
+                    <Form.Group className="mb-3" controlId="breed">
+                        <Form.Control required type="text" placeholder="Raça" onChange={e => setPet(prev => ({ ...prev, breed: e.target.value }))} />
+                    </Form.Group>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <Form.Group className="mb-3" controlId="description">
+                        <Form.Control as="textarea" rows={3} required type="text" placeholder="Algo importante a registrar" onChange={e => setPet(prev => ({ ...prev, description: e.target.value }))} />
+                    </Form.Group>
+                </Col>
+            </Row>
+        </Form>
+    </BodyNodeCadastroPet>;
+
     function handleAddPet() {
-        dispatch(show());
+        dispatch(show({
+            bodyNode: bodyNode,
+            hasHeader: true,
+            title: "Novo pet"
+        }));
     }
 
     return (

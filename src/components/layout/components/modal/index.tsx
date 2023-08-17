@@ -22,22 +22,24 @@ function MyModal(props: MyModalT) {
 
     return (
         <Modal show={modal.isOpen} onHide={handleClose}>
-            <h1>opa nene</h1>
+            <Modal.Header closeButton>
+                {props.hasHeader &&
+                    <Modal.Title>{modal.title && modal.title}</Modal.Title>
+                }
+            </Modal.Header>
 
-            {props.hasHeader &&
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal title</Modal.Title>
-                </Modal.Header>
+            {props.contentBody &&
+                <Modal.Body>
+                    {props.contentBody}
+                </Modal.Body>
             }
 
-            {/*<Modal.Body>
-                {props.contentBody}
-        </Modal.Body>*/}
-
-            {props.hasFooter &&
+            {
+                props.hasFooter &&
                 <Modal.Footer >
-                    <Button variant="secondary">Close</Button>
-                    <Button variant="primary">Save changes</Button>
+                    {/*<Button variant="secondary">Close</Button>
+                    <Button variant="primary">Save changes</Button>*/}
+                    {modal.contentFooter}
                 </Modal.Footer>
             }
         </Modal >

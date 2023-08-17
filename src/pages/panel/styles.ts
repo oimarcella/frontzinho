@@ -23,3 +23,7 @@ export const CardStyled = styled(Card)`
         margin-bottom: 20px;
     }
 `;
+
+export const BodyNodeCadastroPet = styled.div`
+    //border: 2px solid red;
+`; 
