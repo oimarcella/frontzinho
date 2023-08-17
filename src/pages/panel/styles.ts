@@ -10,13 +10,13 @@ export const ContainerStyled = styled(Container)`
 `;
 
 export const CardStyled = styled(Card)`
-    padding: .5rem;
-    height: 150px;
+    padding: 1rem;
+    //height: 150px;
 
     border: none;  
 
     img{
-        width:70%;
+        width:60%;
         margin-bottom: 20px;
     }
     

@@ -15,6 +15,12 @@ const PanelPage = () => {
     const navigate = useNavigate();
     const pets = ["Didi", "Zup", "Lina", "Lik", "Lully"];
     const viewWidth = useWindowDimensions().width;
+    let slidesPerView = 0;
+
+    if (viewWidth > 1000) slidesPerView = 3.3;
+    else if (viewWidth < 400) slidesPerView = 1.3;
+    else slidesPerView = 2.3;
+
 
     const generatePastelColor = (index: number) => {
         const baseHue = (index * 137.5) % 360; // Varia o tom da cor com base no índice
@@ -35,7 +41,7 @@ const PanelPage = () => {
 
                     <Swiper
                         spaceBetween={viewWidth > 1000 ? 30 : 10}
-                        slidesPerView={viewWidth > 1000 ? 3.3 : 1.3}
+                        slidesPerView={slidesPerView}
                         onSlideChange={() => { }}
                         onSwiper={(swiper) => { }}
                     >
