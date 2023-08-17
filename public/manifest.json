@@ -1,0 +1,16 @@
+{
+    "name": "PetPass",
+    "short_name": "PetPass",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "description": "Seja dono das informações do seu pet.",
+    "icons": [
+        {
+            "src": "/images/petpass_small_dark-v1.svg",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

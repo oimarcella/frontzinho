@@ -46,7 +46,7 @@ const PanelPage = () => {
                                         className="d-flex flex-column align-items-center justify-content-center"
                                         style={{ background: generatePastelColor(index) }}
                                     >
-                                        <img src="public/images/dog.png" alt="Cachorro" />
+                                        <img src="/images/cat.svg" alt="Cachorro" />
                                         {pet}
                                     </CardStyled>
                                 </SwiperSlide>

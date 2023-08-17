@@ -16,7 +16,8 @@ export const CardStyled = styled(Card)`
     border: none;  
 
     img{
-        width:20%;
+        width:70%;
+        margin-bottom: 20px;
     }
     
 `;
