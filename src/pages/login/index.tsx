@@ -15,11 +15,11 @@ import { selectUser, login } from "../../redux/userSlice";
 
 const LoginPage = () => {
     const currentRoute = useLocation().pathname;
-    const isLoginRoute = currentRoute == "/login" ? true : false;
     const [userCredentials, setUserCredentials] = useState({ email: "", pwd: "" });
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const navigate = useNavigate();
+    const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
         user.id && navigate(ERoutes.PANEL);
@@ -27,9 +27,12 @@ const LoginPage = () => {
 
     const submit: MouseEventHandler<HTMLButtonElement> = async (event) => {
         event.preventDefault();
+        setLoading(true);
 
         try {
             const { data } = await api.post("/login", userCredentials);
+
+
             localStorage.setItem("@petpass-token", data.token);
 
             dispatch(
@@ -39,11 +42,13 @@ const LoginPage = () => {
                     email: data.user.email,
                     jwtToken: data.token
                 })
-            )
+            );
 
+            setLoading(false);
             navigate(ERoutes.PANEL);
 
         } catch (error: any) {
+            setLoading(false);
             if (error.response.status && typeof error.response.status === 'number') {
                 const status = error.response.status;
 
@@ -84,9 +89,10 @@ const LoginPage = () => {
                                         color="#FF41AD"
                                         outlined="none"
                                         customStyles={{ width: '100%' }}
-                                        onClick={submit}
+                                        onClick={!isLoading ? submit : undefined}
+                                        disabled={isLoading}
                                     >
-                                        Entrar
+                                        {isLoading ? 'Carregando…' : 'Entrar'}
                                     </Button>
                                     <a href={ERoutes.SIGNUP} className="mt-3 d-flex align-items-center">Criar conta <FontAwesomeIcon className="ms-1" icon={faArrowRight} /></a>
                                 </div>
