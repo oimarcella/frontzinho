@@ -26,6 +26,5 @@ export const CardStyled = styled(Card)`
     }
 `;
 
-export const BodyNodeCadastroPet = styled.div`
-    //border: 2px solid red;
+export const DropdownStyled = styled.div`
 `; 

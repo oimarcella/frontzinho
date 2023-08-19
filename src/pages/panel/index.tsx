@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import 'swiper/css';
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../redux/userSlice";
-import { BodyNodeCadastroPet, CardStyled, ContainerStyled, PagePanel } from "./styles";
+import { CardStyled, ContainerStyled, DropdownStyled, PagePanel } from "./styles";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useWindowDimensions from "../../core/hooks/useWindowDimensions";
 import Button from "../../components/layout/components/button/button";
@@ -11,9 +11,13 @@ import { showModal } from "../../redux/modalSlice";
 import { Form, Col, Row } from "react-bootstrap";
 import api from "../../services/api";
 import Loading from "../../components/layout/components/loading";
+import { IconButton, Menu, MenuItem } from "@material-ui/core";
+import { MoreVert, SettingsOutlined } from "@material-ui/icons";
+import { show } from "../../redux/toastSlice";
 
 
 type PetT = {
+    id: number;
     age: string;
     specie: string;
     name: string;
@@ -34,9 +38,13 @@ const PanelPage = () => {
     const dispatch = useDispatch();
     const [pets, setPets] = useState<PetT[]>([]);
 
+    const [openMoreOptions, setOpenMoreOptions] = React.useState<null | HTMLElement>(null);
+    const [whichMoreOptions, setWhichMoreOptions] = useState<null | string>(null);
+
     if (viewWidth > 1000) slidesPerView = 3.3;
     else if (viewWidth < 400) slidesPerView = 1.3;
     else slidesPerView = 2.3;
+
 
     const generatePastelColor = (index: number) => {
         const baseHue = (index * 137.3) % 360; // Varia o tom da cor com base no índice
@@ -72,7 +80,6 @@ const PanelPage = () => {
             let response = await api.post("/pets", body);
 
             setPets([...pets, response.data]);
-            //dispatch();
         }
         catch (error) {
             console.log("Erro:", error);
@@ -104,7 +111,7 @@ const PanelPage = () => {
 
     }, [user.id]);
 
-    const bodyNode = <BodyNodeCadastroPet>
+    const bodyNode = <>
         <Form>
             <Row>
                 <Col>
@@ -184,7 +191,7 @@ const PanelPage = () => {
                 Adicionar
             </Button>
         </Form>
-    </BodyNodeCadastroPet>;
+    </>;
 
     function handleAddPet() {
         dispatch(showModal({
@@ -194,53 +201,116 @@ const PanelPage = () => {
         }));
     }
 
-    return (
-        isLoading ?
-            <Loading />
-            :
-            <PagePanel>
-                <ContainerStyled>
-                    <section>
-                        <div className="d-flex align-items-center justify-content-start mb-2">
-                            <h3>Seus pets</h3>
-                            <Button
-                                onClick={handleAddPet}
-                                color="#fe51b3" className="ms-2" customStyles={{
-                                    fontSize: "1rem",
-                                    borderRadius: "100%",
-                                    width: "30px",
-                                    height: "30px"
-                                }}>+</Button>
-                        </div>
+    function handleMoreOptions(event: any, petName: string) {
+        setOpenMoreOptions(event.currentTarget);
+        setWhichMoreOptions(petName);
+    }
 
-                        {pets.length > 0 &&
-                            <Swiper
-                                spaceBetween={viewWidth > 1000 ? 30 : 10}
-                                slidesPerView={slidesPerView}
-                                onSlideChange={() => { }}
-                                onSwiper={(swiper) => { }}
-                            >
-                                {
-                                    pets.map((pet, index) => {
-                                        return <SwiperSlide key={index}>
+    const handleClose = () => {
+        setOpenMoreOptions(null);
+        setWhichMoreOptions(null);
+    };
+
+    async function deletePet(petId: number) {
+        try {
+            await api.delete(`/pets/${petId}`)
+            const newPets = pets.filter(pet => pet.id !== petId);
+
+            setTimeout(() => {
+                setPets(newPets);
+            }, 3000);
+
+            handleClose();
+        }
+        catch (error) {
+            console.log("Erro:", error);
+            dispatch(show({
+                type: "error",
+                message: "Não foi possível remover o pet"
+            }));
+        }
+    }
+
+    return !isLoading ? (
+
+        <PagePanel>
+            <ContainerStyled>
+                <section>
+                    <div className="d-flex align-items-center justify-content-start mb-2">
+                        <h3>Seus pets</h3>
+                        <Button
+                            onClick={handleAddPet}
+                            color="#fe51b3" className="ms-2" customStyles={{
+                                fontSize: "1rem",
+                                borderRadius: "100%",
+                                width: "30px",
+                                height: "30px"
+                            }}>+</Button>
+                    </div>
+
+                    {pets.length > 0 &&
+                        <Swiper
+                            spaceBetween={viewWidth > 1000 ? 30 : 10}
+                            slidesPerView={slidesPerView}
+                            onSlideChange={() => { }}
+                            onSwiper={(swiper) => { }}
+                        >
+                            {
+                                pets.map((pet, index) => {
+                                    return (
+                                        <SwiperSlide key={index}>
                                             <CardStyled
                                                 className="d-flex flex-column align-items-center justify-content-center"
                                                 style={{ background: generatePastelColor(index) }}
                                             >
-                                                <img
-                                                    src={`/images/${pet.specie == "cachorro" ?
-                                                        "dog" : pet.specie == "gato" ?
-                                                            "cat" : "another_animals"}.svg`}
-                                                    alt={`${pet.name} - ${pet.specie}`} />
+                                                <div className="d-flex flex-row-reverse align-items-start">
+                                                    <IconButton
+                                                        aria-label="more"
+                                                        onClick={(e) => handleMoreOptions(e, pet.name)}
+                                                        aria-haspopup="true"
+                                                        aria-controls="long-menu"
+                                                    >
+                                                        <MoreVert />
+                                                    </IconButton>
+                                                    <Menu
+                                                        id={`more-options-${pet.name}-${index}`}
+                                                        anchorOrigin={{
+                                                            vertical: 'bottom',
+                                                            horizontal: 'left',
+                                                        }}
+                                                        transformOrigin={{
+                                                            vertical: 'top',
+                                                            horizontal: 'right',
+                                                        }}
+                                                        aria-labelledby="demo-positioned-button"
+                                                        anchorEl={openMoreOptions as any}
+                                                        keepMounted onClose={handleClose}
+                                                        open={whichMoreOptions === pet.name}
+                                                    >
+                                                        <MenuItem onClick={() => deletePet(pet.id)}>Remover</MenuItem>
+                                                        <MenuItem onClick={handleClose}>Editar</MenuItem>
+                                                    </Menu>
+
+                                                    <img
+                                                        src={`/images/${pet.specie == "cachorro" ?
+                                                            "dog" : pet.specie == "gato" ?
+                                                                "cat" : "another_animals"}.svg`}
+                                                        alt={`${pet.name} - ${pet.specie}`}
+                                                    />
+                                                </div>
                                                 {pet.name}
                                             </CardStyled>
                                         </SwiperSlide>
-                                    })
-                                }
-                            </Swiper>}
-                    </section>
-                </ContainerStyled>
-            </PagePanel>
+                                    )
+                                })
+                            }
+                        </Swiper>}
+                </section>
+            </ContainerStyled>
+        </PagePanel >
     )
+        :
+
+        <Loading />
 }
 export default PanelPage;

@@ -31,7 +31,7 @@ export const NavBarStyled = styled(Navbar)`
     
     @media(max-width: 1000px){
         position: relative!important;
-        background-color: #fff;
+        background-color: #E7F2F8;
     }
 `;
 
