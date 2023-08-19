@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 type userSliceActionT = {
     id: string;
     name: string;
-    email: string;
+    email?: string;
     jwtToken: string;
 }
 
@@ -27,7 +27,7 @@ export const userSlice = createSlice({
                 jwtToken: payload.jwtToken
             };
         },
-        logout(state, { payload }) {
+        logout(state) {
             return initialState;
         }
     }

@@ -1,7 +1,5 @@
 import { Form, Col } from "react-bootstrap";
-import TopBarComponent from "../../components/layout/components/topbar/topbar";
 import Button from "../../components/layout/components/button/button";
-import Footer from "../../components/layout/components/footer/footer";
 import { ContentStyled, PageStyled, WrapperOverflow } from "./styles";
 import HeaderPage from "../../components/layout/components/headerPage/headerPage";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,7 +13,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { show } from "../../redux/toastSlice";
 import { selectUser, login } from "../../redux/userSlice";
 
-const Content = () => {
+const LoginPage = () => {
+    const currentRoute = useLocation().pathname;
+    const isLoginRoute = currentRoute == "/login" ? true : false;
     const [userCredentials, setUserCredentials] = useState({ email: "", pwd: "" });
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
@@ -56,6 +56,7 @@ const Content = () => {
         }
     }
 
+
     return (
         <PageStyled>
             <WrapperOverflow>
@@ -95,21 +96,6 @@ const Content = () => {
                 </ContentStyled>
             </WrapperOverflow>
         </PageStyled >
-    );
-}
-
-const LoginPage = () => {
-    const currentRoute = useLocation().pathname;
-    const isLoginRoute = currentRoute == "/login" ? true : false;
-
-    return (
-        <>
-            {isLoginRoute && <TopBarComponent />}
-
-            <Content />
-
-            {isLoginRoute && <Footer />}
-        </>
     );
 };
 

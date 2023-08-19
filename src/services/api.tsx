@@ -8,9 +8,6 @@ let linkApi = currentLocation.substring(7, 16) === "localhost" ?
     :
     import.meta.env.VITE_REACT_APP_PROD_BACKEND_URL;
 
-
-console.log("🚀 ~ file: api.tsx:7 ~ linkApi:", linkApi)
-
 const api = axios.create({
     baseURL: linkApi,
     headers: {

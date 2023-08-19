@@ -1,9 +1,42 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./routes";
+import AppRoutes from "./routes";
 import { Provider } from 'react-redux'
 import store from './redux/store';
 import "./main.css";
+import { BrowserRouter } from "react-router-dom";
+import { IntlProvider } from "react-intl";
+import { getLangJson } from "./core/utils/lang.util";
+import api from "./services/api";
+import { login } from "./redux/userSlice";
+import jwt_decode from 'jwt-decode';
+
+type DecodedT = {
+  id: number;
+}
+
+const token = localStorage.getItem('@petpass-token');
+
+function decodeToken(token: string): DecodedT {
+  return jwt_decode(token);
+}
+
+if (token) {
+  const decoded: DecodedT = decodeToken(token);
+  api.get(`/users/${decoded.id}`)
+    .then(response => {
+      const user = response.data;
+      store.dispatch(login({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        jwtToken: token,
+      }));
+    })
+    .catch(error => {
+      console.error('Erro ao buscar dados do usuário:', error);
+    });
+}
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -21,7 +54,11 @@ if ('serviceWorker' in navigator) {
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <IntlProvider messages={getLangJson()} locale="pt-br" defaultLocale="en">
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </IntlProvider>
     </Provider>
   </React.StrictMode>
 );

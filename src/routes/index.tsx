@@ -1,6 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LayoutComponent from "../components/layout/layout";
+import { Route, Routes } from "react-router-dom";
 import HomePage from "../pages/home/home";
 
 import { IntlProvider } from "react-intl";
@@ -13,14 +12,24 @@ import SignUpPage from "../pages/sign-up";
 import DiscoverPage from "../pages/discover";
 import PanelPage from "../pages/panel";
 import MyModal from "../components/layout/components/modal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectModal } from "../redux/modalSlice";
+import { login, logout, selectUser } from "../redux/userSlice";
+import TopBarComponent from "../components/layout/components/topbar/topbar";
+import Footer from "../components/layout/components/footer/footer";
+import MyToast from "../components/layout/components/toast";
+import PrivateRoute from "./privateRoutes";
 
-function App() {
+const AppRoutes = () => {
   const modal = useSelector(selectModal);
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  //let decodedToken: DecodedTokenT;
 
   return (
-    <IntlProvider messages={getLangJson()} locale="pt-br" defaultLocale="en">
+    <>
+      <TopBarComponent />
+      <MyToast />
       <MyModal
         contentBody={modal.bodyNode}
         contentFooter={modal.footerNode}
@@ -28,25 +37,26 @@ function App() {
         hasFooter={modal.hasFooter}
         hasHeader={modal.hasHeader}
       />
-      <BrowserRouter>
-        <Routes>
-          <Route path={ERoutes.LOGIN} element={<LoginPage />} />
+      <Routes>
+        <Route path={ERoutes.LOGIN} element={<LoginPage />} />
 
-          <Route path={ERoutes.ORIGIN} element={<LayoutComponent />}>
-            <Route index element={<LoginPage />} />
-            <Route path={'/'} element={<HomePage />} />
-            <Route path={ERoutes.HOME} element={<HomePage />} />
-            <Route path={ERoutes.ABOUT_US} element={<AboutUsPage />} />
-            <Route path={ERoutes.SIGNUP} element={<SignUpPage />} />
-            <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
-            <Route path={ERoutes.PANEL} element={<PanelPage />} />
-          </Route>
+        <Route index element={<LoginPage />} />
+        <Route path={'/'} element={<HomePage />} />
+        <Route path={ERoutes.HOME} element={<HomePage />} />
+        <Route path={ERoutes.ABOUT_US} element={<AboutUsPage />} />
+        <Route path={ERoutes.SIGNUP} element={<SignUpPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path={ERoutes.PANEL} element={<PanelPage />} />
+        </Route>
 
-          <Route path="*" element={<NotFoundPage404 />} />
-        </Routes>
-      </BrowserRouter>
-    </IntlProvider>
+        <Route path="*" element={<NotFoundPage404 />} />
+      </Routes>
+      <Footer />
+    </>
   );
 }
 
-export default App;
+export default AppRoutes;

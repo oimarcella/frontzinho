@@ -25,7 +25,8 @@ export const modalSlice = createSlice({
     name: 'myModal',
     initialState,
     reducers: {
-        show(state, { payload }: { payload: ActionT }) {
+        showModal(state, { payload }: { payload: ActionT }) {
+            console.log("🚀 ~ file: modalSlice.tsx:29 ~ showModal ~ state:", state)
             return {
                 ...state,
                 isOpen: true,
@@ -36,12 +37,12 @@ export const modalSlice = createSlice({
                 footerNode: payload.footerNode
             };
         },
-        close(state) {
+        closeModal(state) {
             return initialState;
         }
     },
 })
 
-export const { show, close } = modalSlice.actions;
+export const { showModal, closeModal } = modalSlice.actions;
 export const selectModal = (state: any) => state.myModal;
 export default modalSlice.reducer;

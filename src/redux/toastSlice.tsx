@@ -20,11 +20,16 @@ export const toastSlice = createSlice({
     initialState,
     reducers: {
         show(state, { payload }) {
+            let typeFormated = payload.type;
+            if (payload.type && payload.type.toLowerCase() == "error") {
+                typeFormated = "danger";
+            }
+
             return {
                 ...state,
                 isOpen: true,
                 message: payload.message,
-                type: payload.type || initialState.type,
+                type: payload.type ? typeFormated : initialState.type,
                 delay: payload.delay || initialState.delay
             };
         },

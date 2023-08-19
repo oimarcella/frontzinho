@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { close, selectModal } from '../../../../redux/modalSlice';
+import { closeModal, selectModal } from '../../../../redux/modalSlice';
 
 type MyModalT = {
     hasHeader?: boolean;
@@ -17,7 +17,7 @@ function MyModal(props: MyModalT) {
     const dispatch = useDispatch();
 
     function handleClose() {
-        dispatch(close());
+        dispatch(closeModal());
     }
 
     return (

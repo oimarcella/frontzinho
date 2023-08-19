@@ -19,7 +19,7 @@ export const NavBarStyled = styled(Navbar)`
         `:
             `
             position:relative;
-            background: white;
+            background: #D1E8F5;
             border-bottom: 2px solid #D1E8F5;
         `
     }

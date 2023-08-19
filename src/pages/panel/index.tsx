@@ -1,61 +1,32 @@
 import React, { useEffect, useState } from "react";
+// Import Swiper styles
+import 'swiper/css';
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../redux/userSlice";
-import { ERoutes } from "../../core/enums/routes";
-import { useNavigate } from "react-router-dom";
 import { BodyNodeCadastroPet, CardStyled, ContainerStyled, PagePanel } from "./styles";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useWindowDimensions from "../../core/hooks/useWindowDimensions";
 import Button from "../../components/layout/components/button/button";
-import { show } from "../../redux/modalSlice";
+import { showModal } from "../../redux/modalSlice";
 import { Form, Col, Row } from "react-bootstrap";
-
-/*
-    /pets - POST
-    {
-        "name": "string",
-        "size": "string",
-        "breed": 0,
-        "age": "string",
-        "castrated": true,
-        "weight": "string",
-        "specie": "string",
-        "gender": "string",
-        "user_id": 0,
-        "activated": true
-    }
-
-    /pets - GET
-    "id": 2,
-        "age": "5 anos",
-        "specie": "gato",
-        "name": "Nick",
-        "castrated": false,
-        "weight": "3 kg",
-        "gender": "macho",
-        "breed": 2,
-        "size": "pequeno"
-*/
-
-// Import Swiper styles
-import 'swiper/css';
 import api from "../../services/api";
+
 
 type PetT = {
     age: string;
     specie: string;
     name: string;
-    castrated: boolean;
-    weight: string;
+    castrated: string;
+    weight: number;
     gender: string;
-    breed: number;
+    breed: string;
     size: string;
+    description: string;
 };
 
 const PanelPage = () => {
     const user = useSelector(selectUser);
     const [pet, setPet] = useState<PetT>({} as PetT);
-    const navigate = useNavigate();
     const viewWidth = useWindowDimensions().width;
     let slidesPerView = 0;
     const dispatch = useDispatch();
@@ -79,18 +50,41 @@ const PanelPage = () => {
         }));
     };
 
+    async function registerNewPet() {
+        const newPet = pet;
+        let isCastrated = false;
 
-    function registerNewPet() { }
+        if (newPet.castrated == "sim") {
+            isCastrated = true;
+        }
+
+        const body = {
+            ...newPet,
+            gender: newPet.gender == "2" ? "femea" : "macho",
+            age: newPet.age,
+            castrated: isCastrated,
+            user_id: user.id
+        }
+
+        try {
+            let response = await api.post("/pets", body);
+
+            setPets([...pets, response.data]);
+            //dispatch();
+        }
+        catch (error) {
+            console.log("Erro:", error);
+        }
+    }
 
     useEffect(() => {
-        !user.id && navigate(ERoutes.LOGIN);
-
-        api.get("/pets")
+        api.get(`/pets/${user.id}`)
             .then((response) => {
                 setPets(response.data);
             })
             .catch(error => console.log("Erro: ", error));
-    }, []);
+
+    }, [user.id]);
 
     const bodyNode = <BodyNodeCadastroPet>
         <Form>
@@ -102,29 +96,44 @@ const PanelPage = () => {
                 </Col>
             </Row>
             <Row>
+                <Col>
+                    <Form.Group className="mb-3" controlId="specie">
+                        <Form.Select aria-label="Default select example" required placeholder="Espécie" onChange={e => handlePetFieldChange("specie", e.target.value)} >
+                            <option>Espécie</option>
+                            <option value="cachorro">Cachorro</option>
+                            <option value="gato">Gato</option>
+                            <option value="outro">Outro</option>
+                        </Form.Select>
+                    </Form.Group>
+                </Col>
+                <Col>
+                    <Form.Group className="mb-3" controlId="size">
+                        <Form.Select aria-label="Default select example" required placeholder="Porte" onChange={e => handlePetFieldChange("size", e.target.value)} >
+                            <option>Porte</option>
+                            <option value="pequeno">Pequeno</option>
+                            <option value="medio">Médio</option>
+                            <option value="grande">Grande</option>
+                            <option value="gigante">Gigante</option>
+                        </Form.Select>
+                    </Form.Group>
+                </Col>
+            </Row>
+            <Row>
                 <Col md={5}>
-                    <Form.Group className="mb-3 d-flex align-items-center" controlId="specie">
-                        <Form.Check // prettier-ignore
-                            type="radio"
-                            id="gender"
-                            label="Menino"
-                            value="male"
-                        />
-                        <Form.Check // prettier-ignore
-                            className="ms-3"
-                            type="radio"
-                            id="gender"
-                            label="Menina"
-                            value="female"
-                        />
+                    <Form.Group className="mb-3" controlId="gender">
+                        <Form.Select aria-label="Default select example" required placeholder="Gênero" onChange={e => handlePetFieldChange("gender", e.target.value)} >
+                            <option>Gênero</option>
+                            <option value="1">Menino</option>
+                            <option value="2">Menina</option>
+                        </Form.Select>
                     </Form.Group>
                 </Col>
                 <Col >
                     <Form.Group className="mb-3" controlId="castrated">
                         <Form.Select aria-label="Default select example" required placeholder="Castrado(a)" onChange={e => handlePetFieldChange("castrated", e.target.value)} >
                             <option>Castrado(a)?</option>
-                            <option value="1">Sim</option>
-                            <option value="2">Não</option>
+                            <option value="sim">Sim</option>
+                            <option value="nao">Não</option>
                         </Form.Select>
                     </Form.Group>
                 </Col>
@@ -153,14 +162,17 @@ const PanelPage = () => {
                     </Form.Group>
                 </Col>
             </Row>
+            <Button color="#FF41AD" outlined="none" type="button" onClick={registerNewPet}>
+                Adicionar
+            </Button>
         </Form>
     </BodyNodeCadastroPet>;
 
     function handleAddPet() {
-        dispatch(show({
+        dispatch(showModal({
             bodyNode: bodyNode,
             hasHeader: true,
-            title: "Novo pet"
+            title: "Cadastrar novo pet"
         }));
     }
 
@@ -180,26 +192,31 @@ const PanelPage = () => {
                             }}>+</Button>
                     </div>
 
-                    <Swiper
-                        spaceBetween={viewWidth > 1000 ? 30 : 10}
-                        slidesPerView={slidesPerView}
-                        onSlideChange={() => { }}
-                        onSwiper={(swiper) => { }}
-                    >
-                        {
-                            pets.map((pet, index) => {
-                                return <SwiperSlide key={index}>
-                                    <CardStyled
-                                        className="d-flex flex-column align-items-center justify-content-center"
-                                        style={{ background: generatePastelColor(index) }}
-                                    >
-                                        <img src={`/images/${pet.specie == "cachorro" ? "cat" : "dog"}.svg`} alt="Cachorro" />
-                                        {pet.name}
-                                    </CardStyled>
-                                </SwiperSlide>
-                            })
-                        }
-                    </Swiper>
+                    {pets.length > 0 &&
+                        <Swiper
+                            spaceBetween={viewWidth > 1000 ? 30 : 10}
+                            slidesPerView={slidesPerView}
+                            onSlideChange={() => { }}
+                            onSwiper={(swiper) => { }}
+                        >
+                            {
+                                pets.map((pet, index) => {
+                                    return <SwiperSlide key={index}>
+                                        <CardStyled
+                                            className="d-flex flex-column align-items-center justify-content-center"
+                                            style={{ background: generatePastelColor(index) }}
+                                        >
+                                            <img
+                                                src={`/images/${pet.specie == "cachorro" ?
+                                                    "dog" : pet.specie == "gato" ?
+                                                        "cat" : "another_animals"}.svg`}
+                                                alt={`${pet.name} - ${pet.specie}`} />
+                                            {pet.name}
+                                        </CardStyled>
+                                    </SwiperSlide>
+                                })
+                            }
+                        </Swiper>}
                 </section>
             </ContainerStyled>
         </PagePanel >
