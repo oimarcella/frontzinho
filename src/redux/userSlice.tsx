@@ -28,6 +28,8 @@ export const userSlice = createSlice({
             };
         },
         logout(state) {
+            console.log("🚀 ~ file: userSlice.tsx:31 ~ logout ~ state:", state)
+            localStorage.removeItem("@petpass-token");
             return initialState;
         }
     }

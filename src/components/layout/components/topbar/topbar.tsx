@@ -4,8 +4,10 @@ import { NavBarStyled, NavStyled, NavLinkStyled, NavbarBrandStyled } from "./top
 import { FormattedMessage } from "react-intl";
 import { ERoutes } from "../../../../core/enums/routes";
 import Button from "../button/button";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../../../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectUser } from "../../../../redux/userSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 
 const TopBarComponent = () => {
 
@@ -15,7 +17,7 @@ const TopBarComponent = () => {
 	const isDiscoverRoute = currentRoute == "/ola";
 	const styleMustBeDifferent = isHomeRoute || isLoginRoute || isDiscoverRoute;
 	const userLogged = useSelector(selectUser);
-	const userIsLogged = !!userLogged.id;
+	const dispatch = useDispatch();
 
 	function redirect(link: string) {
 		window.location.replace(link);
@@ -24,7 +26,7 @@ const TopBarComponent = () => {
 	return (
 		<NavBarStyled styleMustBeDifferent={styleMustBeDifferent} expand="lg">
 			<Container>
-				{!userIsLogged ?
+				{!userLogged.id ?
 					<NavbarBrandStyled as={Link} to={ERoutes.LOGIN}>
 						<img src="/images/petpass_small_dark-v1.svg" className="img-fluid" />
 					</NavbarBrandStyled>
@@ -38,7 +40,7 @@ const TopBarComponent = () => {
 					<NavStyled className="me-auto d-flex flex-row align-items-center justify-content-between">
 
 						<div className="d-flex flex-column flex-lg-row">
-							{((currentRoute !== "/login") && (currentRoute !== "/not-found") && (userIsLogged)) &&
+							{((currentRoute !== "/login") && (currentRoute !== "/not-found") && (userLogged.id)) &&
 								<NavLinkStyled as={Link} to={ERoutes.PROFILE}>
 									<FormattedMessage
 										id="topbar_profile_link"
@@ -52,6 +54,20 @@ const TopBarComponent = () => {
 							(currentRoute == "/login" || currentRoute == "/") &&
 							<div className="d-flex flex-column flex-lg-row">
 								<Button outlined="outlined" color="#0B344E" className="mt-2 mt-lg-0" onClick={() => { redirect(ERoutes.SIGNUP) }}>Criar conta</Button>
+							</div>
+						}
+
+						{userLogged.id &&
+							<div className="d-flex flex-column flex-lg-row">
+								<Button
+									outlined="outlined"
+									color="#0B344E"
+									className="mt-2 mt-lg-0"
+									onClick={() => { dispatch(logout()) }}
+									customStyles={{ border: "none" }}
+								>
+									<FontAwesomeIcon className="ms-1" icon={faRightFromBracket} />
+								</Button>
 							</div>
 						}
 					</NavStyled>

@@ -9,7 +9,7 @@ export const ButtonStyled = styled.button.attrs((props: ButtonStyledType) => ({
 })) <ButtonStyledType>`
   font-size: 16px;
   padding: 6px 12px;
-  border-radius: 6px;
+  border-radius: 2px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
@@ -19,7 +19,7 @@ export const ButtonStyled = styled.button.attrs((props: ButtonStyledType) => ({
     props.outlined && props.outlined == "outlined" ?
       css`
         background-color: transparent;
-        border: 1px solid ${props.color} !important;
+        border: 1px solid ${props.color};
         color: ${props.color} !important;
         &:hover {
           background: ${props.color};
