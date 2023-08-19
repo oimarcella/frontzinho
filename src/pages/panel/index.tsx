@@ -10,6 +10,7 @@ import Button from "../../components/layout/components/button/button";
 import { showModal } from "../../redux/modalSlice";
 import { Form, Col, Row } from "react-bootstrap";
 import api from "../../services/api";
+import Loading from "../../components/layout/components/loading";
 
 
 type PetT = {
@@ -25,6 +26,7 @@ type PetT = {
 };
 
 const PanelPage = () => {
+    const [isLoading, setLoading] = useState(false);
     const user = useSelector(selectUser);
     const [pet, setPet] = useState<PetT>({} as PetT);
     const viewWidth = useWindowDimensions().width;
@@ -78,11 +80,27 @@ const PanelPage = () => {
     }
 
     useEffect(() => {
+        setLoading(true);
         api.get(`/pets/${user.id}`)
             .then((response) => {
                 setPets(response.data);
+                setTimeout(
+                    () => {
+                        setLoading(false);
+                    },
+                    3000
+                )
             })
-            .catch(error => console.log("Erro: ", error));
+            .catch(error => {
+                console.log("Erro: ", error);
+
+                setTimeout(
+                    () => {
+                        setLoading(false);
+                    },
+                    3000
+                )
+            });
 
     }, [user.id]);
 
@@ -177,49 +195,52 @@ const PanelPage = () => {
     }
 
     return (
-        <PagePanel>
-            <ContainerStyled>
-                <section>
-                    <div className="d-flex align-items-center justify-content-start mb-2">
-                        <h3>Seus pets</h3>
-                        <Button
-                            onClick={handleAddPet}
-                            color="#fe51b3" className="ms-2" customStyles={{
-                                fontSize: "1rem",
-                                borderRadius: "100%",
-                                width: "30px",
-                                height: "30px"
-                            }}>+</Button>
-                    </div>
+        isLoading ?
+            <Loading />
+            :
+            <PagePanel>
+                <ContainerStyled>
+                    <section>
+                        <div className="d-flex align-items-center justify-content-start mb-2">
+                            <h3>Seus pets</h3>
+                            <Button
+                                onClick={handleAddPet}
+                                color="#fe51b3" className="ms-2" customStyles={{
+                                    fontSize: "1rem",
+                                    borderRadius: "100%",
+                                    width: "30px",
+                                    height: "30px"
+                                }}>+</Button>
+                        </div>
 
-                    {pets.length > 0 &&
-                        <Swiper
-                            spaceBetween={viewWidth > 1000 ? 30 : 10}
-                            slidesPerView={slidesPerView}
-                            onSlideChange={() => { }}
-                            onSwiper={(swiper) => { }}
-                        >
-                            {
-                                pets.map((pet, index) => {
-                                    return <SwiperSlide key={index}>
-                                        <CardStyled
-                                            className="d-flex flex-column align-items-center justify-content-center"
-                                            style={{ background: generatePastelColor(index) }}
-                                        >
-                                            <img
-                                                src={`/images/${pet.specie == "cachorro" ?
-                                                    "dog" : pet.specie == "gato" ?
-                                                        "cat" : "another_animals"}.svg`}
-                                                alt={`${pet.name} - ${pet.specie}`} />
-                                            {pet.name}
-                                        </CardStyled>
-                                    </SwiperSlide>
-                                })
-                            }
-                        </Swiper>}
-                </section>
-            </ContainerStyled>
-        </PagePanel >
+                        {pets.length > 0 &&
+                            <Swiper
+                                spaceBetween={viewWidth > 1000 ? 30 : 10}
+                                slidesPerView={slidesPerView}
+                                onSlideChange={() => { }}
+                                onSwiper={(swiper) => { }}
+                            >
+                                {
+                                    pets.map((pet, index) => {
+                                        return <SwiperSlide key={index}>
+                                            <CardStyled
+                                                className="d-flex flex-column align-items-center justify-content-center"
+                                                style={{ background: generatePastelColor(index) }}
+                                            >
+                                                <img
+                                                    src={`/images/${pet.specie == "cachorro" ?
+                                                        "dog" : pet.specie == "gato" ?
+                                                            "cat" : "another_animals"}.svg`}
+                                                    alt={`${pet.name} - ${pet.specie}`} />
+                                                {pet.name}
+                                            </CardStyled>
+                                        </SwiperSlide>
+                                    })
+                                }
+                            </Swiper>}
+                    </section>
+                </ContainerStyled>
+            </PagePanel>
     )
 }
 export default PanelPage;
