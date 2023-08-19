@@ -23,7 +23,7 @@ const LoginPage = () => {
 
     useEffect(() => {
         user.id && navigate(ERoutes.PANEL);
-    }, [])
+    }, [user.id])
 
     const submit: MouseEventHandler<HTMLButtonElement> = async (event) => {
         event.preventDefault();
