@@ -48,3 +48,9 @@ a {
 .text-color-secondary-blue {
     color: var(--light-blue-500) !important;
 }
+
+button.navbar-toggler {
+    border: none;
+    width: 40px;
+    padding: 0;
+}

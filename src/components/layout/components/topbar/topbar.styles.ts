@@ -1,4 +1,5 @@
 import { Nav, Navbar, NavbarBrand } from "react-bootstrap";
+import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
 import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
@@ -15,12 +16,12 @@ export const NavBarStyled = styled(Navbar)`
             css`
         position:relative!important;
         width: 100%;
-        background: transparent;
+        background: #fff;
         `:
             `
             position:relative;
             background: #D1E8F5;
-            border-bottom: 2px solid #D1E8F5;
+            border-bottom: 2px solid #fff;
         `
     }
 
@@ -30,19 +31,25 @@ export const NavBarStyled = styled(Navbar)`
     
     @media(max-width: 1000px){
         position: relative!important;
-        background-color: #d1e8f5;
+        background-color: #fff;
     }
 `;
 
 export const NavStyled = styled(Nav)`
-    width:100%;
+    width: 100%;
 
     div:first-child{
         width:100%;
+        display: flex;
+        flex: 1;
     }
 
     button{ 
         white-space: nowrap;
+    }
+
+    @media (max-width: 1000px) {
+        width:unset;
     }
 `;
 
@@ -59,8 +66,10 @@ export const NavLinkStyled = styled(NavLink)`
 
     transition: all .3s;
 
+    
     @media (max-width: 1000px) {
         padding: 2px 0;
+        width:100%;
     }
 
     &:hover{
@@ -70,4 +79,8 @@ export const NavLinkStyled = styled(NavLink)`
 
 export const NavbarBrandStyled = styled(NavbarBrand)`
     max-width: 140px;
+`;
+
+export const NavCollapseStyled = styled(NavbarCollapse)`
+    
 `;
