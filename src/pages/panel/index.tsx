@@ -95,9 +95,21 @@ const PanelPage = () => {
             let response = await api.post("/pets", body);
             setPets([...pets, response.data]);
             clearForm();
+            dispatch(
+                show({
+                    message: `Novo pet: ${pet.name}! `,
+                    type: "success"
+                })
+            );
         }
         catch (error) {
             console.log("Erro:", error);
+            dispatch(
+                show({
+                    message: `Erro ao cadastrar pet`,
+                    type: "error"
+                })
+            );
         }
     }
 
