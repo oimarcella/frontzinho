@@ -12,12 +12,12 @@ import { Form, Col, Row } from "react-bootstrap";
 import api from "../../services/api";
 import Loading from "../../components/layout/components/loading";
 import { IconButton, Menu, MenuItem } from "@material-ui/core";
-import { MoreVert, SettingsOutlined } from "@material-ui/icons";
+import { MoreVert } from "@material-ui/icons";
 import { show } from "../../redux/toastSlice";
 
 
 type PetT = {
-    id: number;
+    id?: number;
     age: string;
     specie: string;
     name: string;
@@ -37,6 +37,7 @@ const PanelPage = () => {
     let slidesPerView = 0;
     const dispatch = useDispatch();
     const [pets, setPets] = useState<PetT[]>([]);
+    const [petIsLoading, setPetIsLoading] = useState(0);
 
     const [openMoreOptions, setOpenMoreOptions] = React.useState<null | HTMLElement>(null);
     const [whichMoreOptions, setWhichMoreOptions] = useState<null | string>(null);
@@ -53,6 +54,20 @@ const PanelPage = () => {
         return `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
     };
 
+    function clearForm() {
+        setPet({
+            age: "",
+            specie: "",
+            name: "",
+            castrated: "",
+            weight: 0,
+            gender: "",
+            breed: "",
+            size: "",
+            description: ""
+        });
+    }
+
     const handlePetFieldChange = (field: string, value: any) => {
         setPet(prev => ({
             ...prev,
@@ -64,7 +79,7 @@ const PanelPage = () => {
         const newPet = pet;
         let isCastrated = false;
 
-        if (newPet.castrated == "sim") {
+        if (pet.castrated == "sim") {
             isCastrated = true;
         }
 
@@ -78,8 +93,8 @@ const PanelPage = () => {
 
         try {
             let response = await api.post("/pets", body);
-
             setPets([...pets, response.data]);
+            clearForm();
         }
         catch (error) {
             console.log("Erro:", error);
@@ -211,18 +226,44 @@ const PanelPage = () => {
         setWhichMoreOptions(null);
     };
 
+    async function editPet(petId: number) {
+        try {
+            if (petId) {
+                setPetIsLoading(petId);
+                await api.put(`/pets/${petId}`)
+                const newPets = pets.filter(pet => pet.id !== petId);
+                setTimeout(() => {
+                    setPets(newPets);
+                    setPetIsLoading(0);
+                }, 3000);
+
+                handleClose();
+            }
+        }
+        catch (error) {
+            setPetIsLoading(0);
+            console.log("Erro:", error);
+            dispatch(show({
+                type: "error",
+                message: "Não foi possível editar o pet"
+            }));
+        }
+    }
     async function deletePet(petId: number) {
         try {
+            setPetIsLoading(petId);
             await api.delete(`/pets/${petId}`)
             const newPets = pets.filter(pet => pet.id !== petId);
 
             setTimeout(() => {
                 setPets(newPets);
+                setPetIsLoading(0);
             }, 3000);
 
             handleClose();
         }
         catch (error) {
+            setPetIsLoading(0);
             console.log("Erro:", error);
             dispatch(show({
                 type: "error",
@@ -259,47 +300,54 @@ const PanelPage = () => {
                                 pets.map((pet, index) => {
                                     return (
                                         <SwiperSlide key={index}>
-                                            <CardStyled
-                                                className="d-flex flex-column align-items-center justify-content-center"
-                                                style={{ background: generatePastelColor(index) }}
-                                            >
-                                                <div className="d-flex flex-row-reverse align-items-start">
-                                                    <IconButton
-                                                        aria-label="more"
-                                                        onClick={(e) => handleMoreOptions(e, pet.name)}
-                                                        aria-haspopup="true"
-                                                        aria-controls="long-menu"
-                                                    >
-                                                        <MoreVert />
-                                                    </IconButton>
-                                                    <Menu
-                                                        id={`more-options-${pet.name}-${index}`}
-                                                        anchorOrigin={{
-                                                            vertical: 'bottom',
-                                                            horizontal: 'left',
-                                                        }}
-                                                        transformOrigin={{
-                                                            vertical: 'top',
-                                                            horizontal: 'right',
-                                                        }}
-                                                        aria-labelledby="demo-positioned-button"
-                                                        anchorEl={openMoreOptions as any}
-                                                        keepMounted onClose={handleClose}
-                                                        open={whichMoreOptions === pet.name}
-                                                    >
-                                                        <MenuItem onClick={() => deletePet(pet.id)}>Remover</MenuItem>
-                                                        <MenuItem onClick={handleClose}>Editar</MenuItem>
-                                                    </Menu>
+                                            {(petIsLoading && petIsLoading === pet.id) ?
+                                                <Loading />
+                                                :
+                                                <CardStyled
+                                                    className="d-flex flex-column align-items-center justify-content-center"
+                                                    style={{ background: generatePastelColor(index) }}
+                                                >
+                                                    <div className="d-flex flex-row-reverse align-items-start">
+                                                        <IconButton
+                                                            aria-label="more"
+                                                            onClick={(e) => handleMoreOptions(e, pet.name)}
+                                                            aria-haspopup="true"
+                                                            aria-controls="long-menu"
+                                                        >
+                                                            <MoreVert />
+                                                        </IconButton>
+                                                        <Menu
+                                                            id={`more-options-${pet.name}-${index}`}
+                                                            anchorOrigin={{
+                                                                vertical: 'bottom',
+                                                                horizontal: 'left',
+                                                            }}
+                                                            transformOrigin={{
+                                                                vertical: 'top',
+                                                                horizontal: 'right',
+                                                            }}
+                                                            aria-labelledby="demo-positioned-button"
+                                                            anchorEl={openMoreOptions as any}
+                                                            keepMounted onClose={handleClose}
+                                                            open={whichMoreOptions === pet.name}
+                                                        >
+                                                            <MenuItem onClick={() => {
+                                                                if (pet.id) deletePet(pet.id)
+                                                            }}>Remover</MenuItem>
+                                                            <MenuItem onClick={() => {
+                                                                if (pet.id) editPet(pet.id)
+                                                            }}>Editar</MenuItem>
+                                                        </Menu>
 
-                                                    <img
-                                                        src={`/images/${pet.specie == "cachorro" ?
-                                                            "dog" : pet.specie == "gato" ?
-                                                                "cat" : "another_animals"}.svg`}
-                                                        alt={`${pet.name} - ${pet.specie}`}
-                                                    />
-                                                </div>
-                                                {pet.name}
-                                            </CardStyled>
+                                                        <img
+                                                            src={`/images/${pet.specie == "cachorro" ?
+                                                                "dog" : pet.specie == "gato" ?
+                                                                    "cat" : "another_animals"}.svg`}
+                                                            alt={`${pet.name} - ${pet.specie}`}
+                                                        />
+                                                    </div>
+                                                    {pet.name}
+                                                </CardStyled>}
                                         </SwiperSlide>
                                     )
                                 })
