@@ -13,11 +13,16 @@
     "deploy": "gh-pages -d build"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
+    "@mui/icons-material": "^5.14.3",
+    "@mui/lab": "5.0.0-alpha.140",
+    "@mui/material": "^5.14.5",
     "@phosphor-icons/react": "^2.0.8",
     "@popperjs/core": "^2.11.6",
     "@reduxjs/toolkit": "^1.9.5",

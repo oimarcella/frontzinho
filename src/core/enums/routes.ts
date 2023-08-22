@@ -6,5 +6,6 @@ export enum ERoutes {
   PROFILE = "perfil",
   SIGNUP = "/criar-conta",
   DISCOVER = "/descubra",
-  PANEL = "/painel"
+  PANEL = "/painel",
+  HISTORY = "/historico"
 }

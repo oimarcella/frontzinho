@@ -22,11 +22,11 @@ function MyModal(props: MyModalT) {
 
     return (
         <Modal show={modal.isOpen} onHide={handleClose}>
-            <Modal.Header closeButton>
-                {props.hasHeader &&
+            {props.hasHeader &&
+                <Modal.Header closeButton>
                     <Modal.Title>{modal.title && modal.title}</Modal.Title>
-                }
-            </Modal.Header>
+                </Modal.Header>
+            }
 
             {props.contentBody &&
                 <Modal.Body>

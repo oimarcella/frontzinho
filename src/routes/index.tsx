@@ -19,6 +19,7 @@ import TopBarComponent from "../components/layout/components/topbar/topbar";
 import Footer from "../components/layout/components/footer/footer";
 import MyToast from "../components/layout/components/toast";
 import PrivateRoute from "./privateRoutes";
+import HistoryPage from "../pages/history";
 
 const AppRoutes = () => {
   const modal = useSelector(selectModal);
@@ -47,9 +48,8 @@ const AppRoutes = () => {
         <Route path={ERoutes.SIGNUP} element={<SignUpPage />} />
         <Route element={<PrivateRoute />}>
           <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
-        </Route>
-        <Route element={<PrivateRoute />}>
           <Route path={ERoutes.PANEL} element={<PanelPage />} />
+          <Route path={ERoutes.HISTORY} element={<HistoryPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage404 />} />
