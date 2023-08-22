@@ -185,6 +185,7 @@ const PanelPage = () => {
                             <option>Castrado(a)?</option>
                             <option value="sim">Sim</option>
                             <option value="nao">Não</option>
+                            <option value="nao">Não se aplica</option>
                         </Form.Select>
                     </Form.Group>
                 </Col>
