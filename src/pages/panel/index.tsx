@@ -46,7 +46,6 @@ const PanelPage = () => {
     else if (viewWidth < 400) slidesPerView = 1.3;
     else slidesPerView = 2.3;
 
-
     const generatePastelColor = (index: number) => {
         const baseHue = (index * 137.3) % 360; // Varia o tom da cor com base no índice
         const saturation = 70; // Defi3e a saturação
@@ -301,7 +300,7 @@ const PanelPage = () => {
                             }}>+</Button>
                     </div>
 
-                    {pets.length > 0 &&
+                    {pets.length > 0 ?
                         <Swiper
                             spaceBetween={viewWidth > 1000 ? 30 : 10}
                             slidesPerView={slidesPerView}
@@ -364,7 +363,10 @@ const PanelPage = () => {
                                     )
                                 })
                             }
-                        </Swiper>}
+                        </Swiper>
+                        :
+                        <p>Nenhum pet por enquanto</p>
+                    }
                 </section>
             </ContainerStyled>
         </PagePanel >
