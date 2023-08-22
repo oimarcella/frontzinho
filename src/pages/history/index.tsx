@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { Container } from 'react-bootstrap';
 import { ContainerStyled, TimelineContentStyled } from './styles';
 import { Pets } from '@material-ui/icons';
-import { MedicalInformation } from '@mui/icons-material';
+import { MedicalInformation, Vaccines } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { showModal } from '../../redux/modalSlice';
 
@@ -75,11 +75,58 @@ export default function HistoryPage() {
                         </TimelineSeparator>
                         <TimelineContent sx={{ py: '12px', px: 2 }}>
                             <Typography variant="caption" component="span" color="primary">
-                                Internação
+                                Procedimento
                             </Typography>
                             <Typography variant="body2">Internação por 24 horas</Typography>
                         </TimelineContent>
                     </TimelineItem>
+                    <TimelineItem>
+                        <TimelineOppositeContent
+                            sx={{ m: 'auto 0' }}
+                            align="right"
+                            variant="body2"
+                            color="text.secondary"
+                        >
+                            1 jun. 2023
+                        </TimelineOppositeContent>
+                        <TimelineSeparator>
+                            <TimelineConnector />
+                            <TimelineDot>
+                                <Vaccines />
+                            </TimelineDot>
+                            <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent sx={{ py: '12px', px: 2 }}>
+                            <Typography variant="caption" component="span" color="primary">
+                                Medicação/Vacinas
+                            </Typography>
+                            <Typography variant="body2">Vacina GPX-5454 Giardia</Typography>
+                        </TimelineContent>
+                    </TimelineItem>
+                    <TimelineItem>
+                        <TimelineOppositeContent
+                            sx={{ m: 'auto 0' }}
+                            align="right"
+                            variant="body2"
+                            color="text.secondary"
+                        >
+                            10 mar. 2023
+                        </TimelineOppositeContent>
+                        <TimelineSeparator>
+                            <TimelineConnector />
+                            <TimelineDot>
+                                <Pets />
+                            </TimelineDot>
+                            <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContentStyled sx={{ py: '12px', px: 2 }} onClick={() => handleMoreDetails()}>
+                            <Typography variant="caption" component="span" color="primary">
+                                Consulta
+                            </Typography>
+                            <Typography variant="body2">Saudável</Typography>
+                        </TimelineContentStyled>
+                    </TimelineItem>
+                    <TimelineItem></TimelineItem>
                 </Timeline>
             </ContainerStyled>
         </>
