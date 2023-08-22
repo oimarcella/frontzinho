@@ -21,7 +21,21 @@ import { showModal } from '../../redux/modalSlice';
 export default function HistoryPage() {
     const dispatch = useDispatch();
 
-    const moreDetailsElement = <p>Mais detalhes</p>;
+    const moreDetailsElement = <div>
+        <div className='d-flex justify-content-between'>
+            <Typography variant='body2' style={{ color: '#0b344e' }}>Consulta</Typography>
+            <Typography variant='body2' style={{ color: '#0b344e' }}>10 mar. 2023</Typography>
+        </div>
+
+        <div className='mt-4'>
+            <Typography variant="body2">Descrição</Typography>
+            <p>
+                Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior.
+                Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo.
+                Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.
+            </p>
+        </div>
+    </div>;
 
     function handleMoreDetails() {
         dispatch(showModal({
@@ -110,7 +124,7 @@ export default function HistoryPage() {
                             variant="body2"
                             color="text.secondary"
                         >
-                            10 mar. 2023
+                            15 jun. 2023
                         </TimelineOppositeContent>
                         <TimelineSeparator>
                             <TimelineConnector />
