@@ -4,7 +4,6 @@ import Button from '../button/button';
 import Form from 'react-bootstrap/Form';
 import { Col, Row } from 'react-bootstrap';
 import { ModalStyled } from './contactModal.styles';
-import ReCaptcha from '../reCaptcha/reCaptcha';
 
 type ContactModalT = {
   isOpen: boolean;
