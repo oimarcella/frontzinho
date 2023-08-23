@@ -7,6 +7,5 @@ export const ContainerStyled = styled(Container)`
 `;
 
 export const TimelineContentStyled = styled(TimelineContent)`
-    //border: 2px dashed red;
     cursor: pointer;
 `;

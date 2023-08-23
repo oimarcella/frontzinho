@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const WrapperLoading = styled.div`
+    height: 100%;
 `;
 export const LoadingStyled = styled.div`
     border: 5px solid var(--light-blue-200);
