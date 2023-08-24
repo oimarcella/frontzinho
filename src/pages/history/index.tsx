@@ -1,22 +1,154 @@
 import * as React from 'react';
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import TimelineDot from '@mui/lab/TimelineDot';
-import FastfoodIcon from '@mui/icons-material/Fastfood';
-import LaptopMacIcon from '@mui/icons-material/LaptopMac';
-import HotelIcon from '@mui/icons-material/Hotel';
-import RepeatIcon from '@mui/icons-material/Repeat';
 import Typography from '@mui/material/Typography';
-import { Container } from 'react-bootstrap';
-import { ContainerStyled, TimelineContentStyled } from './styles';
-import { Pets } from '@material-ui/icons';
-import { MedicalInformation, Vaccines } from '@mui/icons-material';
+import { ContainerStyled, Overflow, WrapperMark } from './styles';
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 import { useDispatch } from 'react-redux';
+import {
+    MedicalInformation,
+    MedicalServicesOutlined,
+    PetsOutlined,
+    VaccinesOutlined
+} from '@mui/icons-material';
+import { styled } from '@mui/material';
+import { StepIconProps } from '@mui/material/StepIcon';
 import { showModal } from '../../redux/modalSlice';
+import { Section } from '../../components/layout/components/styles/sections';
+
+type MyStepIconPropsT = {
+    extraParams: Record<string, any>;
+} & StepIconProps;
+
+const steps = [
+    {
+        title: "Consulta",
+        summary: "Diagnóstico de Giárdia",
+        type: "CONSULTA",
+        date: "12/04/2023"
+    },
+    {
+        title: "Procedimento",
+        summary: "Internação 24h",
+        type: "PROCEDIMENTO",
+        date: "12/04/2023"
+    },
+    {
+        title: "Procedimento",
+        summary: "Alta",
+        type: "PROCEDIMENTO",
+        date: "12/04/2023"
+    },
+    {
+        title: "Consulta",
+        summary: "Diagnóstico de Giárdia",
+        type: "CONSULTA",
+        date: "12/04/2023"
+    },
+    {
+        title: "Procedimento",
+        summary: "Internação 24h",
+        type: "PROCEDIMENTO",
+        date: "12/04/2023"
+    },
+    {
+        title: "Procedimento",
+        summary: "Alta",
+        type: "PROCEDIMENTO",
+        date: "12/04/2023"
+    },
+    {
+        title: "Consulta",
+        summary: "Diagnóstico de Giárdia",
+        type: "CONSULTA",
+        date: "12/04/2023"
+    },
+    {
+        title: "Procedimento",
+        summary: "Internação 24h",
+        type: "PROCEDIMENTO",
+        date: "12/04/2023"
+    },
+    {
+        title: "Procedimento",
+        summary: "Alta",
+        type: "PROCEDIMENTO",
+        date: "12/04/2023"
+    },
+    {
+        title: "Consulta",
+        summary: "Diagnóstico de Giárdia",
+        type: "CONSULTA",
+        date: "12/04/2023"
+    },
+    {
+        title: "Procedimento",
+        summary: "Internação 24h",
+        type: "PROCEDIMENTO",
+        date: "12/04/2023"
+    },
+    {
+        title: "Procedimento",
+        summary: "Alta",
+        type: "PROCEDIMENTO",
+        date: "12/04/2023"
+    },
+];
+
+const ColorlibStepIconRoot = styled('div')<{
+    ownerState: { completed?: boolean; active?: boolean };
+}>(({ theme, ownerState }) => ({
+    backgroundColor: '#7fc9cd',
+    '&:hover': {
+        backgroundColor: '#66a8ac !important',
+        scale: '1.1'
+    },
+    zIndex: 1,
+    color: '#fff',
+    width: 80,
+    height: 80,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    borderRadius: '50%',
+    cursor: "pointer",
+    transition: 'all .3s ease',
+
+    ...(ownerState.active && {
+        /*backgroundImage:
+            'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',*/
+        background: "#fe51b3",
+        boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+
+        '&:hover': {
+            backgroundColor: '#dd439a !important',
+            scale: '1.1'
+        }
+    })/*,
+    ...(ownerState.active && {
+        backgroundImage:
+            'linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)',
+    }),*/
+}));
+
+function ColorlibStepIcon(props: MyStepIconPropsT) {
+    const { active, completed, className, extraParams } = props;
+
+    const icons: { [index: string]: React.ReactElement } = {
+        CONSULTA: <PetsOutlined />,
+        MEDICAMENTO: <VaccinesOutlined />,
+        OUTRO: <MedicalServicesOutlined />,
+        PROCEDIMENTO: <MedicalInformation />,
+    };
+
+    return (
+        <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
+            {icons[String(extraParams.step.type)]}
+        </ColorlibStepIconRoot>
+    );
+}
 
 export default function HistoryPage() {
     const dispatch = useDispatch();
@@ -45,104 +177,46 @@ export default function HistoryPage() {
     }
 
     return (
-        <>
-            <ContainerStyled>
-                <Timeline position="alternate">
-                    <TimelineItem>
-                        <TimelineOppositeContent
-                            sx={{ m: 'auto 0' }}
-                            align="right"
-                            variant="body2"
-                            color="text.secondary"
-                        >
-                            10 mar. 2023
-                        </TimelineOppositeContent>
-                        <TimelineSeparator>
-                            <TimelineConnector />
-                            <TimelineDot>
-                                <Pets />
-                            </TimelineDot>
-                            <TimelineConnector />
-                        </TimelineSeparator>
-                        <TimelineContentStyled sx={{ py: '12px', px: 2 }} onClick={() => handleMoreDetails()}>
-                            <Typography variant="caption" component="span" color="primary">
-                                Consulta
-                            </Typography>
-                            <Typography variant="body2">Diagóstico: Giardia</Typography>
-                        </TimelineContentStyled>
-                    </TimelineItem>
-                    <TimelineItem>
-                        <TimelineOppositeContent
-                            sx={{ m: 'auto 0' }}
-                            align="right"
-                            variant="body2"
-                            color="text.secondary"
-                        >
-                            11 mar. 2023
-                        </TimelineOppositeContent>
-                        <TimelineSeparator>
-                            <TimelineConnector />
-                            <TimelineDot>
-                                <MedicalInformation />
-                            </TimelineDot>
-                            <TimelineConnector />
-                        </TimelineSeparator>
-                        <TimelineContent sx={{ py: '12px', px: 2 }}>
-                            <Typography variant="caption" component="span" color="primary">
-                                Procedimento
-                            </Typography>
-                            <Typography variant="body2">Internação por 24 horas</Typography>
-                        </TimelineContent>
-                    </TimelineItem>
-                    <TimelineItem>
-                        <TimelineOppositeContent
-                            sx={{ m: 'auto 0' }}
-                            align="right"
-                            variant="body2"
-                            color="text.secondary"
-                        >
-                            1 jun. 2023
-                        </TimelineOppositeContent>
-                        <TimelineSeparator>
-                            <TimelineConnector />
-                            <TimelineDot>
-                                <Vaccines />
-                            </TimelineDot>
-                            <TimelineConnector />
-                        </TimelineSeparator>
-                        <TimelineContent sx={{ py: '12px', px: 2 }}>
-                            <Typography variant="caption" component="span" color="primary">
-                                Medicação/Vacinas
-                            </Typography>
-                            <Typography variant="body2">Vacina GPX-5454 Giardia</Typography>
-                        </TimelineContent>
-                    </TimelineItem>
-                    <TimelineItem>
-                        <TimelineOppositeContent
-                            sx={{ m: 'auto 0' }}
-                            align="right"
-                            variant="body2"
-                            color="text.secondary"
-                        >
-                            15 jun. 2023
-                        </TimelineOppositeContent>
-                        <TimelineSeparator>
-                            <TimelineConnector />
-                            <TimelineDot>
-                                <Pets />
-                            </TimelineDot>
-                            <TimelineConnector />
-                        </TimelineSeparator>
-                        <TimelineContentStyled sx={{ py: '12px', px: 2 }} onClick={() => handleMoreDetails()}>
-                            <Typography variant="caption" component="span" color="primary">
-                                Consulta
-                            </Typography>
-                            <Typography variant="body2">Saudável</Typography>
-                        </TimelineContentStyled>
-                    </TimelineItem>
-                    <TimelineItem></TimelineItem>
-                </Timeline>
-            </ContainerStyled>
-        </>
+        <Section>
+            <ContainerStyled className="d-flex ">
+
+                <Overflow>
+                    <Box sx={{ width: '100%' }}>
+                        <Stepper alternativeLabel activeStep={steps.length - 1}>
+                            {steps.map((step, index) => (
+                                <Step key={index}>
+                                    <StepLabel
+                                        onClick={() => handleMoreDetails()}
+                                        StepIconComponent={(props) =>
+                                            <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
+                                                <p>10 mar. 2023</p>
+                                                <ColorlibStepIcon
+                                                    {...props}
+                                                    extraParams={{
+                                                        step
+                                                    }}
+                                                />
+                                            </WrapperMark>
+                                        }
+                                        extraParams={{ type: 'valor1' }}
+                                    >
+                                        <div
+                                            style={{ border: 'none', padding: '10px 0' }}
+                                            className='d-flex flex-column justify-content-center align-items-center'
+                                        >
+                                            <Typography variant="button">
+                                                {step.title}
+                                            </Typography>
+                                            <p>{step.summary}</p>
+                                        </div>
+                                    </StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
+                    </Box>
+                </Overflow>
+
+            </ContainerStyled >
+        </Section>
     );
 }
