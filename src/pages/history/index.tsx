@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
-import { ContainerStyled, Overflow, WrapperMark } from './styles';
+import { ContainerStyled, Overflow, SummaryStyled, TitleStyled, WrapperMark } from './styles';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -106,8 +106,8 @@ const ColorlibStepIconRoot = styled('div')<{
     },
     zIndex: 1,
     color: '#fff',
-    width: 80,
-    height: 80,
+    width: 50,
+    height: 50,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -178,7 +178,7 @@ export default function HistoryPage() {
 
     return (
         <Section>
-            <ContainerStyled className="d-flex ">
+            <ContainerStyled className="d-flex align-items-center">
 
                 <Overflow>
                     <Box sx={{ width: '100%' }}>
@@ -204,10 +204,10 @@ export default function HistoryPage() {
                                             style={{ border: 'none', padding: '10px 0' }}
                                             className='d-flex flex-column justify-content-center align-items-center'
                                         >
-                                            <Typography variant="button">
+                                            <TitleStyled>
                                                 {step.title}
-                                            </Typography>
-                                            <p>{step.summary}</p>
+                                            </TitleStyled>
+                                            <SummaryStyled>{step.summary}</SummaryStyled>
                                         </div>
                                     </StepLabel>
                                 </Step>

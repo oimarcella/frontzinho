@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { TimelineContent, TimelineItem } from "@mui/lab";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
@@ -26,5 +27,19 @@ export const WrapperMark = styled.span`
         box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
         text-align: center;
         border-radius: 30px;
+        font-size: 10px;
+        color: var(--light-blue-500);
+        font-weight: bold!important;
     }
+`;
+
+export const TitleStyled = styled(Typography)`
+    color: var(--light-blue-300)!important;
+    font-weight: bold!important;
+    font-size: 12px!important;
+`;
+
+export const SummaryStyled = styled.p`
+    color: var(--dark-blue-500)!important;
+    font-size: 12px!important;
 `;
