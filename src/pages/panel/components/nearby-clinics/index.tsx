@@ -33,7 +33,7 @@ const NearbyClinics = () => {
     }
 
     return (
-        <NearbyStyled>
+        <>
             <Section>
                 <h3 className="mb-4">Clínicas e hospitais próximos de você</h3>
                 {!isLoading ?
@@ -76,7 +76,7 @@ const NearbyClinics = () => {
                     <Loading />
                 }
             </Section>
-        </NearbyStyled>
+        </>
     )
 }
 
