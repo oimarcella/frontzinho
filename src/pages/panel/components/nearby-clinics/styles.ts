@@ -18,7 +18,3 @@ export const CardStyled = styled(Card)`
         text-overflow:    ellipsis;
     }
 `;
-
-export const NearbyStyled = styled.div`
-
-`;
