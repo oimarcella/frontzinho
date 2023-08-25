@@ -1,6 +1,6 @@
 import { ContainerStyled, FormStyled } from "./styles";
 import HeaderPage from "../../components/layout/components/headerPage/headerPage";
-import { Col, Form, Row } from "react-bootstrap";
+import { Accordion, Col, Container, Form, Row } from "react-bootstrap";
 import Button from "../../components/layout/components/button/button";
 import { ERoutes } from "../../core/enums/routes";
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { show } from "../../redux/toastSlice";
 import { EHttpResponse } from "../../core/enums/http-responses";
 import { login, selectUser } from "../../redux/userSlice";
+import { Section } from "../../components/layout/components/styles/sections";
+
+// TODO - perguntar se é clinica ou tutor, pra mostrar o formulario correspondende
+// TODO - Adicionar opcoes de servicos para a clinica adicionar ao seu perfil
 
 type userT = {
     name: string;
@@ -69,7 +73,7 @@ const SignUpPage = () => {
     const [validated, setValidated] = useState(false);
     const [arePwdDifferent, setarePwdDifferent] = useState(false);
     const userLogged = useSelector(selectUser);
-    const typeUser = "company";
+    const [typeUser, setTypeUser] = useState("");
     const [isLoading, setLoading] = useState(false);
 
 
@@ -202,180 +206,357 @@ const SignUpPage = () => {
     }
 
     return (
-        <ContainerStyled>
-            <HeaderPage
-                textToStyle=""
-                style={{ color: "#FF41AD" }}
-                title={typeUser === "company" ? "Empresa" : "Tutor"}
-                text="Vamos criar sua conta!"
-            />
+        <>
+            <ContainerStyled>
+                <HeaderPage
+                    textToStyle=""
+                    style={{ color: "#FF41AD" }}
+                    title={typeUser === "company" ? "Empresa" : typeUser === "tutor" ? "Tutor" : ""}
+                    text="Vamos criar sua conta!"
+                />
 
-            <a href={ERoutes.ORIGIN}><FontAwesomeIcon icon={faArrowLeft} /> Fazer login</a>
+                <a href={ERoutes.ORIGIN}><FontAwesomeIcon icon={faArrowLeft} /> Fazer login</a>
 
-            {typeUser !== "company" ?
-                <FormStyled
-                    className="d-flex flex-column align-items-end mt-4"
-                    validated={validated}
-                    onSubmit={handleSubmit}
-                >
-                    <div>
-                        <Row>
-                            <Col md={6}>
-                                <Form.Group className="mb-3" controlId="name">
-                                    <Form.Control required type="text" placeholder="Primeiro nome" onChange={e => setUser(prev => ({ ...prev, name: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                            <Col md={6}>
-                                <Form.Group className="mb-3" controlId="lastname">
-                                    <Form.Control required type="text" placeholder="Sobrenome" onChange={e => setUser(prev => ({ ...prev, lastname: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="cpf">
-                                    <Form.Control required type="number" placeholder="CPF" onChange={e => setUser(prev => ({ ...prev, cpf: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="phone">
-                                    <Form.Control required type="number" placeholder="Telefone/celular" onChange={e => setUser(prev => ({ ...prev, phone: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row className="mt-4">
-                            <Col>
-                                <Form.Group className="mb-3" controlId="email">
-                                    <Form.Control required type="email" placeholder="E-mail" onChange={e => setUser(prev => ({ ...prev, email: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="password">
-                                    <Form.Control required type="password" placeholder="Senha" onChange={e => setUser(prev => ({ ...prev, password: e.target.value }))} />
-                                    {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="password-confirm">
-                                    <Form.Control required type="password" placeholder="Repita a senha" onChange={e => setUser(prev => ({ ...prev, passwordConfirm: e.target.value }))} />
-                                    {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
-                                </Form.Group>
-                            </Col>
-                        </Row>
+                <Accordion className="mt-4">
+                    <Accordion.Item eventKey="0" onClick={() => setTypeUser("tutor")}>
+                        <Accordion.Header>Tutor</Accordion.Header>
+                        <Accordion.Body>
 
-                        <Row className="mt-4">
-                            <Col md={10}>
-                                <Form.Group className="mb-3" controlId="street">
-                                    <Form.Control required type="text" placeholder="Rua" onChange={e => setUser(prev => ({ ...prev, street: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="number">
-                                    <Form.Control required type="text" placeholder="Número" onChange={e => setUser(prev => ({ ...prev, addressNumber: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={2}>
-                                <Form.Group className="mb-3" controlId="zipcode">
-                                    <Form.Control required type="text" placeholder="CEP" onChange={e => setUser(prev => ({ ...prev, zipCode: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="neighborhood">
-                                    <Form.Control required type="text" placeholder="Bairro" onChange={e => setUser(prev => ({ ...prev, neighborhood: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                    </div>
+                            <FormStyled
+                                className="d-flex flex-column align-items-end mt-4"
+                                validated={validated}
+                                onSubmit={handleSubmit}
+                            >
+                                <div>
+                                    <Row>
+                                        <Col md={6}>
+                                            <Form.Group className="mb-3" controlId="name">
+                                                <Form.Control required type="text" placeholder="Primeiro nome" onChange={e => setUser(prev => ({ ...prev, name: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={6}>
+                                            <Form.Group className="mb-3" controlId="lastname">
+                                                <Form.Control required type="text" placeholder="Sobrenome" onChange={e => setUser(prev => ({ ...prev, lastname: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="cpf">
+                                                <Form.Control required type="number" placeholder="CPF" onChange={e => setUser(prev => ({ ...prev, cpf: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="phone">
+                                                <Form.Control required type="number" placeholder="Telefone/celular" onChange={e => setUser(prev => ({ ...prev, phone: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="email">
+                                                <Form.Control required type="email" placeholder="E-mail" onChange={e => setUser(prev => ({ ...prev, email: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="password">
+                                                <Form.Control required type="password" placeholder="Senha" onChange={e => setUser(prev => ({ ...prev, password: e.target.value }))} />
+                                                {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="password-confirm">
+                                                <Form.Control required type="password" placeholder="Repita a senha" onChange={e => setUser(prev => ({ ...prev, passwordConfirm: e.target.value }))} />
+                                                {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
 
-                    <Button
-                        color="#FF41AD"
-                        outlined="none"
-                        type="submit"
-                        onClick={!isLoading ? undefined : undefined}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? 'Carregando…' : 'Criar conta'}
-                    </Button>
-                </FormStyled>
-                :
-                <FormStyled
-                    className="d-flex flex-column align-items-end mt-4"
-                    validated={validated}
-                    onSubmit={handleSubmit}
-                >
-                    <div>
-                        <Row>
-                            <Col md={6}>
-                                <Form.Group className="mb-3" controlId="name">
-                                    <Form.Control required type="text" placeholder="Nome" onChange={e => setCompany(prev => ({ ...prev, name: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                            <Col md={6}>
-                                <Form.Group className="mb-3" controlId="lastname">
-                                    <Form.Control required type="text" placeholder="CNPJ" onChange={e => setCompany(prev => ({ ...prev, cnpj: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row className="mt-4">
-                            <Col>
-                                <Form.Group className="mb-3" controlId="email">
-                                    <Form.Control required type="text" placeholder="username" onChange={e => setCompany(prev => ({ ...prev, username: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="password">
-                                    <Form.Control required type="password" placeholder="Senha" onChange={e => setCompany(prev => ({ ...prev, password: e.target.value }))} />
-                                    {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="password-confirm">
-                                    <Form.Control required type="password" placeholder="Repita a senha" onChange={e => setCompany(prev => ({ ...prev, passwordConfirm: e.target.value }))} />
-                                    {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
-                                </Form.Group>
-                            </Col>
-                        </Row>
+                                    <Row className="mt-4">
+                                        <Col md={10}>
+                                            <Form.Group className="mb-3" controlId="street">
+                                                <Form.Control required type="text" placeholder="Rua" onChange={e => setUser(prev => ({ ...prev, street: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="number">
+                                                <Form.Control required type="text" placeholder="Número" onChange={e => setUser(prev => ({ ...prev, addressNumber: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={2}>
+                                            <Form.Group className="mb-3" controlId="zipcode">
+                                                <Form.Control required type="text" placeholder="CEP" onChange={e => setUser(prev => ({ ...prev, zipCode: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="neighborhood">
+                                                <Form.Control required type="text" placeholder="Bairro" onChange={e => setUser(prev => ({ ...prev, neighborhood: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                </div>
 
-                        <Row className="mt-4">
-                            <Col md={10}>
-                                <Form.Group className="mb-3" controlId="street">
-                                    <Form.Control required type="text" placeholder="Rua" onChange={e => setCompany(prev => ({ ...prev, street: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="number">
-                                    <Form.Control required type="text" placeholder="Número" onChange={e => setCompany(prev => ({ ...prev, addressNumber: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={2}>
-                                <Form.Group className="mb-3" controlId="zipcode">
-                                    <Form.Control required type="text" placeholder="CEP" onChange={e => setCompany(prev => ({ ...prev, zipCode: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="neighborhood">
-                                    <Form.Control required type="text" placeholder="Bairro" onChange={e => setCompany(prev => ({ ...prev, neighborhood: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                    </div>
+                                <Button
+                                    color="#FF41AD"
+                                    outlined="none"
+                                    type="submit"
+                                    onClick={!isLoading ? undefined : undefined}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Carregando…' : 'Criar conta'}
+                                </Button>
+                            </FormStyled>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="1" onClick={() => setTypeUser("company")}>
+                        <Accordion.Header>Hospital/Clínica</Accordion.Header>
+                        <Accordion.Body>
+                            <FormStyled
+                                className="d-flex flex-column align-items-end mt-4"
+                                validated={validated}
+                                onSubmit={handleSubmit}
+                            >
+                                <div>
+                                    <Row>
+                                        <Col md={6}>
+                                            <Form.Group className="mb-3" controlId="name">
+                                                <Form.Control required type="text" placeholder="Nome" onChange={e => setCompany(prev => ({ ...prev, name: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={6}>
+                                            <Form.Group className="mb-3" controlId="lastname">
+                                                <Form.Control required type="text" placeholder="CNPJ" onChange={e => setCompany(prev => ({ ...prev, cnpj: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    <Row className="mt-4">
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="email">
+                                                <Form.Control required type="text" placeholder="username" onChange={e => setCompany(prev => ({ ...prev, username: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="password">
+                                                <Form.Control required type="password" placeholder="Senha" onChange={e => setCompany(prev => ({ ...prev, password: e.target.value }))} />
+                                                {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="password-confirm">
+                                                <Form.Control required type="password" placeholder="Repita a senha" onChange={e => setCompany(prev => ({ ...prev, passwordConfirm: e.target.value }))} />
+                                                {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
 
-                    <Button
-                        color="#FF41AD"
-                        outlined="none"
-                        type="submit"
-                        onClick={!isLoading ? undefined : undefined}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? 'Carregando…' : 'Criar conta'}
-                    </Button>
-                </FormStyled>
-            }
-        </ContainerStyled >
+                                    <Row className="mt-4">
+                                        <Col md={10}>
+                                            <Form.Group className="mb-3" controlId="street">
+                                                <Form.Control required type="text" placeholder="Rua" onChange={e => setCompany(prev => ({ ...prev, street: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="number">
+                                                <Form.Control required type="text" placeholder="Número" onChange={e => setCompany(prev => ({ ...prev, addressNumber: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={2}>
+                                            <Form.Group className="mb-3" controlId="zipcode">
+                                                <Form.Control required type="text" placeholder="CEP" onChange={e => setCompany(prev => ({ ...prev, zipCode: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col>
+                                            <Form.Group className="mb-3" controlId="neighborhood">
+                                                <Form.Control required type="text" placeholder="Bairro" onChange={e => setCompany(prev => ({ ...prev, neighborhood: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                </div>
+
+                                <Button
+                                    color="#FF41AD"
+                                    outlined="none"
+                                    type="submit"
+                                    onClick={!isLoading ? undefined : undefined}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? 'Carregando…' : 'Criar conta'}
+                                </Button>
+                            </FormStyled>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+
+                {/*typeUser !== "company" ?
+                        <FormStyled
+                            className="d-flex flex-column align-items-end mt-4"
+                            validated={validated}
+                            onSubmit={handleSubmit}
+                        >
+                            <div>
+                                <Row>
+                                    <Col md={6}>
+                                        <Form.Group className="mb-3" controlId="name">
+                                            <Form.Control required type="text" placeholder="Primeiro nome" onChange={e => setUser(prev => ({ ...prev, name: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md={6}>
+                                        <Form.Group className="mb-3" controlId="lastname">
+                                            <Form.Control required type="text" placeholder="Sobrenome" onChange={e => setUser(prev => ({ ...prev, lastname: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="cpf">
+                                            <Form.Control required type="number" placeholder="CPF" onChange={e => setUser(prev => ({ ...prev, cpf: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="phone">
+                                            <Form.Control required type="number" placeholder="Telefone/celular" onChange={e => setUser(prev => ({ ...prev, phone: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row className="mt-4">
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="email">
+                                            <Form.Control required type="email" placeholder="E-mail" onChange={e => setUser(prev => ({ ...prev, email: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="password">
+                                            <Form.Control required type="password" placeholder="Senha" onChange={e => setUser(prev => ({ ...prev, password: e.target.value }))} />
+                                            {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="password-confirm">
+                                            <Form.Control required type="password" placeholder="Repita a senha" onChange={e => setUser(prev => ({ ...prev, passwordConfirm: e.target.value }))} />
+                                            {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+
+                                <Row className="mt-4">
+                                    <Col md={10}>
+                                        <Form.Group className="mb-3" controlId="street">
+                                            <Form.Control required type="text" placeholder="Rua" onChange={e => setUser(prev => ({ ...prev, street: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="number">
+                                            <Form.Control required type="text" placeholder="Número" onChange={e => setUser(prev => ({ ...prev, addressNumber: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col md={2}>
+                                        <Form.Group className="mb-3" controlId="zipcode">
+                                            <Form.Control required type="text" placeholder="CEP" onChange={e => setUser(prev => ({ ...prev, zipCode: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="neighborhood">
+                                            <Form.Control required type="text" placeholder="Bairro" onChange={e => setUser(prev => ({ ...prev, neighborhood: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            </div>
+
+                            <Button
+                                color="#FF41AD"
+                                outlined="none"
+                                type="submit"
+                                onClick={!isLoading ? undefined : undefined}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? 'Carregando…' : 'Criar conta'}
+                            </Button>
+                        </FormStyled>
+                        :
+                        <FormStyled
+                            className="d-flex flex-column align-items-end mt-4"
+                            validated={validated}
+                            onSubmit={handleSubmit}
+                        >
+                            <div>
+                                <Row>
+                                    <Col md={6}>
+                                        <Form.Group className="mb-3" controlId="name">
+                                            <Form.Control required type="text" placeholder="Nome" onChange={e => setCompany(prev => ({ ...prev, name: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md={6}>
+                                        <Form.Group className="mb-3" controlId="lastname">
+                                            <Form.Control required type="text" placeholder="CNPJ" onChange={e => setCompany(prev => ({ ...prev, cnpj: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row className="mt-4">
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="email">
+                                            <Form.Control required type="text" placeholder="username" onChange={e => setCompany(prev => ({ ...prev, username: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="password">
+                                            <Form.Control required type="password" placeholder="Senha" onChange={e => setCompany(prev => ({ ...prev, password: e.target.value }))} />
+                                            {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="password-confirm">
+                                            <Form.Control required type="password" placeholder="Repita a senha" onChange={e => setCompany(prev => ({ ...prev, passwordConfirm: e.target.value }))} />
+                                            {arePwdDifferent && <small style={{ color: "red" }}>Senhas não são iguais</small>}
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+
+                                <Row className="mt-4">
+                                    <Col md={10}>
+                                        <Form.Group className="mb-3" controlId="street">
+                                            <Form.Control required type="text" placeholder="Rua" onChange={e => setCompany(prev => ({ ...prev, street: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="number">
+                                            <Form.Control required type="text" placeholder="Número" onChange={e => setCompany(prev => ({ ...prev, addressNumber: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col md={2}>
+                                        <Form.Group className="mb-3" controlId="zipcode">
+                                            <Form.Control required type="text" placeholder="CEP" onChange={e => setCompany(prev => ({ ...prev, zipCode: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group className="mb-3" controlId="neighborhood">
+                                            <Form.Control required type="text" placeholder="Bairro" onChange={e => setCompany(prev => ({ ...prev, neighborhood: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            </div>
+
+                            <Button
+                                color="#FF41AD"
+                                outlined="none"
+                                type="submit"
+                                onClick={!isLoading ? undefined : undefined}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? 'Carregando…' : 'Criar conta'}
+                            </Button>
+                        </FormStyled>
+            */}
+            </ContainerStyled >
+        </>
+
     );
 };
 
