@@ -65,7 +65,7 @@ const NearbyClinics = () => {
                                                 TODO - Colocar o logo da clinica aqui se ela tiver, senão, será o ícone
                                             */}
                                             <Store className="me-2" />
-                                            <h6 className="ellipsis d-flex align-items-center mb-0">{clinic}</h6>
+                                            <h6 className="ellipsis mb-0">{clinic}</h6>
                                         </CardStyled>
                                     </SwiperSlide>
                                 )

@@ -4,7 +4,7 @@ import styled from "styled-components";
 export const CardStyled = styled(Card)`
     cursor:pointer;
     padding: 1rem;
-    max-width: 380px;
+    max-width: 400px;
     transition: ease .3s all;
     
     &:hover{
@@ -12,10 +12,10 @@ export const CardStyled = styled(Card)`
     }
 
     .ellipsis {
-        width: 200px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        max-width: 200px;
+        white-space: nowrap;                  
+        overflow: hidden; /* "overflow" value must be different from "visible" */
+        text-overflow:    ellipsis;
     }
 `;
 
