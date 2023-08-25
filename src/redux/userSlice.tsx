@@ -4,6 +4,7 @@ type userSliceActionT = {
     id: string;
     name: string;
     email?: string;
+    username?: string;
     jwtToken: string;
 }
 
