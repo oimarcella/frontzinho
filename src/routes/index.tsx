@@ -50,6 +50,7 @@ const AppRoutes = () => {
           <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
           <Route path={ERoutes.PANEL} element={<PanelPage />} />
           <Route path={ERoutes.HISTORY} element={<HistoryPage />} />
+          <Route path={`${ERoutes.CLINIC}/:clinicId`} element={<PanelPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage404 />} />

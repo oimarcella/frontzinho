@@ -8,12 +8,19 @@ import { Section } from "../../../../components/layout/components/styles/section
 import { Card } from "react-bootstrap";
 import { CardStyled, NearbyStyled } from "./styles";
 import { Store } from "@material-ui/icons";
+import { useNavigate } from "react-router-dom";
+import { ERoutes } from "../../../../core/enums/routes";
 
 const NearbyClinics = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [clinics, setClinics] = useState<Array<string>>([]);
     const viewWidth = useWindowDimensions().width;
-    const slidesPerView = viewWidth > 1000 ? 3.3 : 1.3;
+    const slidesPerView = viewWidth > 1000 ? 3.3 :
+        viewWidth > 400 ?
+            2.3
+            :
+            1.3;
+    const navigate = useNavigate();
 
     useEffect(() => {
         setIsLoading(true);
@@ -21,13 +28,17 @@ const NearbyClinics = () => {
         setIsLoading(false);
     }, []);
 
+    function handleClickCard() {
+        navigate(`${ERoutes.CLINIC}/${1}`);
+    }
+
     return (
         <NearbyStyled>
             <Section>
                 <h3 className="mb-4">Clínicas e hospitais próximos de você</h3>
                 {!isLoading ?
                     <Swiper
-                        spaceBetween={viewWidth > 1000 ? 20 : 10}
+                        spaceBetween={viewWidth > 1000 ? 10 : 10}
                         slidesPerView={slidesPerView}
                         onSlideChange={() => { }}
                         onSwiper={(swiper) => { }}
@@ -47,7 +58,9 @@ const NearbyClinics = () => {
                             ).map((clinic, index) => {
                                 return (
                                     <SwiperSlide key={index}>
-                                        <CardStyled className="d-flex align-items-center justify-content-center flex-row">
+                                        <CardStyled
+                                            onClick={handleClickCard}
+                                            className="d-flex align-items-center justify-content-center flex-row">
                                             {/* 
                                                 TODO - Colocar o logo da clinica aqui se ela tiver, senão, será o ícone
                                             */}
