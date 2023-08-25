@@ -5,42 +5,65 @@ import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useWindowDimensions from "../../../../core/hooks/useWindowDimensions";
 import { Section } from "../../../../components/layout/components/styles/sections";
+import { Card } from "react-bootstrap";
+import { CardStyled, NearbyStyled } from "./styles";
+import { Store } from "@material-ui/icons";
 
 const NearbyClinics = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [clinics, setClinics] = useState<Array<string>>([]);
     const viewWidth = useWindowDimensions().width;
-    const slidesPerView = 3;
+    const slidesPerView = viewWidth > 1000 ? 3.3 : 1.3;
 
     useEffect(() => {
         setIsLoading(true);
-        setClinics(["Amor&Pet", "Health Clinic", "Hospital Pet Amor 24h"]);
+        setClinics(["Amor&Pet", "Health Clinic", "Bem saúde Veterinário", "Hospital Pet Amor 24h", "Hospital Veterinário Eicke Buckowtz"]);
         setIsLoading(false);
     }, []);
 
     return (
-        <Section>
-            {!isLoading ?
-                <Swiper
-                    spaceBetween={viewWidth > 1000 ? 30 : 10}
-                    slidesPerView={slidesPerView}
-                    onSlideChange={() => { }}
-                    onSwiper={(swiper) => { }}
-                >
-                    {
-                        clinics.map((clinic, index) => {
-                            return (
-                                <SwiperSlide key={index}>
-                                    <div>{clinic}</div>
-                                </SwiperSlide>
-                            )
-                        })
-                    }
-                </Swiper>
-                :
-                <Loading />
-            }
-        </Section>
+        <NearbyStyled>
+            <Section>
+                <h3 className="mb-4">Clínicas e hospitais próximos de você</h3>
+                {!isLoading ?
+                    <Swiper
+                        spaceBetween={viewWidth > 1000 ? 20 : 10}
+                        slidesPerView={slidesPerView}
+                        onSlideChange={() => { }}
+                        onSwiper={(swiper) => { }}
+                    >
+                        {
+                            clinics.sort(
+                                function (a, b) {
+                                    //ordenando por nome
+                                    if (a > b) {
+                                        return 1;
+                                    }
+                                    if (a < b) {
+                                        return -1;
+                                    }
+                                    return 0;
+                                }
+                            ).map((clinic, index) => {
+                                return (
+                                    <SwiperSlide key={index}>
+                                        <CardStyled className="d-flex align-items-center justify-content-center flex-row">
+                                            {/* 
+                                                TODO - Colocar o logo da clinica aqui se ela tiver, senão, será o ícone
+                                            */}
+                                            <Store className="me-2" />
+                                            <h6 className="ellipsis d-flex align-items-center mb-0">{clinic}</h6>
+                                        </CardStyled>
+                                    </SwiperSlide>
+                                )
+                            })
+                        }
+                    </Swiper>
+                    :
+                    <Loading />
+                }
+            </Section>
+        </NearbyStyled>
     )
 }
 

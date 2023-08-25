@@ -373,7 +373,6 @@ const YourPets = () => {
         }
     }
 
-
     async function deletePet(petId: number) {
         try {
             setPetIsLoading(petId);
@@ -417,7 +416,7 @@ const YourPets = () => {
             </Modal>
 
             <Section>
-                <div className="d-flex align-items-center justify-content-start mb-2">
+                <div className="d-flex align-items-center justify-content-start mb-4">
                     <h3>Seus pets</h3>
                     <Button
                         onClick={handleAddPet}
