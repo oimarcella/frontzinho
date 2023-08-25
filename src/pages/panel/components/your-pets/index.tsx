@@ -373,6 +373,7 @@ const YourPets = () => {
         }
     }
 
+
     async function deletePet(petId: number) {
         try {
             setPetIsLoading(petId);
@@ -416,7 +417,7 @@ const YourPets = () => {
             </Modal>
 
             <Section>
-                <div className="d-flex align-items-center justify-content-start mb-4">
+                <div className="d-flex align-items-center justify-content-start mb-2">
                     <h3>Seus pets</h3>
                     <Button
                         onClick={handleAddPet}
@@ -446,7 +447,7 @@ const YourPets = () => {
                                                 className="d-flex flex-column align-items-center justify-content-center"
                                                 style={{ background: generatePastelColor(index) }}
                                             >
-                                                <div className="d-flex flex-row-reverse align-items-start">
+                                                <div className="d-flex flex-row-reverse align-items-start justify-content-between">
                                                     <IconButton
                                                         aria-label="more"
                                                         onClick={(e) => handleMoreOptions(e, pet.id)}
@@ -478,12 +479,14 @@ const YourPets = () => {
                                                         }}>Editar</MenuItem>
                                                     </Menu>
 
-                                                    <img
-                                                        src={`/images/${pet.specie == "cachorro" ?
-                                                            "dog" : pet.specie == "gato" ?
-                                                                "cat" : "another_animals"}.svg`}
-                                                        alt={`${pet.name} - ${pet.specie}`}
-                                                    />
+                                                    <div className="d-flex justify-content-center">
+                                                        <img
+                                                            src={`/images/${pet.specie == "cachorro" ?
+                                                                "dog" : pet.specie == "gato" ?
+                                                                    "cat" : "another_animals"}.svg`}
+                                                            alt={`${pet.name} - ${pet.specie}`}
+                                                        />
+                                                    </div>
                                                 </div>
                                                 {pet.name}
                                             </CardStyled>}
