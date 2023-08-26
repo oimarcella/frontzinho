@@ -12,10 +12,6 @@ import { useNavigate } from "react-router-dom";
 import { show } from "../../redux/toastSlice";
 import { EHttpResponse } from "../../core/enums/http-responses";
 import { login, selectUser } from "../../redux/userSlice";
-import { Section } from "../../components/layout/components/styles/sections";
-
-// TODO - perguntar se é clinica ou tutor, pra mostrar o formulario correspondende
-// TODO - Adicionar opcoes de servicos para a clinica adicionar ao seu perfil
 
 type userT = {
     name: string;
@@ -41,6 +37,10 @@ type companyT = {
     neighborhood: string;
     addressNumber: string;
     zipCode: string;
+}
+type ServicesT = {
+    label: string;
+    id: number;
 }
 
 const SignUpPage = () => {
@@ -75,7 +75,12 @@ const SignUpPage = () => {
     const userLogged = useSelector(selectUser);
     const [typeUser, setTypeUser] = useState("");
     const [isLoading, setLoading] = useState(false);
-
+    const [services, setServices] = useState<Array<ServicesT>>([
+        { id: 1, label: "Banho e tosa" },
+        { id: 2, label: "Vacinas" },
+        { id: 3, label: "Serviços hospitalares" }
+    ]);
+    const [service, setService] = useState<ServicesT>({} as ServicesT);
 
     useEffect(() => {
         userLogged.id && navigate(ERoutes.PANEL);
@@ -151,6 +156,8 @@ const SignUpPage = () => {
         try {
             const { data } = await api.post(path, body);
 
+            await addServices(data.id);
+
             setLoading(false);
 
             const loginCredentials = typeUser === "company" ?
@@ -158,32 +165,6 @@ const SignUpPage = () => {
                 :
                 { email: user.email, pwd: user.password };
             authenticate(loginCredentials);
-            //clear states
-            setCompany({
-                name: "",
-                username: "",
-                cnpj: "",
-                password: "",
-                passwordConfirm: "",
-                street: "",
-                neighborhood: "",
-                addressNumber: "",
-                zipCode: ""
-            });
-
-            setUser({
-                name: "",
-                lastname: "",
-                email: "",
-                cpf: "",
-                phone: "",
-                password: "",
-                passwordConfirm: "",
-                street: "",
-                neighborhood: "",
-                addressNumber: "",
-                zipCode: ""
-            });
         } catch (error: any) {
             setLoading(false);
             if (error.response.status && typeof error.response.status === 'number') {
@@ -219,6 +200,19 @@ const SignUpPage = () => {
             setarePwdDifferent(false);
             setValidated(true);
             send();
+        }
+    }
+
+    async function addServices(clinicId: number) {
+        try {
+            const body = {
+                clinica: clinicId,
+                servico: service.id
+            }
+            await api.post("/clinicas/conectar-serviço", body);
+        }
+        catch (error) {
+            console.log("Não foi possível associar o serviço à clínica");
         }
     }
 
@@ -390,6 +384,24 @@ const SignUpPage = () => {
                                                 <Form.Control value={company.neighborhood} required type="text" placeholder="Bairro" onChange={e => setCompany(prev => ({ ...prev, neighborhood: e.target.value }))} />
                                             </Form.Group>
                                         </Col>
+                                    </Row>
+                                    <Row>
+                                        <div className="mt-3 d-flex flex-column">
+                                            {
+                                                services.map((svc, index) =>
+                                                    <Form.Check
+                                                        key={index}
+                                                        inline
+                                                        label={svc.label}
+                                                        checked={svc.label === service.label ? true : false}
+                                                        name="group1"
+                                                        type="radio"
+                                                        id={`inline-${svc}`}
+                                                        onChange={() => setService({ label: svc.label, id: svc.id })}
+                                                    />
+                                                )
+                                            }
+                                        </div>
                                     </Row>
                                 </div>
 
