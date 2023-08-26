@@ -20,6 +20,7 @@ import Footer from "../components/layout/components/footer/footer";
 import MyToast from "../components/layout/components/toast";
 import PrivateRoute from "./privateRoutes";
 import HistoryPage from "../pages/history";
+import ProfilePetPage from "../pages/pet-profile";
 
 const AppRoutes = () => {
   const modal = useSelector(selectModal);
@@ -51,6 +52,7 @@ const AppRoutes = () => {
           <Route path={ERoutes.PANEL} element={<PanelPage />} />
           <Route path={ERoutes.HISTORY} element={<HistoryPage />} />
           <Route path={`${ERoutes.CLINIC}/:clinicId`} element={<PanelPage />} />
+          <Route path={`${ERoutes.PET}/:petId`} element={<ProfilePetPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage404 />} />

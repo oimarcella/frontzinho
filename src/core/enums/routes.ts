@@ -8,5 +8,6 @@ export enum ERoutes {
   DISCOVER = "/descubra",
   PANEL = "/painel",
   HISTORY = "/historico",
-  CLINIC = "/clinica"
+  CLINIC = "/clinicas",
+  PET = "/pet"
 }

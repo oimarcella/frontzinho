@@ -14,6 +14,8 @@ import Loading from "../../../../components/layout/components/loading";
 import api from "../../../../services/api";
 import { show } from "../../../../redux/toastSlice";
 import { Section } from "../../../../components/layout/components/styles/sections";
+import { useNavigate } from "react-router-dom";
+import { ERoutes } from "../../../../core/enums/routes";
 
 type PetT = {
     id?: number;
@@ -27,12 +29,6 @@ type PetT = {
     size: string;
     description: string;
 };
-
-/*
-    TODO
-    - talvez / Verificar se a modal de cadastro foi fechada, e se sim limpar o formulario
-    - Corrigir cadastro pet
-*/
 
 const YourPets = () => {
     const [isLoading, setLoading] = useState(false);
@@ -54,6 +50,7 @@ const YourPets = () => {
     const handleShow = () => setShowModal(true);
     const [isEditing, setIsEditing] = useState(false);
     const [isAddingPet, setIsAddingPet] = useState(false);
+    const navigate = useNavigate();
 
     if (viewWidth > 1000) slidesPerView = 3.3;
     else if (viewWidth < 400) slidesPerView = 1.3;
@@ -131,7 +128,7 @@ const YourPets = () => {
 
     useEffect(() => {
         setLoading(true);
-        api.get(`/pets/${user.id}`)
+        api.get(`/pets/users/${user.id}`)
             .then((response) => {
 
                 setPets(response.data.reverse());
@@ -140,12 +137,7 @@ const YourPets = () => {
             .catch(error => {
                 console.log("Erro: ", error);
 
-                setTimeout(
-                    () => {
-                        setLoading(false);
-                    },
-                    3000
-                )
+                setLoading(false);
             });
 
     }, [user.id]);
@@ -477,6 +469,9 @@ const YourPets = () => {
                                                         <MenuItem onClick={() => {
                                                             if (pet.id) handleEditPet(pet.id)
                                                         }}>Editar</MenuItem>
+                                                        <MenuItem onClick={() => {
+                                                            if (pet.id) navigate(`${ERoutes.PET}/${pet.id}`);
+                                                        }}>Perfil</MenuItem>
                                                     </Menu>
 
                                                     <div className="d-flex justify-content-center">

@@ -209,7 +209,7 @@ const SignUpPage = () => {
                 clinica: clinicId,
                 servico: service.id
             }
-            await api.post("/clinicas/conectar-serviço", body);
+            await api.post(`${ERoutes.CLINIC}/conectar-serviço`, body);
         }
         catch (error) {
             console.log("Não foi possível associar o serviço à clínica");

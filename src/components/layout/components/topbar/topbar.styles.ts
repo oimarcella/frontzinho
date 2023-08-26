@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 export const NavBarStyled = styled(Navbar)`
-    padding: 24px 1rem;
+    padding: 20px 1rem;
     z-index: 3;
     /*Quando estiver na rota home o navbar será absolute*/
     /*Nas outras ele será relative
@@ -20,8 +20,8 @@ export const NavBarStyled = styled(Navbar)`
         `:
             `
             position:relative;
-            background: #D1E8F5;
-            border-bottom: 2px solid #fff;
+            background: var(--light-blue-100);
+            //border-bottom: 2px solid #fff;
         `
     }
 
@@ -31,7 +31,7 @@ export const NavBarStyled = styled(Navbar)`
     
     @media(max-width: 1000px){
         position: relative!important;
-        background-color: #E7F2F8;
+        background: var(--light-blue-100);
     }
 `;
 
