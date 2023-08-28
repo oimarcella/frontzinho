@@ -1,5 +1,5 @@
 import { Navbar, Container, Nav } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { NavBarStyled, NavStyled, NavLinkStyled, NavbarBrandStyled, NavCollapseStyled } from "./topbar.styles";
 import { FormattedMessage } from "react-intl";
 import { ERoutes } from "../../../../core/enums/routes";
@@ -20,6 +20,7 @@ const TopBarComponent = () => {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const urlParams = new URLSearchParams(location.search);
+	const navigate = useNavigate();
 
 	function redirect(link: string) {
 		window.location.replace(link);
@@ -75,7 +76,10 @@ const TopBarComponent = () => {
 											outlined="outlined"
 											color="#0B344E"
 											className="mt-2 mt-lg-0"
-											onClick={() => { dispatch(logout()) }}
+											onClick={() => {
+												dispatch(logout());
+												navigate(ERoutes.LOGIN);
+											}}
 											customStyles={{ border: "none" }}
 										>
 											<FontAwesomeIcon className="ms-0 ms-md-1" icon={faRightFromBracket} />
