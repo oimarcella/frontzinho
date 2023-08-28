@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import { ContainerStyled, Overflow, SummaryStyled, TitleStyled, WrapperMark } from './styles';
 import Box from '@mui/material/Box';
@@ -16,6 +16,7 @@ import { styled } from '@mui/material';
 import { StepIconProps } from '@mui/material/StepIcon';
 import { showModal } from '../../redux/modalSlice';
 import { Section } from '../../components/layout/components/styles/sections';
+import { useLocation, useParams } from 'react-router-dom';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
@@ -152,6 +153,10 @@ function ColorlibStepIcon(props: MyStepIconPropsT) {
 
 export default function HistoryPage() {
     const dispatch = useDispatch();
+    const location = useLocation();
+    const urlParams = new URLSearchParams(location.search);
+    console.log("🚀 ~ file: index.tsx:158 ~ HistoryPage ~ location:", location)
+    console.log("🚀 ~ file: index.tsx:157 ~ HistoryPage ~ urlParams:", urlParams)
 
     const moreDetailsElement = <div>
         <div className='d-flex justify-content-between'>
@@ -177,46 +182,78 @@ export default function HistoryPage() {
     }
 
     return (
-        <Section>
-            <ContainerStyled className="d-flex align-items-center">
-
-                <Overflow>
-                    <Box sx={{ width: '100%' }}>
-                        <Stepper alternativeLabel activeStep={steps.length - 1}>
-                            {steps.map((step, index) => (
-                                <Step key={index}>
-                                    <StepLabel
-                                        onClick={() => handleMoreDetails()}
-                                        StepIconComponent={(props) =>
-                                            <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                <p>10 mar. 2023</p>
-                                                <ColorlibStepIcon
-                                                    {...props}
-                                                    extraParams={{
-                                                        step
-                                                    }}
-                                                />
-                                            </WrapperMark>
-                                        }
-                                        extraParams={{ type: 'valor1' }}
-                                    >
-                                        <div
-                                            style={{ border: 'none', padding: '10px 0' }}
-                                            className='d-flex flex-column justify-content-center align-items-center'
+        urlParams.get("origin") == "iframe" ?
+            <Stepper alternativeLabel activeStep={steps.length - 1}>
+                {steps.map((step, index) => (
+                    <Step key={index}>
+                        <StepLabel
+                            onClick={() => handleMoreDetails()}
+                            StepIconComponent={(props) =>
+                                <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
+                                    <p>10 mar. 2023</p>
+                                    <ColorlibStepIcon
+                                        {...props}
+                                        extraParams={{
+                                            step
+                                        }}
+                                    />
+                                </WrapperMark>
+                            }
+                            extraParams={{ type: 'valor1' }}
+                        >
+                            <div
+                                style={{ border: 'none', padding: '10px 0' }}
+                                className='d-flex flex-column justify-content-center align-items-center'
+                            >
+                                <TitleStyled>
+                                    {step.title}
+                                </TitleStyled>
+                                <SummaryStyled>{step.summary}</SummaryStyled>
+                            </div>
+                        </StepLabel>
+                    </Step>
+                ))}
+            </Stepper>
+            :
+            <Section>
+                <ContainerStyled className="d-flex align-items-center">
+                    <Overflow>
+                        <Box sx={{ width: '100%' }}>
+                            <Stepper alternativeLabel activeStep={steps.length - 1}>
+                                {steps.map((step, index) => (
+                                    <Step key={index}>
+                                        <StepLabel
+                                            onClick={() => handleMoreDetails()}
+                                            StepIconComponent={(props) =>
+                                                <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
+                                                    <p>10 mar. 2023</p>
+                                                    <ColorlibStepIcon
+                                                        {...props}
+                                                        extraParams={{
+                                                            step
+                                                        }}
+                                                    />
+                                                </WrapperMark>
+                                            }
+                                            extraParams={{ type: 'valor1' }}
                                         >
-                                            <TitleStyled>
-                                                {step.title}
-                                            </TitleStyled>
-                                            <SummaryStyled>{step.summary}</SummaryStyled>
-                                        </div>
-                                    </StepLabel>
-                                </Step>
-                            ))}
-                        </Stepper>
-                    </Box>
-                </Overflow>
+                                            <div
+                                                style={{ border: 'none', padding: '10px 0' }}
+                                                className='d-flex flex-column justify-content-center align-items-center'
+                                            >
+                                                <TitleStyled>
+                                                    {step.title}
+                                                </TitleStyled>
+                                                <SummaryStyled>{step.summary}</SummaryStyled>
+                                            </div>
+                                        </StepLabel>
+                                    </Step>
+                                ))}
+                            </Stepper>
+                        </Box>
+                    </Overflow>
 
-            </ContainerStyled >
-        </Section>
+                </ContainerStyled >
+            </Section>
     );
 }

@@ -18,13 +18,15 @@ const TopBarComponent = () => {
 	const styleMustBeDifferent = isHomeRoute || isLoginRoute || isDiscoverRoute;
 	const userLogged = useSelector(selectUser);
 	const dispatch = useDispatch();
+	const location = useLocation();
+	const urlParams = new URLSearchParams(location.search);
 
 	function redirect(link: string) {
 		window.location.replace(link);
 	}
 
 	return (
-		<NavBarStyled styleMustBeDifferent={styleMustBeDifferent} expand="lg">
+		urlParams.get("origin") !== "iframe" && <NavBarStyled styleMustBeDifferent={styleMustBeDifferent} expand="lg">
 			<Container>
 				{!userLogged.id ?
 					<NavbarBrandStyled as={Link} to={ERoutes.LOGIN}>

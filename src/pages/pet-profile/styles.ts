@@ -19,7 +19,8 @@ export const HeaderStyled = styled.div`
            max-height: 90%;
         }
     }
-    h3{
+    div >strong{
+        font-size: 22px;
         margin: 0;
     }
     ul{

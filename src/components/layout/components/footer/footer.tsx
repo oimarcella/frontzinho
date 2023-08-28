@@ -4,13 +4,17 @@ import Button from '../button/button';
 import ContactModal from '../contactModal/contactModal';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../../../redux/userSlice';
+import { useLocation } from 'react-router-dom';
 
 const Footer = () => {
   const [isModalContactOpen, setIsModalContactOpen] = useState(false);
   const user = useSelector(selectUser);
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+
 
   return (
-    <>
+    urlParams.get("origin") !== "iframe" && <>
       <ContactModal isOpen={isModalContactOpen} handleShow={() => { setIsModalContactOpen(true) }} handleClose={() => { setIsModalContactOpen(false) }} />
       <StyledFooter>
         <ContentStyled className='d-flex flex-column justify-content-around'>

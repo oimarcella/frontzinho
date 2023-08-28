@@ -1,10 +1,11 @@
 import { Container } from "react-bootstrap";
 import { BodyStyled, HeaderStyled, ProfilePetPageStyled } from "./styles";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import api from "../../services/api";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/styles/sections";
 import { Pets } from "@material-ui/icons";
+import useScrollPosition from './../../core/hooks/useScrollPosition';
 
 type QueryParamsT = {
     petId: string;
@@ -22,16 +23,17 @@ type PetT = {
     castrated: boolean;
 }
 
-
-
 function ProfilePetPage() {
     const params = useParams<QueryParamsT>();
     const [pet, setPet] = useState<PetT>({} as PetT);
+    const [url, setUrl] = useState("http://localhost:5173/historico");
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const ref = useRef<HTMLIFrameElement>();
+    const position = useScrollPosition();
 
     async function getPetById(id: number) {
         const { data } = await api.get(`pets/${id}`);
         setPet(data);
-        console.log("🚀 ~ file: index.tsx:34 ~ getPetById ~ data:", data)
     }
 
     useEffect(() => {
@@ -42,10 +44,10 @@ function ProfilePetPage() {
         <>
             <HeaderStyled>
                 <Section>
-                    <Container className="d-flex flex-row align-items-center justify-content-lg-between justify-content-center flex-wrap">
-                        <div className="d-flex flex-lg-row flex-column justify-content-center align-items-center justify-content-md-start">
+                    <Container className="d-flex flex-column  flex-md-row align-items-center justify-content-md-between justify-content-center">
+                        <div className="d-flex flex-md-row flex-column justify-content-center align-items-center justify-content-md-start">
                             <img src={`/images/${pet.specie == "cachorro" ? "dog" : pet.specie == "gato" ? "cat" : "another_animals"}.svg`} />
-                            <h3 className="ms-4 my-4 my-md-0">{pet.name}</h3>
+                            <strong className="ms-4 my-4 my-md-0">{pet.name}</strong>
                         </div>
                         <div className="d-flex flex-column justify-content-center align-items-center"
                             style={{ flex: 1 }}
@@ -67,6 +69,18 @@ function ProfilePetPage() {
                 </Section>
                 <Section>
                     <h3 className="mb-4">Linha do tempo</h3>
+                    <div
+                        style={{ overflowX: "hidden" }}
+                    >
+                        <iframe
+                            id="myIframe"
+                            src={`${url}?origin=${"iframe"}`}
+                            width="100%"
+                            height="220px"
+                            style={{}}
+                            title="Timeline"
+                        />
+                    </div>
                 </Section>
             </BodyStyled>
         </>
