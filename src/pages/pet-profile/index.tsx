@@ -24,9 +24,10 @@ type PetT = {
 }
 
 function ProfilePetPage() {
+    const currentUrl = window.location.host;
     const params = useParams<QueryParamsT>();
     const [pet, setPet] = useState<PetT>({} as PetT);
-    const [url, setUrl] = useState("http://localhost:5173/historico");
+    const [url, setUrl] = useState(currentUrl === "localhost:5173" ? "http://localhost:5173/historico" : "https://frontzinho.vercel.app/historico");
     const [scrollPosition, setScrollPosition] = useState(0);
     const ref = useRef<HTMLIFrameElement>();
     const position = useScrollPosition();
