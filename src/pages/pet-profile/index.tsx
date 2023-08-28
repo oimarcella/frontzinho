@@ -69,9 +69,7 @@ function ProfilePetPage() {
                 </Section>
                 <Section>
                     <h3 className="mb-4">Linha do tempo</h3>
-                    <div
-                        style={{ overflowX: "hidden" }}
-                    >
+                    <div>
                         <iframe
                             id="myIframe"
                             src={`${url}?origin=${"iframe"}`}

@@ -155,8 +155,6 @@ export default function HistoryPage() {
     const dispatch = useDispatch();
     const location = useLocation();
     const urlParams = new URLSearchParams(location.search);
-    console.log("🚀 ~ file: index.tsx:158 ~ HistoryPage ~ location:", location)
-    console.log("🚀 ~ file: index.tsx:157 ~ HistoryPage ~ urlParams:", urlParams)
 
     const moreDetailsElement = <div>
         <div className='d-flex justify-content-between'>

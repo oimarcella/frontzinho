@@ -26,7 +26,7 @@ const TopBarComponent = () => {
 	}
 
 	return (
-		urlParams.get("origin") !== "iframe" && <NavBarStyled styleMustBeDifferent={styleMustBeDifferent} expand="lg">
+		urlParams.get("origin") !== "iframe" ? <NavBarStyled styleMustBeDifferent={styleMustBeDifferent} expand="lg">
 			<Container>
 				{!userLogged.id ?
 					<NavbarBrandStyled as={Link} to={ERoutes.LOGIN}>
@@ -94,7 +94,9 @@ const TopBarComponent = () => {
 				}
 			</Container>
 		</NavBarStyled >
-	);
+			:
+			<></>
+	)
 };
 
 export default TopBarComponent;
