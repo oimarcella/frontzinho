@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import HomePage from "../pages/home/home";
 
 import { IntlProvider } from "react-intl";
@@ -24,8 +24,6 @@ import ProfilePetPage from "../pages/pet-profile";
 
 const AppRoutes = () => {
   const modal = useSelector(selectModal);
-  const dispatch = useDispatch();
-  const user = useSelector(selectUser);
   //let decodedToken: DecodedTokenT;
 
   return (

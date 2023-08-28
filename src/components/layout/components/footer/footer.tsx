@@ -14,22 +14,25 @@ const Footer = () => {
 
 
   return (
-    urlParams.get("origin") !== "iframe" && <>
-      <ContactModal isOpen={isModalContactOpen} handleShow={() => { setIsModalContactOpen(true) }} handleClose={() => { setIsModalContactOpen(false) }} />
-      <StyledFooter>
-        <ContentStyled className='d-flex flex-column justify-content-around'>
-          <RowStyled className='d-flex flex-wrap justify-content-between'>
-            <LogoStyled className='col-md-6 col-12 d-flex'>
-              <img style={{}} src="/images/petpass_small_dark-v1.svg" className="img-fluid" />
-            </LogoStyled>
-            <Button color="#0B344E" outlined='outlined' onClick={() => setIsModalContactOpen(true)}>Fale conosco</Button>
-          </RowStyled>
-        </ContentStyled>
-        {!user.id && <LgpdStyled>
-          <p><strong>PetPass</strong> solicita sua coleta de dados para identificação do usuário com a finalidade de entrarmos em contato para fornecermos mais detalhes do tema desejado. <strong>Estes dados não serão utilizados para envio de SPAM.</strong></p>
-        </LgpdStyled>}
-      </StyledFooter>
-    </>
+    urlParams.get("origin") !== "iframe" ?
+      <>
+        <ContactModal isOpen={isModalContactOpen} handleShow={() => { setIsModalContactOpen(true) }} handleClose={() => { setIsModalContactOpen(false) }} />
+        <StyledFooter>
+          <ContentStyled className='d-flex flex-column justify-content-around'>
+            <RowStyled className='d-flex flex-wrap justify-content-between'>
+              <LogoStyled className='col-md-6 col-12 d-flex'>
+                <img style={{}} src="/images/petpass_small_dark-v1.svg" className="img-fluid" />
+              </LogoStyled>
+              <Button color="#0B344E" outlined='outlined' onClick={() => setIsModalContactOpen(true)}>Fale conosco</Button>
+            </RowStyled>
+          </ContentStyled>
+          {!user.id && <LgpdStyled>
+            <p><strong>PetPass</strong> solicita sua coleta de dados para identificação do usuário com a finalidade de entrarmos em contato para fornecermos mais detalhes do tema desejado. <strong>Estes dados não serão utilizados para envio de SPAM.</strong></p>
+          </LgpdStyled>}
+        </StyledFooter>
+      </>
+      :
+      <div></div>
   )
 }
 export default Footer
