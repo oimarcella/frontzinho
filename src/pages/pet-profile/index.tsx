@@ -2,9 +2,10 @@ import { Container } from "react-bootstrap";
 import { BodyStyled, HeaderStyled } from "./styles";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/styles/sections";
 import { Pets } from "@material-ui/icons";
+import { ERoutes } from "../../core/enums/routes";
 
 type QueryParamsT = {
     petId: string;
@@ -65,7 +66,10 @@ function ProfilePetPage() {
                     <h3 className="mb-4">O que vamos fazer hoje?</h3>
                 </Section>
                 <Section>
-                    <h3 className="mb-4">Linha do tempo</h3>
+                    <div className="d-flex align-items-center mb-4">
+                        <h3>Linha do tempo</h3>
+                        <Link className="ms-3" to={ERoutes.HISTORY}>Ver mais</Link>
+                    </div>
                     {/*@ts-ignore*/}
                     <div>
                         <iframe
