@@ -28,75 +28,121 @@ const steps = [
         title: "Consulta",
         summary: "Diagnóstico de Giárdia",
         type: "CONSULTA",
-        date: "12/04/2023"
+        date: "12/04/2023",
+        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Procedimento",
         summary: "Internação 24h",
         type: "PROCEDIMENTO",
-        date: "12/04/2023"
+        date: "12/04/2023",
+        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Procedimento",
         summary: "Alta",
         type: "PROCEDIMENTO",
-        date: "12/04/2023"
+        date: "12/04/2023",
+        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Consulta",
         summary: "Diagnóstico de Giárdia",
         type: "CONSULTA",
-        date: "12/04/2023"
+        date: "12/04/2023",
+        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Procedimento",
         summary: "Internação 24h",
         type: "PROCEDIMENTO",
-        date: "12/04/2023"
+        date: "12/04/2023",
+        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Procedimento",
         summary: "Alta",
         type: "PROCEDIMENTO",
-        date: "12/04/2023"
+        date: "12/04/2023",
+        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Consulta",
         summary: "Diagnóstico de Giárdia",
         type: "CONSULTA",
-        date: "12/04/2023"
+        date: "07/06/2023",
+        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Procedimento",
         summary: "Internação 24h",
         type: "PROCEDIMENTO",
-        date: "12/04/2023"
+        date: "08/06/2023",
+        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Procedimento",
         summary: "Alta",
         type: "PROCEDIMENTO",
-        date: "12/04/2023"
+        date: "09/06/2023",
+        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Consulta",
         summary: "Diagnóstico de Giárdia",
         type: "CONSULTA",
-        date: "12/04/2023"
+        date: "10/06/2023",
+        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Procedimento",
         summary: "Internação 24h",
         type: "PROCEDIMENTO",
-        date: "12/04/2023"
+        date: "11/06/2023",
+        description: "Zoey foi atendida e apa a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
     {
         title: "Procedimento",
         summary: "Alta",
         type: "PROCEDIMENTO",
-        date: "12/04/2023"
+        date: "12/06/2023",
+        description: "blabla",
+        vet: "Luís Cardoso",
+        clinic: "Pet&Amor"
     },
 ];
+
+type StepT = {
+    title: string;
+    summary: string;
+    date: string;
+    type: string;
+    description: string;
+    clinic: string;
+    vet: string;
+}
 
 const ColorlibStepIconRoot = styled('div')<{
     ownerState: { completed?: boolean; active?: boolean };
@@ -161,32 +207,54 @@ export default function HistoryPage() {
     const [positionLeft, setPositionLeft] = useState();
     const ref = useRef<HTMLDivElement | null>(null);
     const { width } = useWindowDimensions();
+    const [modalMoreDetails, setModalMoreDetails] = useState<StepT>({
+        title: "",
+        description: "",
+        vet: "",
+        clinic: "",
+        date: "",
+        summary: "",
+        type: "",
+    } as StepT);
 
     const moreDetailsElement = <div>
-        <div className='d-flex justify-content-between'>
-            <Typography variant='body2' style={{ color: '#0b344e' }}>Consulta</Typography>
-            <Typography variant='body2' style={{ color: '#0b344e' }}>10 mar. 2023</Typography>
+        <div className='d-flex justify-content-between mb-4'>
+            <Typography variant='body2' style={{ color: '#0b344e' }}>{modalMoreDetails.title}</Typography>
+            <Typography variant='body2' style={{ color: '#0b344e' }}>{modalMoreDetails.date}</Typography>
         </div>
+        <Typography variant='body2' style={{ color: '#0b344e' }}>Atendimento feito por: {modalMoreDetails.vet}</Typography>
+        <Typography variant='body2' style={{ color: '#0b344e' }}>Clínica: {modalMoreDetails.clinic}</Typography>
 
-        <div className='mt-4'>
+
+        <div className='mt-4 d-flex flex-column'>
+            <strong className='mb-3'>{modalMoreDetails.summary}</strong>
             <Typography variant="body2">Descrição</Typography>
-            <p>
-                Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior.
-                Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo.
-                Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.
-            </p>
+            <p>{modalMoreDetails.description}</p>
         </div>
     </div>;
 
-    function handleMoreDetails() {
+    function openModal() {
         dispatch(showModal({
             bodyNode: moreDetailsElement,
             hasHeader: false
         }));
     }
 
+    function handleMoreDetails(step: StepT) {
+        setModalMoreDetails(prevModalMoreDetails => ({
+            ...prevModalMoreDetails,
+            title: step.title,
+            summary: step.summary,
+            date: step.date,
+            type: step.type,
+            description: step.description,
+            vet: step.vet,
+            clinic: step.clinic
+        }));
+        openModal();
+    }
+
     const handleScroll = () => {
-        console.log("history/index.tsx ~ left:", positionLeft)
         const el = ref.current;
 
         if (el !== undefined) {
@@ -206,6 +274,42 @@ export default function HistoryPage() {
         }
     }, [width]);
 
+    //resolve a questão de assincronismo do react e a atualizacao do conteudo do modal
+    useEffect(() => {
+        // Função para abrir o modal com as informações atualizadas
+        const openModalWithUpdatedDetails = () => {
+            const moreDetailsElement = (
+                <div>
+                    <div className='d-flex justify-content-between mb-4'>
+                        <Typography variant='body2' style={{ color: '#0b344e' }}>{modalMoreDetails.title}</Typography>
+                        <Typography variant='body2' style={{ color: '#0b344e' }}>{modalMoreDetails.date}</Typography>
+                    </div>
+                    <Typography variant='body2' style={{ color: '#0b344e' }}>Atendimento feito por: {modalMoreDetails.vet}</Typography>
+                    <Typography variant='body2' style={{ color: '#0b344e' }}>Clínica: {modalMoreDetails.clinic}</Typography>
+
+
+                    <div className='mt-4 d-flex flex-column'>
+                        <strong className='mb-3'>{modalMoreDetails.summary}</strong>
+                        <Typography variant="body2">Descrição</Typography>
+                        <p>{modalMoreDetails.description}</p>
+                    </div>
+                </div>
+            );
+
+            dispatch(
+                showModal({
+                    bodyNode: moreDetailsElement,
+                    hasHeader: false
+                })
+            );
+        };
+
+        // Abre o modal sempre que modalMoreDetails for atualizado
+        if (modalMoreDetails.title !== '') {
+            openModalWithUpdatedDetails();
+        }
+    }, [modalMoreDetails]);
+
 
     return (
         urlParams.get("origin") == "iframe" ?
@@ -217,10 +321,12 @@ export default function HistoryPage() {
                             {steps.map((step, index) => (
                                 <Step key={index}>
                                     <StepLabel
-                                        onClick={() => handleMoreDetails()}
+                                        onClick={() => {
+                                            handleMoreDetails(step)
+                                        }}
                                         StepIconComponent={(props) =>
                                             <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                <p>10 mar. 2023</p>
+                                                <p>{step.date}</p>
                                                 <ColorlibStepIcon
                                                     {...props}
                                                     extraParams={{
@@ -251,16 +357,18 @@ export default function HistoryPage() {
             <Section>
                 <ContainerStyled className="d-flex align-items-center">
                     {/*@ts-ignore */}
-                    <Overflow onScroll={handleScroll} ref={ref}>
+                    <Overflow onScroll={handleScroll} ref={ref} >
                         <Box sx={{ width: '100%' }}>
                             <Stepper alternativeLabel activeStep={steps.length - 1}>
                                 {steps.map((step, index) => (
                                     <Step key={index}>
                                         <StepLabel
-                                            onClick={() => handleMoreDetails()}
+                                            onClick={() => {
+                                                handleMoreDetails(step)
+                                            }}
                                             StepIconComponent={(props) =>
                                                 <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                    <p>10 mar. 2023</p>
+                                                    <p>{step.date}</p>
                                                     <ColorlibStepIcon
                                                         {...props}
                                                         extraParams={{
@@ -285,7 +393,7 @@ export default function HistoryPage() {
                                 ))}
                             </Stepper>
                         </Box>
-                    </Overflow>
+                    </Overflow >
 
                 </ContainerStyled >
             </Section>

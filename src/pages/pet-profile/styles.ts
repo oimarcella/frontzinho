@@ -34,4 +34,15 @@ export const BodyStyled = styled(Container)`
         font-size: 1rem;
         margin-bottom: 0;
     }
+
+    .ver-mais{
+        color: var(--light-blue-500);
+        text-transform: uppercase;
+        font-size: 10px;
+        font-weight: bold;
+        
+        :hover{
+            color: var(--light-blue-300);
+        }
+    }
 `;

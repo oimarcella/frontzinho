@@ -68,7 +68,7 @@ function ProfilePetPage() {
                 <Section>
                     <div className="d-flex align-items-center mb-4">
                         <h3>Linha do tempo</h3>
-                        <Link className="ms-3" to={ERoutes.HISTORY}>Ver mais</Link>
+                        <Link className="ms-3 ver-mais" to={ERoutes.HISTORY}>Ver mais</Link>
                     </div>
                     {/*@ts-ignore*/}
                     <div>
