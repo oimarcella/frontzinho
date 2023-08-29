@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { ContainerStyled, Overflow, SummaryStyled, TitleStyled, WrapperMark } from './styles';
 import Box from '@mui/material/Box';
@@ -17,6 +17,7 @@ import { StepIconProps } from '@mui/material/StepIcon';
 import { showModal } from '../../redux/modalSlice';
 import { Section } from '../../components/layout/components/styles/sections';
 import { useLocation, useParams } from 'react-router-dom';
+import useWindowDimensions from '../../core/hooks/useWindowDimensions';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
@@ -155,6 +156,10 @@ export default function HistoryPage() {
     const dispatch = useDispatch();
     const location = useLocation();
     const urlParams = new URLSearchParams(location.search);
+    const [positionTop, setPositionTop] = useState();
+    const [positionLeft, setPositionLeft] = useState();
+    const ref = useRef<HTMLDivElement | null>(null);
+    const { width } = useWindowDimensions();
 
     const moreDetailsElement = <div>
         <div className='d-flex justify-content-between'>
@@ -179,43 +184,73 @@ export default function HistoryPage() {
         }));
     }
 
+    const handleScroll = () => {
+        console.log("history/index.tsx ~ left:", positionLeft)
+        const el = ref.current;
+
+        if (el !== undefined) {
+            //@ts-ignore
+            setPositionTop(el.scrollTop);
+            //@ts-ignore
+            setPositionLeft(el.scrollLeft);
+        }
+    };
+
+    useEffect(() => {
+        const el = ref.current;
+        if (width) {
+            if (el) {
+                el.scrollLeft = el.scrollWidth - el.clientWidth;
+            }
+        }
+    }, [width]);
+
+
     return (
         urlParams.get("origin") == "iframe" ?
-            <Stepper alternativeLabel activeStep={steps.length - 1}>
-                {steps.map((step, index) => (
-                    <Step key={index}>
-                        <StepLabel
-                            onClick={() => handleMoreDetails()}
-                            StepIconComponent={(props) =>
-                                <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                    <p>10 mar. 2023</p>
-                                    <ColorlibStepIcon
-                                        {...props}
-                                        extraParams={{
-                                            step
-                                        }}
-                                    />
-                                </WrapperMark>
-                            }
-                            extraParams={{ type: 'valor1' }}
-                        >
-                            <div
-                                style={{ border: 'none', padding: '10px 0' }}
-                                className='d-flex flex-column justify-content-center align-items-center'
-                            >
-                                <TitleStyled>
-                                    {step.title}
-                                </TitleStyled>
-                                <SummaryStyled>{step.summary}</SummaryStyled>
-                            </div>
-                        </StepLabel>
-                    </Step>
-                ))}
-            </Stepper>
+            <>
+                {/*@ts-ignore */}
+                <Overflow onScroll={handleScroll} ref={ref} >
+                    <Box sx={{ width: '100%' }}>
+                        <Stepper alternativeLabel activeStep={steps.length - 1}>
+                            {steps.map((step, index) => (
+                                <Step key={index}>
+                                    <StepLabel
+                                        onClick={() => handleMoreDetails()}
+                                        StepIconComponent={(props) =>
+                                            <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
+                                                <p>10 mar. 2023</p>
+                                                <ColorlibStepIcon
+                                                    {...props}
+                                                    extraParams={{
+                                                        step
+                                                    }}
+                                                />
+                                            </WrapperMark>
+                                        }
+                                        extraParams={{ type: 'valor1' }}
+                                    >
+                                        <div
+                                            style={{ border: 'none', padding: '10px 0' }}
+                                            className='d-flex flex-column justify-content-center align-items-center'
+                                        >
+                                            <TitleStyled>
+                                                {step.title}
+                                            </TitleStyled>
+                                            <SummaryStyled>{step.summary}</SummaryStyled>
+                                        </div>
+                                    </StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
+                    </Box>
+                </Overflow >
+            </>
             :
             <Section>
                 <ContainerStyled className="d-flex align-items-center">
-                    <Overflow>
+                    {/*@ts-ignore */}
+                    <Overflow onScroll={handleScroll} ref={ref}>
                         <Box sx={{ width: '100%' }}>
                             <Stepper alternativeLabel activeStep={steps.length - 1}>
                                 {steps.map((step, index) => (

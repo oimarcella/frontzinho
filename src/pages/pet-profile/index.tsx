@@ -1,11 +1,10 @@
 import { Container } from "react-bootstrap";
-import { BodyStyled, HeaderStyled, ProfilePetPageStyled } from "./styles";
-import { useEffect, useRef, useState } from "react";
+import { BodyStyled, HeaderStyled } from "./styles";
+import { useEffect, useState } from "react";
 import api from "../../services/api";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/styles/sections";
 import { Pets } from "@material-ui/icons";
-import useScrollPosition from './../../core/hooks/useScrollPosition';
 
 type QueryParamsT = {
     petId: string;
@@ -28,9 +27,6 @@ function ProfilePetPage() {
     const params = useParams<QueryParamsT>();
     const [pet, setPet] = useState<PetT>({} as PetT);
     const [url, setUrl] = useState(currentUrl === "localhost:5173" ? "http://localhost:5173/historico" : "https://frontzinho.vercel.app/historico");
-    const [scrollPosition, setScrollPosition] = useState(0);
-    const ref = useRef<HTMLIFrameElement>();
-    const position = useScrollPosition();
 
     async function getPetById(id: number) {
         const { data } = await api.get(`pets/${id}`);
@@ -70,6 +66,7 @@ function ProfilePetPage() {
                 </Section>
                 <Section>
                     <h3 className="mb-4">Linha do tempo</h3>
+                    {/*@ts-ignore*/}
                     <div>
                         <iframe
                             id="myIframe"
