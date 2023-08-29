@@ -45,7 +45,7 @@ function ProfilePetPage() {
                     <Container className="d-flex flex-column  flex-md-row align-items-center justify-content-md-between justify-content-center">
                         <div className="d-flex flex-md-row flex-column justify-content-center align-items-center justify-content-md-start">
                             <img src={`/images/${pet.specie == "cachorro" ? "dog" : pet.specie == "gato" ? "cat" : "another_animals"}.svg`} />
-                            <strong className="ms-4 my-4 my-md-0">{pet.name}</strong>
+                            <strong className="ms-0 ms-md-4 my-4 my-md-0">{pet.name}</strong>
                         </div>
                         <div className="d-flex flex-column justify-content-center align-items-center"
                             style={{ flex: 1 }}

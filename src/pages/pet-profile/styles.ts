@@ -15,8 +15,8 @@ export const HeaderStyled = styled.div`
         background: #fff;
 
         @media(max-width: 1000px){
-           max-width: 90%;
-           max-height: 90%;
+            width: 150px;
+            height: 150px;
         }
     }
     div >strong{
