@@ -35,7 +35,7 @@ const TopBarComponent = () => {
 					</NavbarBrandStyled>
 					:
 					<div>
-						<strong>{userLogged.name.charAt(0).toUpperCase()}{userLogged.name.substring(1)}</strong>
+						<Link to={ERoutes.PANEL}><strong>{userLogged.name.charAt(0).toUpperCase()}{userLogged.name.substring(1)}</strong></Link>
 					</div>
 				}
 				{userLogged.id &&

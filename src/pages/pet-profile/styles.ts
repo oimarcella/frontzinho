@@ -1,3 +1,4 @@
+import { Drawer, Typography } from "@material-ui/core";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -44,5 +45,32 @@ export const BodyStyled = styled(Container)`
         :hover{
             color: var(--light-blue-300);
         }
+    }
+`;
+
+export const ChangePetStyledButton = styled(Typography)`
+    cursor: pointer;
+    transition: all ease-in-out .3s;
+
+    :hover{
+        color: var(--light-blue-500);
+    }
+`;
+
+export const DrawerStyled = styled(Drawer)`
+    ul{
+        width: 400px;
+        list-style: none;
+        padding: 0;
+    }
+    li{
+        padding: .8rem;
+        width: 100%;
+        background: var(--light-blue-100);
+    }
+    li:nth-child(odd){
+        padding: .8rem;
+        width: 100%;
+        background: var(--light-blue-80);
     }
 `;
