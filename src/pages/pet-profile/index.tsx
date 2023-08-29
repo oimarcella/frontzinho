@@ -76,7 +76,6 @@ function ProfilePetPage() {
     }
 
     function handleChange(e: React.MouseEvent<HTMLLIElement, MouseEvent>, pet: any) {
-        console.log("🚀 ~ file: index.tsx:79 ~ handleChange ~ pet:", pet)
         e.preventDefault();
         setAnchor(false);
 
