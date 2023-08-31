@@ -15,7 +15,7 @@ import { selectUser, login } from "../../redux/userSlice";
 
 const LoginPage = () => {
     const currentRoute = useLocation().pathname;
-    const [userCredentials, setUserCredentials] = useState({ email: "", pwd: "" });
+    const [userCredentials, setUserCredentials] = useState({ username: "", pwd: "" });
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const navigate = useNavigate();
@@ -76,8 +76,8 @@ const LoginPage = () => {
                             />
                             <Form>
                                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                                    <Form.Control type="email" placeholder="jon.doe@myemail.com" value={userCredentials.email}
-                                        onChange={(e) => setUserCredentials(prev => ({ ...prev, email: e.target.value }))} />
+                                    <Form.Control type="email" placeholder="fulano" value={userCredentials.username}
+                                        onChange={(e) => setUserCredentials(prev => ({ ...prev, username: e.target.value }))} />
                                 </Form.Group>
 
                                 <Form.Group className="mb-3" controlId="formBasicPassword">

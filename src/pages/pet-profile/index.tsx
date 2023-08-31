@@ -2,7 +2,7 @@ import { Container } from "react-bootstrap";
 import { BodyStyled, HeaderStyled, ChangePetStyledButton, DrawerStyled } from "./styles";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/styles/sections";
 import { Pets } from "@material-ui/icons";
 import { ERoutes } from "../../core/enums/routes";
@@ -31,8 +31,6 @@ type PetT = {
 
 /*
     TODO
-    - Adicionar botao de troca de pet
-    - Adicionar loading quando a pagina recarrega
     - Seção "oque vamos fazer hoje?"
 */
 
@@ -52,7 +50,6 @@ function ProfilePetPage() {
     const currentUrl = window.location.host;
     const params = useParams<QueryParamsT>();
     const [pets, setPets] = useState<Array<PetT>>([]);
-    console.log("🚀 ~ file: index.tsx:55 ~ ProfilePetPage ~ pets:", pets)
     const [pet, setPet] = useState<PetT>({} as PetT);
     const [url, setUrl] = useState(currentUrl === "localhost:5173" ? "http://localhost:5173/historico" : "https://frontzinho.vercel.app/historico");
     const { width } = useWindowDimensions();
