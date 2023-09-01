@@ -25,6 +25,7 @@ type PetT = {
     breed: string;
     specie: string;
     name: string;
+    description: string;
     weight: number;
     castrated: boolean;
 }
@@ -96,7 +97,12 @@ function ProfilePetPage() {
                                         </ChangePetStyledButton>
                                         <div className="d-flex flex-md-row flex-column justify-content-center align-items-center justify-content-md-start">
                                             <img src={`/images/${pet.specie == "cachorro" ? "dog" : pet.specie == "gato" ? "cat" : "another_animals"}.svg`} />
-                                            <strong className="ms-0 ms-md-4 my-4 my-md-0">{pet.name}</strong>
+                                            <div className="d-flex flex-column ms-0 ms-md-4 my-4 my-md-0 align-items-center align-items-md-start">
+                                                <strong>{pet.name}</strong>
+                                                <div className="wrapper-text">
+                                                    <p>{pet.description ? pet.description : "Sem descrição"}</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
