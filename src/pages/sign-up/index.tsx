@@ -14,6 +14,7 @@ import { EHttpResponse } from "../../core/enums/http-responses";
 import { login, selectUser } from "../../redux/userSlice";
 
 type userT = {
+    username: string;
     name: string;
     lastname: string;
     email: string;
@@ -45,6 +46,7 @@ type ServicesT = {
 
 const SignUpPage = () => {
     const [user, setUser] = useState<userT>({
+        username: "",
         name: "",
         lastname: "",
         email: "",
@@ -86,7 +88,7 @@ const SignUpPage = () => {
         userLogged.id && navigate(ERoutes.PANEL);
     }, [])
 
-    async function authenticate(loginCredentials: { pwd: string, username?: string, email?: string }) {
+    async function authenticate(loginCredentials: { pwd: string, username: string }) {
 
         try {
             const newUser = await api.post("/login", loginCredentials);
@@ -103,6 +105,7 @@ const SignUpPage = () => {
                 {
                     id: newUser.data.user.id,
                     name: newUser.data.user.name,
+                    username: newUser.data.user.username || loginCredentials.username,
                     email: newUser.data.user.email,
                     jwtToken: newUser.data.token
                 };
@@ -144,6 +147,7 @@ const SignUpPage = () => {
             }
             :
             {
+                username: user.username,
                 email: user.email,
                 name: user.name,
                 lastname: user.lastname,
@@ -163,7 +167,7 @@ const SignUpPage = () => {
             const loginCredentials = typeUser === "company" ?
                 { username: company.username, pwd: company.password }
                 :
-                { email: user.email, pwd: user.password };
+                { username: user.username, pwd: user.password };
             authenticate(loginCredentials);
         } catch (error: any) {
             setLoading(false);
@@ -187,12 +191,10 @@ const SignUpPage = () => {
         }
 
         if (typeUser !== "company" && user.password !== user.passwordConfirm) {
-            console.log("🚀 ~ file: index.tsx:149 ~ user");
             setarePwdDifferent(true);
             setValidated(false);
         }
         else if (typeUser === "company" && company.password != company.passwordConfirm) {
-            console.log("🚀 ~ file: index.tsx:149 ~ company");
             setarePwdDifferent(true);
             setValidated(false);
         }
@@ -263,7 +265,12 @@ const SignUpPage = () => {
                                         </Col>
                                     </Row>
                                     <Row className="mt-4">
-                                        <Col>
+                                        <Col md={6}>
+                                            <Form.Group className="mb-3" controlId="username">
+                                                <Form.Control value={user.username} required type="text" placeholder="Nome de usuário" onChange={e => setUser(prev => ({ ...prev, username: e.target.value }))} />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={6}>
                                             <Form.Group className="mb-3" controlId="email">
                                                 <Form.Control value={user.email} required type="email" placeholder="E-mail" onChange={e => setUser(prev => ({ ...prev, email: e.target.value }))} />
                                             </Form.Group>

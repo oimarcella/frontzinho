@@ -2,13 +2,13 @@ import { Container } from "react-bootstrap";
 import { BodyStyled, HeaderStyled, ChangePetStyledButton, DrawerStyled } from "./styles";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/styles/sections";
 import { Pets } from "@material-ui/icons";
 import { ERoutes } from "../../core/enums/routes";
 import { WifiProtectedSetup } from "@mui/icons-material";
 import useWindowDimensions from "../../core/hooks/useWindowDimensions";
-import { makeStyles } from "@material-ui/core";
+import { Typography } from "@mui/material";
 import Loading from "../../components/layout/components/loading";
 import { selectUser } from "../../redux/userSlice";
 import { useSelector } from "react-redux";
@@ -34,17 +34,6 @@ type PetT = {
     - Seção "oque vamos fazer hoje?"
 */
 
-const useStyles = makeStyles({
-    list: {
-        width: 250
-    },
-    fullList: {
-        width: "auto"
-    },
-    paper: {
-        background: "var(--light-blue-80)",
-    }
-});
 
 function ProfilePetPage() {
     const currentUrl = window.location.host;
@@ -57,7 +46,6 @@ function ProfilePetPage() {
     const user = useSelector(selectUser);
 
     const [anchor, setAnchor] = useState(false);
-    const classes = useStyles();
 
     async function getPetById(id: number) {
         const { data } = await api.get(`pets/${id}`);
@@ -143,18 +131,20 @@ function ProfilePetPage() {
                                         src={`${url}?origin=${"iframe"}`}
                                         width="100%"
                                         height="220px"
-                                        style={{}}
                                         title="Timeline"
                                     />
                                 </div>
                             </Section>
                         </BodyStyled>
                         <DrawerStyled
-                            classes={{ paper: classes.paper }}
                             anchor={"right"}
                             open={anchor}
                             onClose={() => setAnchor(false)}
                         >
+                            <Typography
+                                variant="subtitle1"
+                                className="mb-3 p-2"
+                            >Seus pets</Typography>
                             <ul>
                                 {pets.map(pet =>
                                     <li

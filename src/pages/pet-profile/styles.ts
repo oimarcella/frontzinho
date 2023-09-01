@@ -62,6 +62,10 @@ export const DrawerStyled = styled(Drawer)`
         width: 400px;
         list-style: none;
         padding: 0;
+        
+        @media (max-width: 1000px) {
+            width: 90vw;
+        }
     }
     li{
         padding: .8rem;
