@@ -35,19 +35,42 @@ const LoginPage = () => {
 
             localStorage.setItem("@petpass-token", data.token);
 
+            const objUser = data.user ? {
+                id: data.user.id,
+                name: data.user.name,
+                email: data.user.email,
+                jwtToken: data.token,
+                role: data.user.role
+            }
+                : data.vet ?
+                    {
+                        id: data.vet.id,
+                        name: data.vet.name,
+                        username: data.vet.username,
+                        jwtToken: data.token,
+                        role: data.vet.role
+                    } :
+                    {
+                        id: data.clinica.id,
+                        name: data.clinica.name,
+                        username: data.clinica.username,
+                        jwtToken: data.token,
+                        role: data.clinica.role
+                    }
+                ;
+
             dispatch(
-                login({
-                    id: data.user.id,
-                    name: data.user.name,
-                    email: data.user.email,
-                    jwtToken: data.token
-                })
+                login(objUser)
             );
 
+
+
+            dispatch(show({ message: "Logado", type: "success" }));
             setLoading(false);
             navigate(ERoutes.PANEL);
 
         } catch (error: any) {
+            console.log("Error: ", error);
             setLoading(false);
             if (error.response.status && typeof error.response.status === 'number') {
                 const status = error.response.status;
@@ -76,12 +99,12 @@ const LoginPage = () => {
                             />
                             <Form>
                                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                                    <Form.Control type="email" placeholder="fulano" value={userCredentials.username}
+                                    <Form.Control type="text" placeholder="Nome de usuário. Ex: john.doe" value={userCredentials.username}
                                         onChange={(e) => setUserCredentials(prev => ({ ...prev, username: e.target.value }))} />
                                 </Form.Group>
 
                                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                                    <Form.Control type="password" placeholder="Senha" value={userCredentials.pwd}
+                                    <Form.Control type="password" placeholder="******" value={userCredentials.pwd}
                                         onChange={(e) => setUserCredentials(prev => ({ ...prev, pwd: e.target.value }))} />
                                 </Form.Group>
                                 <div className="d-flex flex-column align-items-center">

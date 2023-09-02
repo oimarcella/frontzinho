@@ -99,7 +99,8 @@ const SignUpPage = () => {
                     id: newUser.data.company.id,
                     name: newUser.data.company.name,
                     username: newUser.data.company.username,
-                    jwtToken: newUser.data.token
+                    jwtToken: newUser.data.token,
+                    role: newUser.data.company.role
                 }
                 :
                 {
@@ -107,7 +108,8 @@ const SignUpPage = () => {
                     name: newUser.data.user.name,
                     username: newUser.data.user.username || loginCredentials.username,
                     email: newUser.data.user.email,
-                    jwtToken: newUser.data.token
+                    jwtToken: newUser.data.token,
+                    role: newUser.data.user.role
                 };
 
             dispatch(

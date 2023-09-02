@@ -1,10 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import HomePage from "../pages/home/home";
 
-import { IntlProvider } from "react-intl";
 import { ERoutes } from "../core/enums/routes";
-import { getLangJson } from "../core/utils/lang.util";
 import AboutUsPage from "../pages/about-us/about-us";
 import NotFoundPage404 from "../pages/not-found-404";
 import LoginPage from "../pages/login";
@@ -12,19 +10,18 @@ import SignUpPage from "../pages/sign-up";
 import DiscoverPage from "../pages/discover";
 import PanelPage from "../pages/panel";
 import MyModal from "../components/layout/components/modal";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectModal } from "../redux/modalSlice";
-import { login, logout, selectUser } from "../redux/userSlice";
 import TopBarComponent from "../components/layout/components/topbar/topbar";
 import Footer from "../components/layout/components/footer/footer";
 import MyToast from "../components/layout/components/toast";
 import PrivateRoute from "./privateRoutes";
 import HistoryPage from "../pages/history";
 import ProfilePetPage from "../pages/pet-profile";
+import RegisterVeterinarianPage from "../pages/register-veterinarian";
 
 const AppRoutes = () => {
   const modal = useSelector(selectModal);
-  //let decodedToken: DecodedTokenT;
 
   return (
     <>
@@ -51,8 +48,8 @@ const AppRoutes = () => {
           <Route path={ERoutes.HISTORY} element={<HistoryPage />} />
           <Route path={`${ERoutes.CLINIC}/:clinicId`} element={<PanelPage />} />
           <Route path={`${ERoutes.PET}/:petId`} element={<ProfilePetPage />} />
+          <Route path={`${ERoutes.REGISTER_VETERINARIAN}`} element={<RegisterVeterinarianPage />} />
         </Route>
-
         <Route path="*" element={<NotFoundPage404 />} />
       </Routes>
       <Footer />

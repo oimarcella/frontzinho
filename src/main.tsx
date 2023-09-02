@@ -13,6 +13,7 @@ import jwt_decode from 'jwt-decode';
 
 type DecodedT = {
   id: number;
+  role: string;
 }
 
 const token = localStorage.getItem('@petpass-token');
@@ -23,14 +24,19 @@ function decodeToken(token: string): DecodedT {
 
 if (token) {
   const decoded: DecodedT = decodeToken(token);
-  api.get(`/users/${decoded.id}`)
+  const role = decoded.role;
+
+  api.get(`/${role}s/${decoded.id}`) /* TODO - Preciso receber o username do usuario nessa response */
     .then(response => {
       const user = response.data;
       store.dispatch(login({
+        role: decoded.role,
         id: user.id,
         name: user.name,
-        email: user.email,
-        jwtToken: token,
+        username: user.username,
+        //email: user.email,
+        ...(user.email ? { email: user.email } : {}),
+        jwtToken: token /* TODO - Passar mais uma propriedade no objeto para armazenar o username do usuário, caso */
       }));
     })
     .catch(error => {

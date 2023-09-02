@@ -9,5 +9,6 @@ export enum ERoutes {
   PANEL = "/painel",
   HISTORY = "/historico",
   CLINIC = "/clinicas",
-  PET = "/pet"
+  PET = "/pet",
+  REGISTER_VETERINARIAN = "/cadastro-veterinario"
 }

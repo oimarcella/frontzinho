@@ -6,13 +6,15 @@ type userSliceActionT = {
     email?: string;
     username?: string;
     jwtToken: string;
+    role: string;
 }
 
 const initialState: userSliceActionT = {
     id: "",
     name: "",
     email: "",
-    jwtToken: ""
+    jwtToken: "",
+    role: ""
 }
 
 export const userSlice = createSlice({
@@ -25,7 +27,8 @@ export const userSlice = createSlice({
                 id: payload.id,
                 name: payload.name,
                 email: payload.email,
-                jwtToken: payload.jwtToken
+                jwtToken: payload.jwtToken,
+                role: payload.role
             };
         },
         logout(state) {
