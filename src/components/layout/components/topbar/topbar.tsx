@@ -35,7 +35,7 @@ const TopBarComponent = () => {
 					</NavbarBrandStyled>
 					:
 					<div>
-						<Link to={ERoutes.PANEL}><strong>{userLogged.name.charAt(0).toUpperCase()}{userLogged.name.substring(1)}</strong></Link>
+						<Link className="mx-0 mx-md-3" to={ERoutes.PANEL}><strong>{userLogged.name.charAt(0).toUpperCase()}{userLogged.name.substring(1)}</strong></Link>
 					</div>
 				}
 				{userLogged.id &&
@@ -44,8 +44,8 @@ const TopBarComponent = () => {
 						<NavCollapseStyled id="basic-navbar-nav">
 							<NavStyled className="me-auto d-flex flex-column flex-lg-row align-items-start justify-content-start align-items-lg-center justify-content-lg-between">
 
-								<div className="d-flex">
-									{((currentRoute !== "/login") && (currentRoute !== "/not-found") && (userLogged.id)) &&
+								<div className="d-flex flex-column flex-lg-row">
+									{((currentRoute !== "/not-found") && (userLogged.id)) &&
 										<>
 											<NavLinkStyled as={Link} to={ERoutes.PROFILE}>
 												<FormattedMessage
@@ -75,6 +75,7 @@ const TopBarComponent = () => {
 										<Button
 											outlined="outlined"
 											color="#0B344E"
+											id="btn-logout"
 											className="mt-2 mt-lg-0"
 											onClick={() => {
 												dispatch(logout());

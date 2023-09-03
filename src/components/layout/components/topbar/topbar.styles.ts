@@ -28,6 +28,10 @@ export const NavBarStyled = styled(Navbar)`
     img{
         width: 200px;
     }
+
+    #btn-logout{
+        padding: 0;
+    }
     
     @media(max-width: 1000px){
         position: relative!important;
