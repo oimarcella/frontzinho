@@ -12,8 +12,6 @@ import Loading from "../../../../components/layout/components/loading";
 import { CardStyled } from "./styles";
 
 const ClinicPets = () => {
-    const petsApi = "/pets";
-    const vetsApi = "/vets";
     const [clinic, setClinic] = useState();
     const [pets, setPets] = useState([]);
     const veterinarian = useSelector(selectUser);
@@ -25,17 +23,18 @@ const ClinicPets = () => {
     else slidesPerView = 2.3;
 
     async function getVetById() {
-        const { data } = await api.get(vetsApi + `/${veterinarian.id}`);
+        const { data } = await api.get(`/vets/${veterinarian.id}`);
         setClinic(data.clinica_id);
     }
 
     async function getPetsById() {
-        const { data } = await api.get(petsApi + `/${clinic}`);
+        const { data } = await api.get(`/clinicas/${clinic}/pets`);
         setPets(data);
     }
 
     useEffect(() => {
         getVetById();
+        getPetsById();
 
     }, [veterinarian.id])
     return (

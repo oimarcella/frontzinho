@@ -56,8 +56,6 @@ const YourPets = () => {
     else if (viewWidth < 400) slidesPerView = 1.3;
     else slidesPerView = 2.3;
 
-
-
     const generatePastelColor = (index: number) => {
         const baseHue = (index * 137.3) % 360; // Varia o tom da cor com base no índice
         const saturation = 70; // Defi3e a saturação
@@ -128,18 +126,15 @@ const YourPets = () => {
 
     useEffect(() => {
         setLoading(true);
-        api.get(`/pets/users/${user.id}`)
+        api.get(`/users/${user.id}/pets`)
             .then((response) => {
-
                 setPets(response.data.reverse());
                 setLoading(false);
             })
             .catch(error => {
                 console.log("Erro: ", error);
-
                 setLoading(false);
             });
-
     }, [user.id]);
 
     const bodyAddPet = <>
@@ -344,7 +339,6 @@ const YourPets = () => {
                 message: "Pet editado!"
             }));
 
-
             const petEditedIndex = pets.findIndex(pet => pet.id === petId);
             const tempPets = [...pets];
             tempPets[petEditedIndex] = pet;
@@ -364,7 +358,6 @@ const YourPets = () => {
             }));
         }
     }
-
 
     async function deletePet(petId: number) {
         try {

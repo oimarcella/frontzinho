@@ -88,7 +88,7 @@ const ClinicVets = () => {
 
     useEffect(() => {
         setLoading(true);
-        api.get(`/vets/clinicas/${user.id}`)
+        api.get(`/clinicas/${user.id}/vets`)
             .then((response) => {
 
                 setVets(response.data.reverse());
