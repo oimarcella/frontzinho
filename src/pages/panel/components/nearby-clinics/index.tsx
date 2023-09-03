@@ -35,7 +35,7 @@ const NearbyClinics = () => {
     return (
         <>
             <Section>
-                <h3 className="mb-4">Clínicas e hospitais próximos de você</h3>
+                <h3 className="mb-4">Clínicas e hospitais recomendados</h3>
                 {!isLoading ?
                     <Swiper
                         spaceBetween={viewWidth > 1000 ? 10 : 10}
