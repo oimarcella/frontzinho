@@ -71,7 +71,7 @@ function ProfilePetPage() {
     }
 
     async function getUserPets(userId: number) {
-        const { data } = await api.get(`/pets/users/${userId}`);
+        const { data } = await api.get(`/users/${userId}/pets`);
 
         setPets(data);
     }
@@ -147,10 +147,6 @@ function ProfilePetPage() {
                             open={anchor}
                             onClose={() => setAnchor(false)}
                         >
-                            <Typography
-                                variant="subtitle1"
-                                className="mb-3 p-2"
-                            >Seus pets</Typography>
                             <ul>
                                 {pets.map(pet =>
                                     <li

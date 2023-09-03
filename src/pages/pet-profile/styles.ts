@@ -62,6 +62,8 @@ export const DrawerStyled = styled(Drawer)`
         width: 400px;
         list-style: none;
         padding: 0;
+        height: 100%;
+        background: var(--light-blue-80);
         
         @media (max-width: 1000px) {
             width: 90vw;
@@ -70,11 +72,10 @@ export const DrawerStyled = styled(Drawer)`
     li{
         padding: .8rem;
         width: 100%;
-        background: var(--light-blue-100);
     }
     li:nth-child(odd){
         padding: .8rem;
         width: 100%;
-        background: var(--light-blue-80);
+        background: var(--light-blue-100);
     }
 `;
