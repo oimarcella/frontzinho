@@ -27,7 +27,6 @@ type userT = {
     addressNumber: string;
     zipCode: string;
 }
-
 type companyT = {
     name: string;
     username: string;
@@ -40,7 +39,7 @@ type companyT = {
     zipCode: string;
 }
 type ServicesT = {
-    label: string;
+    name: string;
     id: number;
 }
 
@@ -77,15 +76,16 @@ const SignUpPage = () => {
     const userLogged = useSelector(selectUser);
     const [typeUser, setTypeUser] = useState("");
     const [isLoading, setLoading] = useState(false);
-    const [services, setServices] = useState<Array<ServicesT>>([
-        { id: 1, label: "Banho e tosa" },
-        { id: 2, label: "Vacinas" },
-        { id: 3, label: "Serviços hospitalares" }
-    ]);
+    const [services, setServices] = useState<Array<ServicesT>>([]);
     const [service, setService] = useState<ServicesT>({} as ServicesT);
 
     useEffect(() => {
         userLogged.id && navigate(ERoutes.PANEL);
+
+        api.get("/services")
+            .then((response) => {
+                setServices(response.data);
+            });
     }, [])
 
     async function authenticate(loginCredentials: { pwd: string, username: string }) {
@@ -401,12 +401,12 @@ const SignUpPage = () => {
                                                     <Form.Check
                                                         key={index}
                                                         inline
-                                                        label={svc.label}
-                                                        checked={svc.label === service.label ? true : false}
+                                                        label={svc.name}
+                                                        checked={svc.name === service.name ? true : false}
                                                         name="group1"
                                                         type="radio"
                                                         id={`inline-${svc}`}
-                                                        onChange={() => setService({ label: svc.label, id: svc.id })}
+                                                        onChange={() => setService({ name: svc.name, id: svc.id })}
                                                     />
                                                 )
                                             }
