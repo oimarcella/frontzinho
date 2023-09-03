@@ -37,6 +37,7 @@ const PanelPage = () => {
                     userLogged.role === "clinica" &&
                     <>
                         <ClinicVets />
+                        <ClinicPets />
                     </>
 
                 }
