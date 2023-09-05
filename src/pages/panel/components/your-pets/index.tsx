@@ -33,7 +33,6 @@ type PetT = {
 const YourPets = () => {
     const [isLoading, setLoading] = useState(false);
     const user = useSelector(selectUser);
-    console.log("🚀 ~ file: index.tsx:36 ~ YourPets ~ user:", user)
     const [pet, setPet] = useState<PetT>({} as PetT);
     const viewWidth = useWindowDimensions().width;
     let slidesPerView = 0;
@@ -129,7 +128,6 @@ const YourPets = () => {
         setLoading(true);
         api.get(`/users/${user.id}/pets`)
             .then((response) => {
-                console.log("🚀 ~ file: index.tsx:131 ~ .then ~ response:", response)
                 setPets(response.data.reverse());
                 setLoading(false);
             })

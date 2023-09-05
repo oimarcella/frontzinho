@@ -1,17 +1,19 @@
-import { Container } from "react-bootstrap";
+import { Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { BodyStyled, HeaderStyled, ChangePetStyledButton, DrawerStyled } from "./styles";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { Link, useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/styles/sections";
-import { Pets } from "@material-ui/icons";
+import { LinkOutlined, Pets } from "@material-ui/icons";
 import { ERoutes } from "../../core/enums/routes";
 import { WifiProtectedSetup } from "@mui/icons-material";
 import useWindowDimensions from "../../core/hooks/useWindowDimensions";
 import { Typography } from "@mui/material";
 import Loading from "../../components/layout/components/loading";
 import { selectUser } from "../../redux/userSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Button from "../../components/layout/components/button/button";
+import { show } from "../../redux/toastSlice";
 
 type QueryParamsT = {
     petId: string;
@@ -45,8 +47,11 @@ function ProfilePetPage() {
     const { width } = useWindowDimensions();
     const [isLoading, setIsLoading] = useState(true);
     const user = useSelector(selectUser);
-
     const [anchor, setAnchor] = useState(false);
+    const [isOpenModalConnect, setIsOpenModalConnect] = useState(false);
+    const [availableClinics, setAvailableClinics] = useState<Array<any>>([]);
+    const [clinicSelected, setClinicSelected] = useState(0);
+    const dispatch = useDispatch();
 
     async function getPetById(id: number) {
         const { data } = await api.get(`pets/${id}`);
@@ -76,9 +81,37 @@ function ProfilePetPage() {
         setPets(data);
     }
 
+    async function getAllClinics() {
+        const response = await api.get("/clinicas")
+        setAvailableClinics(response.data);
+    }
+
+    async function connectPet() {
+        try {
+            api.post("/pets/connect", {
+                clinica: clinicSelected,
+                pet: pet.id
+            });
+
+            setClinicSelected(0);
+            setIsOpenModalConnect(false);
+
+            dispatch(
+                show({ message: "Conectado!", type: "success" })
+            );
+        }
+        catch (error) {
+            console.log("Erro ao tentar conectar pet à clínica");
+            dispatch(
+                show({ message: "Não foi possível conectar-se à clínica no momento", delay: 4000, type: "error" })
+            );
+        }
+    }
+
     useEffect(() => {
         setTimeout(() => { setIsLoading(false) }, 1000);
         getUserPets(user.id);
+        getAllClinics();
     }, [])
 
     return (
@@ -86,18 +119,43 @@ function ProfilePetPage() {
             {
                 !isLoading ?
                     <>
+                        <Modal show={isOpenModalConnect} onHide={() => setIsOpenModalConnect(false)}>
+                            <Modal.Header>Conectar {pet.name} à uma clínica</Modal.Header>
+                            <Modal.Body>
+                                <Form>
+                                    <Row>
+                                        <Col>
+                                            <Form.Select aria-label="Selecione a clínica para conectar seu pet aqui"
+                                                value={clinicSelected}
+                                                onChange={(e) => setClinicSelected(Number(e.target.value))}
+                                            >
+                                                <option value={0}>Quer conectar seu pet com qual clínica?</option>
+                                                {availableClinics.map(clinic => <option value={clinic.id}>{clinic.name}</option>)}
+                                            </Form.Select>
+                                        </Col>
+                                    </Row>
+                                    <Button className="mt-3" color="#FF41AD" outlined="none" type="button" onClick={() => connectPet()}>
+                                        Conectar
+                                    </Button>
+                                </Form>
+                            </Modal.Body>
+                        </Modal>
                         <HeaderStyled>
                             <Section>
                                 <Container className="d-flex flex-column flex-md-row align-items-center justify-content-md-between justify-content-center">
 
                                     <div className="d-flex flex-column">
-                                        <ChangePetStyledButton variant="body2" className="mb-4" onClick={handleDrawer}>
+                                        <ChangePetStyledButton variant="body2" className="mb-4 d-flex align-items-center" onClick={handleDrawer}>
                                             <WifiProtectedSetup />
-                                            {width > 1000 && <strong>Trocar</strong>}
+                                            {width > 1000 && <strong className="ms-1">Trocar</strong>}
                                         </ChangePetStyledButton>
                                         <div className="d-flex flex-md-row flex-column justify-content-center align-items-center justify-content-md-start">
                                             <img src={`/images/${pet.specie == "cachorro" ? "dog" : pet.specie == "gato" ? "cat" : "another_animals"}.svg`} />
                                             <div className="d-flex flex-column ms-0 ms-md-4 my-4 my-md-0 align-items-center align-items-md-start">
+                                                <ChangePetStyledButton variant="body2" className="mb-4 d-flex align-items-center" onClick={() => setIsOpenModalConnect(true)}>
+                                                    <LinkOutlined />
+                                                    {width > 1000 && <strong className="ms-1">Conectar à clínica</strong>}
+                                                </ChangePetStyledButton>
                                                 <strong>{pet.name}</strong>
                                                 <div className="wrapper-text">
                                                     <p>{pet.description ? pet.description : "Sem descrição"}</p>

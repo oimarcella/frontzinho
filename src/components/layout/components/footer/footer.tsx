@@ -23,7 +23,7 @@ const Footer = () => {
               <LogoStyled className='col-md-6 col-12 d-flex'>
                 <img style={{}} src="/images/petpass_small_dark-v1.svg" className="img-fluid" />
               </LogoStyled>
-              <Button color="#0B344E" outlined='outlined' onClick={() => setIsModalContactOpen(true)}>Fale conosco</Button>
+              <Button color="#0B344E" outlined='outlined' onClick={() => setIsModalContactOpen(true)}>Ajuda</Button>
             </RowStyled>
           </ContentStyled>
           {!user.id && <LgpdStyled>

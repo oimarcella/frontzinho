@@ -31,7 +31,7 @@ function ContactModal(props: ContactModalT) {
     <>
       <ModalStyled show={props.isOpen} onHide={props.handleClose}>
         <Modal.Header className='d-flex justify-content-center'>
-          <Modal.Title>Saiba mais</Modal.Title>
+          <Modal.Title>Nos envie uma mensagem</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -63,7 +63,7 @@ function ContactModal(props: ContactModalT) {
               <Form.Check type="checkbox" label="Aceito receber comunicações do PetPass" />
             </Form.Group>
 
-            <small>*Ao enviar seu contato, você está de acordo com nossa <a target="_blank" href={politicsAndPrivacy}>Política de Privacidade</a></small>
+            {/*<small>*Ao enviar seu contato, você está de acordo com nossa <a target="_blank" href={politicsAndPrivacy}>Política de Privacidade</a></small>*/}
           </Form>
         </Modal.Body>
         <Modal.Footer className='d-flex flex-row justify-content-center'>
@@ -71,7 +71,7 @@ function ContactModal(props: ContactModalT) {
             Cancelar
           </Button>
           {verified ?
-            <Button customStyles={{ width: '40%', }} color="#188755" onClick={submit}>
+            <Button customStyles={{ width: '40%', }} color="#FE51B3" onClick={submit}>
               Enviar
             </Button>
             :
@@ -81,7 +81,7 @@ function ContactModal(props: ContactModalT) {
           }
 
           <p className='mt-3'>
-            O PetPass solicita sua coleta de dados para identificação do usuário com a finalidade de garantir que podemos entrar em contato para falarmos sobre a disponibilização dos planos e assuntos pertinentes ao PetPass. Estes dados não serão utilizados para envio de SPAM.
+            O PetPass solicita os dados acima para fins de contato. Estes dados não serão utilizados para envio de SPAM e também não serão compartilhados com terceiros.
           </p>
         </Modal.Footer>
       </ModalStyled>
