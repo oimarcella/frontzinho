@@ -34,6 +34,8 @@ export const BodyStyled = styled(Container)`
         font-weight: bold;
         font-size: 1rem;
         margin-bottom: 0;
+
+        position: relative;
     }
 
     .ver-mais{
@@ -45,6 +47,16 @@ export const BodyStyled = styled(Container)`
         :hover{
             color: var(--light-blue-300);
         }
+    }
+
+    span{
+        position: absolute;
+        top: -30px;
+        padding: 3px 5px;
+        background: #63e5ff;
+        color: #ffffff;
+        font-size: 12px;
+        border-radius: 50px;
     }
 `;
 

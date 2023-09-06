@@ -181,7 +181,7 @@ function ProfilePetPage() {
                         </HeaderStyled>
                         <BodyStyled>
                             <Section>
-                                <h3 className="mb-4">O que vamos fazer hoje?</h3>
+                                <h3 className="mb-4">O que vamos fazer hoje? <span>Em breve</span></h3>
                             </Section>
                             <Section>
                                 <div className="d-flex align-items-center mb-4">
