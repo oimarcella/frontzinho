@@ -33,11 +33,7 @@ type PetT = {
     castrated: boolean;
 }
 
-/*
-    TODO
-    - Seção "oque vamos fazer hoje?"
-*/
-
+/*TODO - O que vamos fazer hoje? */
 
 function ProfilePetPage() {
     const currentUrl = window.location.host;
@@ -54,6 +50,7 @@ function ProfilePetPage() {
     const [connectedClinics, setConnectedClinics] = useState<Array<any>>([]);
     const [clinicSelected, setClinicSelected] = useState(0);
     const dispatch = useDispatch();
+    const [connectionLoading, setConnectionLoading] = useState(false);
 
     async function getPetById(id: number) {
         const { data } = await api.get(`pets/${id}`);
@@ -69,10 +66,6 @@ function ProfilePetPage() {
         const { data } = await api.get(`pets/${id}/clinicas/nao-conectadas`);
         setAvailableClinics(data);
     }
-
-    useEffect(() => {
-        params.petId && getPetById(Number(params.petId));
-    }, []);
 
     function handleDrawer() {
         setAnchor(true);
@@ -94,7 +87,6 @@ function ProfilePetPage() {
 
     async function getAllClinics() {
         const response = await api.get("/clinicas");
-        setAvailableClinics(response.data);
     }
 
     async function connectPet() {
@@ -170,6 +162,15 @@ function ProfilePetPage() {
         getConnectedClinics(pet.id);
         getNotConnectedClinics(pet.id);
     }, [user.id, pet.id])
+
+    useEffect(() => {
+        setConnectionLoading(true);
+        !pet.id ?
+            params.petId && getPetById(Number(params.petId))
+            :
+            params.petId && getPetById(Number(pet.id));
+        setConnectionLoading(false);
+    }, [pet.id]);
 
     const MyOverlay = ({ id, children, title }: { id: any, children: ReactNode, title: string }) => (
         <OverlayTrigger overlay={<Tooltip id={id}>{title}</Tooltip>}>
@@ -248,15 +249,24 @@ function ProfilePetPage() {
                                 <small>Administre as conexões aqui. Clicando no ícone <LinkOff style={{ width: "20px" }} /> você desfaz a conexão do seu pet com a clínica.</small>
                                 <div className="mt-4 d-flex flex-wrap gap-2">
                                     {
-                                        connectedClinics.map(clinic => {
-                                            return (
-                                                <CompanyConnectedStyled key={clinic.id}>
-                                                    {clinic.name}
-                                                    <MyOverlay title="Desconectar" id={clinic.id}><LinkOff className="ms-2 clickable" onClick={() => desconnect(clinic.id)} /></MyOverlay>
-                                                </CompanyConnectedStyled>
-                                            )
-                                        })
+                                        connectionLoading ?
+                                            <Loading />
+                                            :
+                                            connectedClinics.length > 0 ?
+                                                (
+                                                    connectedClinics.map(clinic => {
+                                                        return (
+                                                            <CompanyConnectedStyled key={clinic.id}>
+                                                                {clinic.name}
+                                                                <MyOverlay title="Desconectar" id={clinic.id}><LinkOff className="ms-2 clickable" onClick={() => desconnect(clinic.id)} /></MyOverlay>
+                                                            </CompanyConnectedStyled>
+                                                        )
+                                                    })
+                                                )
+                                                :
+                                                <p>Sem conexões no momento</p>
                                     }
+
                                 </div>
                             </Section>
                             <Section>
