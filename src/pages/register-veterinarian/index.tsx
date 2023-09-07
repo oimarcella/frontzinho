@@ -89,7 +89,7 @@ const RegisterVeterinarianPage = () => {
             let username: string = '';
 
             // Transformar o nome em minúsculas e substituir espaços por pontos
-            if (name.split(" ").length > 1)
+            if (name.trim().split(" ").length > 1)
                 username = `${name.toLowerCase().split(" ")[0]}.${name.toLowerCase().split(" ")[1]}`;
             else
                 username = `${name.toLowerCase().split(" ")[0]}.` + `${Math.floor(Math.random() * 9999) + 1}`.substring(0, 3);
