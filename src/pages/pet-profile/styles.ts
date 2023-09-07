@@ -105,12 +105,24 @@ export const DrawerStyled = styled(Drawer)`
         }
     }
     li{
+        cursor: pointer;
         padding: .8rem;
         width: 100%;
+        transition: all ease-in-out .3s;
+        
+        :hover{
+            background: var(--light-blue-500) !important;
+            color: #fff;
+        }
     }
     li:nth-child(odd){
         padding: .8rem;
         width: 100%;
         background: var(--light-blue-100);
+        
+        :hover{
+            background: var(--light-blue-500) !important;
+            color: #fff;
+        }
     }
 `;
