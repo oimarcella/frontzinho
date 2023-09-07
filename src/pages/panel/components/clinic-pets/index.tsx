@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 // Import Swiper styles
 import 'swiper/css';
 import { Section } from "../../../../components/layout/components/styles/sections";
@@ -10,6 +10,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import useWindowDimensions from "../../../../core/hooks/useWindowDimensions";
 import Loading from "../../../../components/layout/components/loading";
 import { CardStyled } from "./styles";
+import { RemoveRedEye } from "@material-ui/icons";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { ERoutes } from "../../../../core/enums/routes";
 
 type PetT = {
     name: string;
@@ -21,9 +25,9 @@ const ClinicPets = () => {
     const [pets, setPets] = useState<Array<PetT>>([]);
     const userLogged = useSelector(selectUser);
     const typeUserLogged = userLogged.role === "clinica" ? "clinica" : "vet";
-    console.log("🚀 ~ file: index.tsx:18 ~ ClinicPets ~ userLogged:", userLogged)
     const viewWidth = useWindowDimensions().width;
     let slidesPerView = 0;
+    const navigate = useNavigate();
 
     if (viewWidth > 1000) slidesPerView = 3.3;
     else if (viewWidth < 400) slidesPerView = 1.3;
@@ -58,6 +62,12 @@ const ClinicPets = () => {
 
     }, [userLogged.id])
 
+    const MyOverlay = ({ id, children, title }: { id: any, children: ReactNode, title: string }) => (
+        <OverlayTrigger overlay={<Tooltip id={id}>{title}</Tooltip>}>
+            <span style={{ cursor: "pointer" }}>{children}</span>
+        </OverlayTrigger>
+    );
+
     return (
         <ContainerStyled>
             <Section>
@@ -84,6 +94,9 @@ const ClinicPets = () => {
                                                     alt={pet.name}
                                                 />
                                                 {pet.name}
+                                                <div className="d-flex align-items-center mt-3">
+                                                    <MyOverlay title="Ver paciente" id={pet.name}><RemoveRedEye onClick={() => navigate(`${ERoutes.PET}/${pet.id}`)} /></MyOverlay>
+                                                </div>
                                             </CardStyled>
                                         </SwiperSlide>
                                     )

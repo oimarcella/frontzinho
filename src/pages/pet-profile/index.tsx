@@ -51,6 +51,8 @@ function ProfilePetPage() {
     const [clinicSelected, setClinicSelected] = useState(0);
     const dispatch = useDispatch();
     const [connectionLoading, setConnectionLoading] = useState(false);
+    const isGuardian = user.role === 'user';
+    const [clinicId, setClinicId] = useState(0);
 
     async function getPetById(id: number) {
         const { data } = await api.get(`pets/${id}`);
@@ -83,6 +85,12 @@ function ProfilePetPage() {
     async function getUserPets(userId: number) {
         const { data } = await api.get(`/users/${userId}/pets`);
         setPets(data);
+    }
+
+    async function getPetsByClinicId(clinicId: number) {
+        const { data } = await api.get(`/clinicas/${clinicId}/pets`);
+        setPets(data);
+        console.log("🚀 ~ file: index.tsx:93 ~ getPetsByClinicId ~ data:", data)
     }
 
     async function getAllClinics() {
@@ -156,12 +164,31 @@ function ProfilePetPage() {
         }
     }
 
+    async function getVetById(vetId: number) {
+        const { data } = await api.get(`/vets/${vetId}`);
+        setClinicId(data.clinica_id);
+        return data;
+    }
+
     useEffect(() => {
         setTimeout(() => { setIsLoading(false) }, 1000);
-        getUserPets(user.id);
-        getConnectedClinics(pet.id);
-        getNotConnectedClinics(pet.id);
-    }, [user.id, pet.id])
+
+        if (isGuardian) {
+            getUserPets(user.id)
+            getConnectedClinics(pet.id);
+            getNotConnectedClinics(pet.id);
+        }
+        else if (user.role === "clinica") {
+            getPetsByClinicId(user.id)
+        }
+        else {
+            getVetById(user.id);
+            getPetsByClinicId(clinicId); //verificar de qual clinica o veterinario
+        }
+
+
+
+    }, [user.id, pet.id, clinicId])
 
     useEffect(() => {
         setConnectionLoading(true);
@@ -216,10 +243,12 @@ function ProfilePetPage() {
                                         <div className="d-flex flex-md-row flex-column justify-content-center align-items-center justify-content-md-start">
                                             <img src={`/images/${pet.specie == "cachorro" ? "dog" : pet.specie == "gato" ? "cat" : "another_animals"}.svg`} />
                                             <div className="d-flex flex-column ms-0 ms-md-4 my-4 my-md-0 align-items-center align-items-md-start">
-                                                <ChangePetStyledButton variant="body2" className="mb-4 d-flex align-items-center" onClick={() => setIsOpenModalConnect(true)}>
-                                                    <LinkOutlined />
-                                                    {width > 1000 && <strong className="ms-1">Conectar à clínica</strong>}
-                                                </ChangePetStyledButton>
+                                                {isGuardian &&
+                                                    <ChangePetStyledButton variant="body2" className="mb-4 d-flex align-items-center" onClick={() => setIsOpenModalConnect(true)}>
+                                                        <LinkOutlined />
+                                                        {width > 1000 && <strong className="ms-1">Conectar à clínica</strong>}
+                                                    </ChangePetStyledButton>
+                                                }
                                                 <strong>{pet.name}</strong>
                                                 <div className="wrapper-text">
                                                     <p>{pet.description ? pet.description : "Sem descrição"}</p>
@@ -244,34 +273,39 @@ function ProfilePetPage() {
                             </Section>
                         </HeaderStyled>
                         <BodyStyled>
-                            <Section>
-                                <h3 className="mb-2">Conexões<span className="new">Novidade</span></h3>
-                                <small>Administre as conexões aqui. Clicando no ícone <LinkOff style={{ width: "20px" }} /> você desfaz a conexão do seu pet com a clínica.</small>
-                                <div className="mt-4 d-flex flex-wrap gap-2">
-                                    {
-                                        connectionLoading ?
-                                            <Loading />
-                                            :
-                                            connectedClinics.length > 0 ?
-                                                (
-                                                    connectedClinics.map(clinic => {
-                                                        return (
-                                                            <CompanyConnectedStyled key={clinic.id}>
-                                                                {clinic.name}
-                                                                <MyOverlay title="Desconectar" id={clinic.id}><LinkOff className="ms-2 clickable" onClick={() => desconnect(clinic.id)} /></MyOverlay>
-                                                            </CompanyConnectedStyled>
+                            {isGuardian &&
+                                <>
+                                    <Section>
+                                        <h3 className="mb-2">Conexões<span className="new">Novidade</span></h3>
+                                        <small>Administre as conexões aqui. Clicando no ícone <LinkOff style={{ width: "20px" }} /> você desfaz a conexão do seu pet com a clínica.</small>
+                                        <div className="mt-4 d-flex flex-wrap gap-2">
+                                            {
+                                                connectionLoading ?
+                                                    <Loading />
+                                                    :
+                                                    connectedClinics.length > 0 ?
+                                                        (
+                                                            connectedClinics.map(clinic => {
+                                                                return (
+                                                                    <CompanyConnectedStyled key={clinic.id}>
+                                                                        {clinic.name}
+                                                                        <MyOverlay title="Desconectar" id={clinic.id}><LinkOff className="ms-2 clickable" onClick={() => desconnect(clinic.id)} /></MyOverlay>
+                                                                    </CompanyConnectedStyled>
+                                                                )
+                                                            })
                                                         )
-                                                    })
-                                                )
-                                                :
-                                                <p>Sem conexões no momento</p>
-                                    }
+                                                        :
+                                                        <p>Sem conexões no momento</p>
+                                            }
 
-                                </div>
-                            </Section>
-                            <Section>
-                                <h3 className="mb-4">O que vamos fazer hoje? <span className="soon">Em breve</span></h3>
-                            </Section>
+                                        </div>
+                                    </Section>
+                                    <Section>
+                                        <h3 className="mb-4">O que vamos fazer hoje? <span className="soon">Em breve</span></h3>
+                                    </Section>
+                                </>
+
+                            }
                             <Section>
                                 <div className="d-flex align-items-center mb-4">
                                     <h3>Linha do tempo</h3>
