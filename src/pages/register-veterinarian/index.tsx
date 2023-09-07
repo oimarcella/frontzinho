@@ -86,8 +86,13 @@ const RegisterVeterinarianPage = () => {
     function handleUsername(name: string) {
 
         if (name) {
+            let username: string = '';
+
             // Transformar o nome em minúsculas e substituir espaços por pontos
-            let username = name.replace(" ", ".").toLowerCase();
+            if (name.split(" ").length > 1)
+                username = `${name.toLowerCase().split(" ")[0]}.${name.toLowerCase().split(" ")[1]}`;
+            else
+                username = `${name.toLowerCase().split(" ")[0]}.` + `${Math.floor(Math.random() * 9999) + 1}`.substring(0, 3);
 
             setVet(prev => ({ ...prev, username }));
         } else {
@@ -133,7 +138,7 @@ const RegisterVeterinarianPage = () => {
                             <Col lg={4} sm={12}>
                                 <Form.Group className="mb-3" controlId="name">
                                     <Form.Control value={vet.username} required type="text" placeholder="Nome de usuário" onChange={e => setVet(prev => ({ ...prev, username: e.target.value }))} />
-                                    {vet.username && <small>Sugestão de nome de usuário</small>}
+                                    {vet.username && <small>Sugestão de nome de usuário. Altere se preferir.</small>}
                                 </Form.Group>
                             </Col>
                         </Row>
