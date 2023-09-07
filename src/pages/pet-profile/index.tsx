@@ -1,10 +1,10 @@
-import { Col, Container, Form, Modal, Row } from "react-bootstrap";
-import { BodyStyled, HeaderStyled, ChangePetStyledButton, DrawerStyled } from "./styles";
-import { useEffect, useState } from "react";
+import { Col, Container, Form, Modal, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
+import { BodyStyled, HeaderStyled, ChangePetStyledButton, DrawerStyled, CompanyConnectedStyled } from "./styles";
+import { ReactNode, useEffect, useState } from "react";
 import api from "../../services/api";
 import { Link, useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/styles/sections";
-import { LinkOutlined, Pets } from "@material-ui/icons";
+import { LinkOff, LinkOutlined, Pets } from "@material-ui/icons";
 import { ERoutes } from "../../core/enums/routes";
 import { WifiProtectedSetup } from "@mui/icons-material";
 import useWindowDimensions from "../../core/hooks/useWindowDimensions";
@@ -14,6 +14,7 @@ import { selectUser } from "../../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../components/layout/components/button/button";
 import { show } from "../../redux/toastSlice";
+import { delay } from "@reduxjs/toolkit/dist/utils";
 
 type QueryParamsT = {
     petId: string;
@@ -50,12 +51,23 @@ function ProfilePetPage() {
     const [anchor, setAnchor] = useState(false);
     const [isOpenModalConnect, setIsOpenModalConnect] = useState(false);
     const [availableClinics, setAvailableClinics] = useState<Array<any>>([]);
+    const [connectedClinics, setConnectedClinics] = useState<Array<any>>([]);
     const [clinicSelected, setClinicSelected] = useState(0);
     const dispatch = useDispatch();
 
     async function getPetById(id: number) {
         const { data } = await api.get(`pets/${id}`);
         setPet(data);
+    }
+
+    async function getConnectedClinics(id: number) {
+        const { data } = await api.get(`pets/${id}/clinicas/conectadas`);
+        setConnectedClinics(data);
+    }
+
+    async function getNotConnectedClinics(id: number) {
+        const { data } = await api.get(`pets/${id}/clinicas/nao-conectadas`);
+        setAvailableClinics(data);
     }
 
     useEffect(() => {
@@ -77,12 +89,11 @@ function ProfilePetPage() {
 
     async function getUserPets(userId: number) {
         const { data } = await api.get(`/users/${userId}/pets`);
-
         setPets(data);
     }
 
     async function getAllClinics() {
-        const response = await api.get("/clinicas")
+        const response = await api.get("/clinicas");
         setAvailableClinics(response.data);
     }
 
@@ -96,6 +107,19 @@ function ProfilePetPage() {
             setClinicSelected(0);
             setIsOpenModalConnect(false);
 
+
+            const clinicToConnect = availableClinics.find(clinic => {
+                if (clinic.id === clinicSelected)
+                    return { name: clinic.name, id: clinic.id }
+            });
+            const newConnectedArray = [...connectedClinics, clinicToConnect];
+            setConnectedClinics(newConnectedArray);
+
+            const newAvailableClinicArray = availableClinics.filter(clinic =>
+                clinic.id !== clinicSelected
+            );
+            setAvailableClinics(newAvailableClinicArray);
+
             dispatch(
                 show({ message: "Conectado!", type: "success" })
             );
@@ -108,11 +132,50 @@ function ProfilePetPage() {
         }
     }
 
+    function desconnect(clinicId: number) {
+        try {
+            api.delete("/pets/connect", {
+                data: {
+                    clinica: clinicId,
+                    pet: pet.id
+                }
+            });
+
+            const newNotConnectedArray: Array<any> = [];
+            let clinicDeleted = null;
+            connectedClinics.forEach(clinic => {
+                if (clinic.id !== clinicId) newNotConnectedArray.push(clinic);
+                else clinicDeleted = clinic;
+            });
+            setConnectedClinics(newNotConnectedArray);
+
+            const newAvailableArray = [...availableClinics, clinicDeleted];
+            setAvailableClinics(newAvailableArray);
+
+            dispatch(
+                show({ message: "Desconectada", type: "success", delay: 2000 })
+            );
+        }
+        catch (error) {
+            console.log("Erro ao tentar desconectar da clínica");
+            dispatch(
+                show({ message: "Não foi possível desconectar", delay: 3000, type: "error" })
+            );
+        }
+    }
+
     useEffect(() => {
         setTimeout(() => { setIsLoading(false) }, 1000);
         getUserPets(user.id);
-        getAllClinics();
-    }, [])
+        getConnectedClinics(pet.id);
+        getNotConnectedClinics(pet.id);
+    }, [user.id, pet.id])
+
+    const MyOverlay = ({ id, children, title }: { id: any, children: ReactNode, title: string }) => (
+        <OverlayTrigger overlay={<Tooltip id={id}>{title}</Tooltip>}>
+            <a href="#">{children}</a>
+        </OverlayTrigger>
+    );
 
     return (
         <>
@@ -130,7 +193,7 @@ function ProfilePetPage() {
                                                 onChange={(e) => setClinicSelected(Number(e.target.value))}
                                             >
                                                 <option value={0}>Quer conectar seu pet com qual clínica?</option>
-                                                {availableClinics.map(clinic => <option value={clinic.id}>{clinic.name}</option>)}
+                                                {availableClinics.map(clinic => <option key={clinic.id} value={clinic.id}>{clinic.name}</option>)}
                                             </Form.Select>
                                         </Col>
                                     </Row>
@@ -181,7 +244,23 @@ function ProfilePetPage() {
                         </HeaderStyled>
                         <BodyStyled>
                             <Section>
-                                <h3 className="mb-4">O que vamos fazer hoje? <span>Em breve</span></h3>
+                                <h3 className="mb-2">Conexões<span className="new">Novidade</span></h3>
+                                <small>Administre as conexões aqui. Clicando no ícone <LinkOff style={{ width: "20px" }} /> você desfaz a conexão do seu pet com a clínica.</small>
+                                <div className="mt-4 d-flex flex-wrap gap-2">
+                                    {
+                                        connectedClinics.map(clinic => {
+                                            return (
+                                                <CompanyConnectedStyled key={clinic.id}>
+                                                    {clinic.name}
+                                                    <MyOverlay title="Desconectar" id={clinic.id}><LinkOff className="ms-2 clickable" onClick={() => desconnect(clinic.id)} /></MyOverlay>
+                                                </CompanyConnectedStyled>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </Section>
+                            <Section>
+                                <h3 className="mb-4">O que vamos fazer hoje? <span className="soon">Em breve</span></h3>
                             </Section>
                             <Section>
                                 <div className="d-flex align-items-center mb-4">

@@ -53,10 +53,33 @@ export const BodyStyled = styled(Container)`
         position: absolute;
         top: -30px;
         padding: 3px 5px;
-        background: #63e5ff;
-        color: #ffffff;
         font-size: 12px;
         border-radius: 50px;
+
+    }
+    span.soon{
+        background: #63e5ff;
+        color: #ffffff;
+    }
+    span.new{
+        background: #63ffa9;
+        color: #ffffff;
+    }
+`;
+
+export const CompanyConnectedStyled = styled.div`
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    padding: 1rem 1.2rem;
+    border-radius: 5px;
+
+    
+    .clickable{
+        cursor:pointer;
+        transition: all ease-in-out .3s;
+
+        :hover{
+            color: var(--light-blue-500);
+        }
     }
 `;
 
