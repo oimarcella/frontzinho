@@ -99,6 +99,9 @@ export const DrawerStyled = styled(Drawer)`
         padding: 0;
         height: 100%;
         background: var(--light-blue-80);
+        max-height: 100%;
+        overflow-y: auto;
+        margin-bottom: 0;
         
         @media (max-width: 1000px) {
             width: 90vw;

@@ -76,6 +76,7 @@ const ClinicPets = () => {
                 {
                     pets.length > 0 ?
                         <Swiper
+                            className="mt-3"
                             spaceBetween={viewWidth > 1000 ? 30 : 10}
                             slidesPerView={slidesPerView}
                             onSlideChange={() => { }}
@@ -94,8 +95,8 @@ const ClinicPets = () => {
                                                     alt={pet.name}
                                                 />
                                                 {pet.name}
-                                                <div className="d-flex align-items-center mt-3">
-                                                    <MyOverlay title="Ver paciente" id={pet.name}><RemoveRedEye onClick={() => navigate(`${ERoutes.PET}/${pet.id}`)} /></MyOverlay>
+                                                <div className="d-flex align-items-center">
+                                                    <MyOverlay title="Ver paciente" id={pet.name}><RemoveRedEye className="icon-actions" onClick={() => navigate(`${ERoutes.PET}/${pet.id}`)} /></MyOverlay>
                                                 </div>
                                             </CardStyled>
                                         </SwiperSlide>

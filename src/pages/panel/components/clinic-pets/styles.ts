@@ -11,4 +11,8 @@ export const CardStyled = styled(Card)`
         margin-bottom: 20px;
         min-height: 90px;
     }
+
+    .icon-actions{
+        font-size: 18px;
+    }
 `;
