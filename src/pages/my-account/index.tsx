@@ -114,14 +114,14 @@ function MyAccount() {
                                             onChange={(e) => setUserRegister(prev => ({ ...prev, document: e.target.value }))} />
                                     </Form.Group>
                                 </Col>
+                                <Col md={4}>
+                                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                                        <Form.Control required type="text" placeholder="E-mail" value={userRegister.email}
+                                            onChange={(e) => setUserRegister(prev => ({ ...prev, email: e.target.value }))} />
+                                    </Form.Group>
+                                </Col>
                             </>
                         }
-                        <Col md={4}>
-                            <Form.Group className="mb-3" controlId="formBasicEmail">
-                                <Form.Control required type="text" placeholder="E-mail" value={userRegister.email}
-                                    onChange={(e) => setUserRegister(prev => ({ ...prev, email: e.target.value }))} />
-                            </Form.Group>
-                        </Col>
                     </Row>
                     <Row>
                         <Col md={4}>
