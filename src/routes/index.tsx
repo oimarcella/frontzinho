@@ -19,6 +19,7 @@ import PrivateRoute from "./privateRoutes";
 import HistoryPage from "../pages/history";
 import ProfilePetPage from "../pages/pet-profile";
 import RegisterVeterinarianPage from "../pages/register-veterinarian";
+import MyAccount from "../pages/my-account";
 
 const AppRoutes = () => {
   const modal = useSelector(selectModal);
@@ -43,6 +44,7 @@ const AppRoutes = () => {
         <Route path={ERoutes.ABOUT_US} element={<AboutUsPage />} />
         <Route path={ERoutes.SIGNUP} element={<SignUpPage />} />
         <Route element={<PrivateRoute />}>
+          <Route path={ERoutes.PROFILE} element={<MyAccount />} />
           <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
           <Route path={ERoutes.PANEL} element={<PanelPage />} />
           <Route path={ERoutes.HISTORY} element={<HistoryPage />} />

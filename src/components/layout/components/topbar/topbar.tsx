@@ -47,18 +47,21 @@ const TopBarComponent = () => {
 								<div className="d-flex flex-column flex-lg-row">
 									{((currentRoute !== "/not-found") && (userLogged.id)) &&
 										<>
-											{/*<NavLinkStyled as={Link} to={ERoutes.PROFILE}>
-												<FormattedMessage
-													id="topbar_profile_link"
-													defaultMessage="Perfil"
-												/>
-											</NavLinkStyled>*/}
-											<NavLinkStyled as={Link} to={ERoutes.HISTORY}>
+											{/* MENUS DO USUÁRIO LOGADO */}
+
+											{userLogged.role !== "vet" &&
+												<NavLinkStyled as={Link} to={ERoutes.PROFILE}>
+													<FormattedMessage
+														id="topbar_profile_link"
+														defaultMessage="Perfil"
+													/>
+												</NavLinkStyled>}
+											{/*<NavLinkStyled as={Link} to={ERoutes.HISTORY}>
 												<FormattedMessage
 													id="topbar_historic_link"
 													defaultMessage="Histórico"
 												/>
-											</NavLinkStyled>
+										</NavLinkStyled>*/}
 										</>
 									}
 								</div>
