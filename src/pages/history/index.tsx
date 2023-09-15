@@ -18,130 +18,135 @@ import { showModal } from '../../redux/modalSlice';
 import { Section } from '../../components/layout/components/styles/sections';
 import { useLocation, useParams } from 'react-router-dom';
 import useWindowDimensions from '../../core/hooks/useWindowDimensions';
+import api from '../../services/api';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
 } & StepIconProps;
 
-const steps = [
-    {
-        title: "Consulta",
+/*const steps = [
+{
+    title: "Consulta",
         summary: "Diagnóstico de Giárdia",
-        type: "CONSULTA",
-        date: "12/04/2023",
-        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Procedimento",
+            type: "CONSULTA",
+                date: "12/04/2023",
+                    description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Procedimento",
         summary: "Internação 24h",
-        type: "PROCEDIMENTO",
-        date: "12/04/2023",
-        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Procedimento",
+            type: "PROCEDIMENTO",
+                date: "12/04/2023",
+                    description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Procedimento",
         summary: "Alta",
-        type: "PROCEDIMENTO",
-        date: "12/04/2023",
-        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Consulta",
+            type: "PROCEDIMENTO",
+                date: "12/04/2023",
+                    description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Consulta",
         summary: "Diagnóstico de Giárdia",
-        type: "CONSULTA",
-        date: "12/04/2023",
-        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Procedimento",
+            type: "CONSULTA",
+                date: "12/04/2023",
+                    description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Procedimento",
         summary: "Internação 24h",
-        type: "PROCEDIMENTO",
-        date: "12/04/2023",
-        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Procedimento",
+            type: "PROCEDIMENTO",
+                date: "12/04/2023",
+                    description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Procedimento",
         summary: "Alta",
-        type: "PROCEDIMENTO",
-        date: "12/04/2023",
-        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Consulta",
+            type: "PROCEDIMENTO",
+                date: "12/04/2023",
+                    description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Consulta",
         summary: "Diagnóstico de Giárdia",
-        type: "CONSULTA",
-        date: "07/06/2023",
-        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Procedimento",
+            type: "CONSULTA",
+                date: "07/06/2023",
+                    description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Procedimento",
         summary: "Internação 24h",
-        type: "PROCEDIMENTO",
-        date: "08/06/2023",
-        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Procedimento",
+            type: "PROCEDIMENTO",
+                date: "08/06/2023",
+                    description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Procedimento",
         summary: "Alta",
-        type: "PROCEDIMENTO",
-        date: "09/06/2023",
-        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Consulta",
+            type: "PROCEDIMENTO",
+                date: "09/06/2023",
+                    description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Consulta",
         summary: "Diagnóstico de Giárdia",
-        type: "CONSULTA",
-        date: "10/06/2023",
-        description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Procedimento",
+            type: "CONSULTA",
+                date: "10/06/2023",
+                    description: "Zoey foi atendida e aparentava não estar muito mal, tutora relatou que havia aprensentado diarréia no dia anterior. Foi feito teste rápido na presença da tutora para Parvivirose, que teve resultado negativo. Foi indicada a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Procedimento",
         summary: "Internação 24h",
-        type: "PROCEDIMENTO",
-        date: "11/06/2023",
-        description: "Zoey foi atendida e apa a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-    {
-        title: "Procedimento",
+            type: "PROCEDIMENTO",
+                date: "11/06/2023",
+                    description: "Zoey foi atendida e apa a internação da paciente por 24 horas para acompanhamento do quadro e medicação.",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+{
+    title: "Procedimento",
         summary: "Alta",
-        type: "PROCEDIMENTO",
-        date: "12/06/2023",
-        description: "blabla",
-        vet: "Luís Cardoso",
-        clinic: "Pet&Amor"
-    },
-];
+            type: "PROCEDIMENTO",
+                date: "12/06/2023",
+                    description: "blabla",
+                        vet: "Luís Cardoso",
+                            clinic: "Pet&Amor"
+},
+];*/
+
+type QueryParamsT = {
+    petId: string;
+};
 
 type StepT = {
     title: string;
-    summary: string;
     date: string;
     type: string;
     description: string;
     clinic: string;
     vet: string;
+    created_date: Date;
 }
 
 const ColorlibStepIconRoot = styled('div')<{
@@ -194,7 +199,7 @@ function ColorlibStepIcon(props: MyStepIconPropsT) {
 
     return (
         <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-            {icons[String(extraParams.step.type)]}
+            {icons[String(extraParams.step.type.toUpperCase())]}
         </ColorlibStepIconRoot>
     );
 }
@@ -202,18 +207,19 @@ function ColorlibStepIcon(props: MyStepIconPropsT) {
 export default function HistoryPage() {
     const dispatch = useDispatch();
     const location = useLocation();
+    const params = useParams<QueryParamsT>();
     const urlParams = new URLSearchParams(location.search);
     const [positionTop, setPositionTop] = useState();
     const [positionLeft, setPositionLeft] = useState();
     const ref = useRef<HTMLDivElement | null>(null);
     const { width } = useWindowDimensions();
+    const [steps, setSteps] = useState<Array<StepT>>([]);
     const [modalMoreDetails, setModalMoreDetails] = useState<StepT>({
         title: "",
         description: "",
         vet: "",
         clinic: "",
         date: "",
-        summary: "",
         type: "",
     } as StepT);
 
@@ -227,7 +233,6 @@ export default function HistoryPage() {
 
 
         <div className='mt-4 d-flex flex-column'>
-            <strong className='mb-3'>{modalMoreDetails.summary}</strong>
             <Typography variant="body2">Descrição</Typography>
             <p>{modalMoreDetails.description}</p>
         </div>
@@ -244,7 +249,6 @@ export default function HistoryPage() {
         setModalMoreDetails(prevModalMoreDetails => ({
             ...prevModalMoreDetails,
             title: step.title,
-            summary: step.summary,
             date: step.date,
             type: step.type,
             description: step.description,
@@ -274,6 +278,13 @@ export default function HistoryPage() {
         }
     }, [width]);
 
+    useEffect(() => {
+        api.get(`/pets/${params.petId}/timeline`)
+            .then(response => {
+                setSteps(response.data);
+            })
+    }, [params.petId])
+
     //resolve a questão de assincronismo do react e a atualizacao do conteudo do modal
     useEffect(() => {
         // Função para abrir o modal com as informações atualizadas
@@ -289,7 +300,6 @@ export default function HistoryPage() {
 
 
                     <div className='mt-4 d-flex flex-column'>
-                        <strong className='mb-3'>{modalMoreDetails.summary}</strong>
                         <Typography variant="body2">Descrição</Typography>
                         <p>{modalMoreDetails.description}</p>
                     </div>
@@ -326,7 +336,7 @@ export default function HistoryPage() {
                                         }}
                                         StepIconComponent={(props) =>
                                             <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                <p>{step.date}</p>
+                                                <p>{step.created_date.toString()}</p>
                                                 <ColorlibStepIcon
                                                     {...props}
                                                     extraParams={{
@@ -344,7 +354,7 @@ export default function HistoryPage() {
                                             <TitleStyled>
                                                 {step.title}
                                             </TitleStyled>
-                                            <SummaryStyled>{step.summary}</SummaryStyled>
+                                            <SummaryStyled>{step.description.substring(0, 30)}</SummaryStyled>
                                         </div>
                                     </StepLabel>
                                 </Step>
@@ -386,7 +396,6 @@ export default function HistoryPage() {
                                                 <TitleStyled>
                                                     {step.title}
                                                 </TitleStyled>
-                                                <SummaryStyled>{step.summary}</SummaryStyled>
                                             </div>
                                         </StepLabel>
                                     </Step>

@@ -7,7 +7,8 @@ export enum ERoutes {
   SIGNUP = "/criar-conta",
   DISCOVER = "/descubra",
   PANEL = "/painel",
-  HISTORY = "/historico",
+  TIMELINE = "/linha-do-tempo",
+  CREATE_TIMELINE = "/criar-linha-do-tempo",
   CLINIC = "/clinicas",
   PET = "/pet",
   REGISTER_VETERINARIAN = "/cadastro-veterinario"

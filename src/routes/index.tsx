@@ -20,6 +20,7 @@ import HistoryPage from "../pages/history";
 import ProfilePetPage from "../pages/pet-profile";
 import RegisterVeterinarianPage from "../pages/register-veterinarian";
 import MyAccount from "../pages/my-account";
+import CreateNewTimelinePoint from "../pages/create-timeline-point";
 
 const AppRoutes = () => {
   const modal = useSelector(selectModal);
@@ -47,9 +48,11 @@ const AppRoutes = () => {
           <Route path={ERoutes.PROFILE} element={<MyAccount />} />
           <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
           <Route path={ERoutes.PANEL} element={<PanelPage />} />
-          <Route path={ERoutes.HISTORY} element={<HistoryPage />} />
+          <Route path={ERoutes.TIMELINE} element={<HistoryPage />} />
           <Route path={`${ERoutes.CLINIC}/:clinicId`} element={<PanelPage />} />
           <Route path={`${ERoutes.PET}/:petId`} element={<ProfilePetPage />} />
+          <Route path={`${ERoutes.TIMELINE}/:petId`} element={<HistoryPage />} />
+          <Route path={`${ERoutes.CREATE_TIMELINE}/:petId`} element={<CreateNewTimelinePoint />} />
           <Route path={`${ERoutes.REGISTER_VETERINARIAN}`} element={<RegisterVeterinarianPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage404 />} />

@@ -40,7 +40,7 @@ function ProfilePetPage() {
     const params = useParams<QueryParamsT>();
     const [pets, setPets] = useState<Array<PetT>>([]);
     const [pet, setPet] = useState<PetT>({} as PetT);
-    const [url, setUrl] = useState(currentUrl === "localhost:5173" ? "http://localhost:5173/historico" : "https://frontzinho.vercel.app/historico");
+    const [url, setUrl] = useState(currentUrl === "localhost:5173" ? `http://localhost:5173/linha-do-tempo/${params.petId}` : `https://frontzinho.vercel.app/linha-do-tempo/${params.petId}`);
     const { width } = useWindowDimensions();
     const [isLoading, setIsLoading] = useState(true);
     const user = useSelector(selectUser);
@@ -253,6 +253,8 @@ function ProfilePetPage() {
                                                 <div className="wrapper-text">
                                                     <p>{pet.description ? pet.description : "Sem descrição"}</p>
                                                 </div>
+
+                                                <a href={`${ERoutes.CREATE_TIMELINE}/${pet.id}`} style={{ fontWeight: "bold" }}>Novo registro</a>
                                             </div>
                                         </div>
                                     </div>
@@ -309,7 +311,7 @@ function ProfilePetPage() {
                             <Section>
                                 <div className="d-flex align-items-center mb-4">
                                     <h3>Linha do tempo</h3>
-                                    <Link className="ms-3 ver-mais" to={ERoutes.HISTORY}>Ver mais</Link>
+                                    <Link className="ms-3 ver-mais" to={`${ERoutes.TIMELINE}/${pet.id}`}>Ver mais</Link>
                                 </div>
                                 {/*@ts-ignore*/}
                                 <div>

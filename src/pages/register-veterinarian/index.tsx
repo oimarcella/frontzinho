@@ -22,7 +22,6 @@ type VeterinarianT = {
     clinica_id: number;
 }
 
-
 const RegisterVeterinarianPage = () => {
     const userLogged = useSelector(selectUser);
     const [vet, setVet] = useState<VeterinarianT>({
