@@ -85,22 +85,22 @@ function CreateNewTimelinePoint() {
                 >
                     <div style={{ width: "100%" }}>
                         <Row>
-                            <Col>
+                            <Col xs={12} md={3}>
                                 <Form.Group className="mb-3" controlId="titulo">
                                     <Form.Control value={timelinePoint.title} required type="text" placeholder="Título" onChange={e => setTimelinePoint(prev => ({ ...prev, title: e.target.value }))} />
                                 </Form.Group>
                             </Col>
-                            <Col>
+                            <Col xs={12} md={3}>
                                 <Form.Group className="mb-3" controlId="vet">
                                     <Form.Control value={timelinePoint.vet} required type="text" placeholder="Veterinário" onChange={e => setTimelinePoint(prev => ({ ...prev, vet: e.target.value }))} />
                                 </Form.Group>
                             </Col>
-                            <Col>
-                                <Form.Group className="mb-3" controlId="clinc">
+                            <Col xs={12} md={3}>
+                                <Form.Group className="mb-3" controlId="clinic">
                                     <Form.Control value={timelinePoint.clinic} required type="text" placeholder="Clínica" onChange={e => setTimelinePoint(prev => ({ ...prev, clinic: e.target.value }))} />
                                 </Form.Group>
                             </Col>
-                            <Col>
+                            <Col xs={12} md={3}>
                                 <Form.Select aria-label="Tipo do registro"
                                     value={timelinePoint.type}
                                     onChange={(e) => setTimelinePoint(prev => ({ ...prev, type: e.target.value }))}
@@ -113,14 +113,14 @@ function CreateNewTimelinePoint() {
                                 </Form.Select>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col>
+                        <Row className="mt-3 mt-lg-0">
+                            <Col xs={12}>
                                 <Form.Group className="mb-3" controlId="description">
                                     <Form.Control as="textarea" value={timelinePoint.description} required type="text" placeholder="Description" onChange={e => setTimelinePoint(prev => ({ ...prev, description: e.target.value }))} />
                                 </Form.Group>
                             </Col>
                         </Row>
-                    </div>
+                    </div >
 
                     <Button
                         color="#FF41AD"
@@ -131,8 +131,8 @@ function CreateNewTimelinePoint() {
                     >
                         {isLoading ? 'Carregando…' : 'Criar'}
                     </Button>
-                </Form>
-            </Container>
+                </Form >
+            </Container >
         </Section >
     )
 }

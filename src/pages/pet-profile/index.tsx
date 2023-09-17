@@ -1,10 +1,10 @@
 import { Col, Container, Form, Modal, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
-import { BodyStyled, HeaderStyled, ChangePetStyledButton, DrawerStyled, CompanyConnectedStyled } from "./styles";
+import { BodyStyled, HeaderStyled, ButtonStyled, DrawerStyled, CompanyConnectedStyled } from "./styles";
 import { ReactNode, useEffect, useState } from "react";
 import api from "../../services/api";
 import { Link, useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/styles/sections";
-import { LinkOff, LinkOutlined, Pets } from "@material-ui/icons";
+import { Add, LinkOff, LinkOutlined, Pets } from "@material-ui/icons";
 import { ERoutes } from "../../core/enums/routes";
 import { WifiProtectedSetup } from "@mui/icons-material";
 import useWindowDimensions from "../../core/hooks/useWindowDimensions";
@@ -236,25 +236,31 @@ function ProfilePetPage() {
                                 <Container className="d-flex flex-column flex-md-row align-items-center justify-content-md-between justify-content-center">
 
                                     <div className="d-flex flex-column">
-                                        <ChangePetStyledButton variant="body2" className="mb-4 d-flex align-items-center" onClick={handleDrawer}>
-                                            <WifiProtectedSetup />
-                                            {width > 1000 && <strong className="ms-1">Trocar</strong>}
-                                        </ChangePetStyledButton>
+                                        <div className="mb-4 d-flex gap-2 flex-wrap align-items-center flex-row">
+                                            <ButtonStyled variant="body2" className="d-flex align-items-center justify-content-center" onClick={handleDrawer}>
+                                                <WifiProtectedSetup />
+                                                {width > 1000 && <strong className="ms-1">Trocar</strong>}
+                                            </ButtonStyled>
+                                            <ButtonStyled variant="body2" className="d-flex align-items-center">
+                                                <a href={`${ERoutes.CREATE_TIMELINE}/${pet.id}`} style={{ fontWeight: "bold" }}><Add /></a>
+                                                {width > 1000 &&
+                                                    <a href={`${ERoutes.CREATE_TIMELINE}/${pet.id}`} style={{ fontWeight: "bold" }}>Novo registro</a>
+                                                }
+                                            </ButtonStyled>
+                                            {isGuardian &&
+                                                <ButtonStyled variant="body2" className="d-flex align-items-center" onClick={() => setIsOpenModalConnect(true)}>
+                                                    <LinkOutlined />
+                                                    {width > 1000 && <strong className="ms-1">Conectar à clínica</strong>}
+                                                </ButtonStyled>
+                                            }
+                                        </div>
                                         <div className="d-flex flex-md-row flex-column justify-content-center align-items-center justify-content-md-start">
                                             <img src={`/images/${pet.specie == "cachorro" ? "dog" : pet.specie == "gato" ? "cat" : "another_animals"}.svg`} />
                                             <div className="d-flex flex-column ms-0 ms-md-4 my-4 my-md-0 align-items-center align-items-md-start">
-                                                {isGuardian &&
-                                                    <ChangePetStyledButton variant="body2" className="mb-4 d-flex align-items-center" onClick={() => setIsOpenModalConnect(true)}>
-                                                        <LinkOutlined />
-                                                        {width > 1000 && <strong className="ms-1">Conectar à clínica</strong>}
-                                                    </ChangePetStyledButton>
-                                                }
                                                 <strong>{pet.name}</strong>
                                                 <div className="wrapper-text">
                                                     <p>{pet.description ? pet.description : "Sem descrição"}</p>
                                                 </div>
-
-                                                <a href={`${ERoutes.CREATE_TIMELINE}/${pet.id}`} style={{ fontWeight: "bold" }}>Novo registro</a>
                                             </div>
                                         </div>
                                     </div>
@@ -271,6 +277,8 @@ function ProfilePetPage() {
                                             <p className="d-flex align-items-center"><Pets className="me-2" fontSize="small" /><strong className="me-1">Castração:</strong>{pet.castrated ? "Sim" : "Não"}</p>
                                         </ul>
                                     </div>
+                                    <div className="d-flex align-items-start justify-content-end" style={{ border: '1px solid red' }}>
+                                    </div>
                                 </Container>
                             </Section>
                         </HeaderStyled>
@@ -278,7 +286,7 @@ function ProfilePetPage() {
                             {isGuardian &&
                                 <>
                                     <Section>
-                                        <h3 className="mb-2">Conexões<span className="new">Novidade</span></h3>
+                                        <h3 className="mb-2">Conexões<span className="new tag">Novidade</span></h3>
                                         <small>Administre as conexões aqui. Clicando no ícone <LinkOff style={{ width: "20px" }} /> você desfaz a conexão do seu pet com a clínica.</small>
                                         <div className="mt-4 d-flex flex-wrap gap-2">
                                             {
@@ -303,7 +311,7 @@ function ProfilePetPage() {
                                         </div>
                                     </Section>
                                     <Section>
-                                        <h3 className="mb-4">O que vamos fazer hoje? <span className="soon">Em breve</span></h3>
+                                        <h3 className="mb-4">O que vamos fazer hoje? <span className="soon tag">Em breve</span></h3>
                                     </Section>
                                 </>
 

@@ -141,12 +141,11 @@ type QueryParamsT = {
 
 type StepT = {
     title: string;
-    date: string;
     type: string;
     description: string;
     clinic: string;
     vet: string;
-    created_date: Date;
+    created_date: Date | any;
 }
 
 const ColorlibStepIconRoot = styled('div')<{
@@ -219,14 +218,14 @@ export default function HistoryPage() {
         description: "",
         vet: "",
         clinic: "",
-        date: "",
+        created_date: "",
         type: "",
     } as StepT);
 
     const moreDetailsElement = <div>
         <div className='d-flex justify-content-between mb-4'>
             <Typography variant='body2' style={{ color: '#0b344e' }}>{modalMoreDetails.title}</Typography>
-            <Typography variant='body2' style={{ color: '#0b344e' }}>{modalMoreDetails.date}</Typography>
+            <Typography variant='body2' style={{ color: '#0b344e' }}>{convertDate(modalMoreDetails.created_date, "long")}</Typography>
         </div>
         <Typography variant='body2' style={{ color: '#0b344e' }}>Atendimento feito por: {modalMoreDetails.vet}</Typography>
         <Typography variant='body2' style={{ color: '#0b344e' }}>Clínica: {modalMoreDetails.clinic}</Typography>
@@ -249,7 +248,7 @@ export default function HistoryPage() {
         setModalMoreDetails(prevModalMoreDetails => ({
             ...prevModalMoreDetails,
             title: step.title,
-            date: step.date,
+            created_date: step.created_date,
             type: step.type,
             description: step.description,
             vet: step.vet,
@@ -268,6 +267,11 @@ export default function HistoryPage() {
             setPositionLeft(el.scrollLeft);
         }
     };
+
+    function convertDate(date: any, style: string = "short") {
+        //@ts-ignore
+        return new Date(date).toLocaleDateString('pt-BR', { dateStyle: style });
+    }
 
     useEffect(() => {
         const el = ref.current;
@@ -293,7 +297,7 @@ export default function HistoryPage() {
                 <div>
                     <div className='d-flex justify-content-between mb-4'>
                         <Typography variant='body2' style={{ color: '#0b344e' }}>{modalMoreDetails.title}</Typography>
-                        <Typography variant='body2' style={{ color: '#0b344e' }}>{modalMoreDetails.date}</Typography>
+                        <Typography variant='body2' style={{ color: '#0b344e' }}>{convertDate(modalMoreDetails.created_date, "long")}</Typography>
                     </div>
                     <Typography variant='body2' style={{ color: '#0b344e' }}>Atendimento feito por: {modalMoreDetails.vet}</Typography>
                     <Typography variant='body2' style={{ color: '#0b344e' }}>Clínica: {modalMoreDetails.clinic}</Typography>
@@ -336,7 +340,7 @@ export default function HistoryPage() {
                                         }}
                                         StepIconComponent={(props) =>
                                             <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                <p>{step.created_date.toString()}</p>
+                                                <p>{convertDate(step.created_date, "medium")}</p>
                                                 <ColorlibStepIcon
                                                     {...props}
                                                     extraParams={{
@@ -354,7 +358,7 @@ export default function HistoryPage() {
                                             <TitleStyled>
                                                 {step.title}
                                             </TitleStyled>
-                                            <SummaryStyled>{step.description.substring(0, 30)}</SummaryStyled>
+                                            <SummaryStyled>{step.description.substring(0, 30)}...</SummaryStyled>
                                         </div>
                                     </StepLabel>
                                 </Step>
@@ -378,7 +382,7 @@ export default function HistoryPage() {
                                             }}
                                             StepIconComponent={(props) =>
                                                 <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                    <p>{step.date}</p>
+                                                    <p>{convertDate(step.created_date, "long")}</p>
                                                     <ColorlibStepIcon
                                                         {...props}
                                                         extraParams={{

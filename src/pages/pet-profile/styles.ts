@@ -49,13 +49,11 @@ export const BodyStyled = styled(Container)`
         }
     }
 
-    span{
+    .tag{
         position: absolute;
         top: -30px;
         padding: 3px 5px;
         font-size: 12px;
-        border-radius: 50px;
-
     }
     span.soon{
         background: #63e5ff;
@@ -83,12 +81,21 @@ export const CompanyConnectedStyled = styled.div`
     }
 `;
 
-export const ChangePetStyledButton = styled(Typography)`
+export const ButtonStyled = styled(Typography)`
     cursor: pointer;
     transition: all ease-in-out .3s;
 
+    background: var(--light-blue-300);
+    font-size: 11px;
+    width: fit-content;
+    padding: 8px 10px;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
+
+
     :hover{
-        color: var(--light-blue-500);
+        background: var(--light-blue-200);
     }
 `;
 
