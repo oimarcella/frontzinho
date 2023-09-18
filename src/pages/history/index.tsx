@@ -19,6 +19,7 @@ import { Section } from '../../components/layout/components/styles/sections';
 import { useLocation, useParams } from 'react-router-dom';
 import useWindowDimensions from '../../core/hooks/useWindowDimensions';
 import api from '../../services/api';
+import Loading from '../../components/layout/components/loading';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
@@ -221,6 +222,7 @@ export default function HistoryPage() {
         created_date: "",
         type: "",
     } as StepT);
+    const [isLoading, setIsLoading] = useState(false);
 
     const moreDetailsElement = <div>
         <div className='d-flex justify-content-between mb-4'>
@@ -283,9 +285,11 @@ export default function HistoryPage() {
     }, [width]);
 
     useEffect(() => {
+        setIsLoading(true);
         api.get(`/pets/${params.petId}/timeline`)
             .then(response => {
                 setSteps(response.data);
+                setIsLoading(false);
             })
     }, [params.petId])
 
@@ -329,43 +333,46 @@ export default function HistoryPage() {
         urlParams.get("origin") == "iframe" ?
             <>
                 {/*@ts-ignore */}
-                <Overflow onScroll={handleScroll} ref={ref} >
-                    <Box sx={{ width: '100%' }}>
-                        <Stepper alternativeLabel activeStep={steps.length - 1}>
-                            {steps.map((step, index) => (
-                                <Step key={index}>
-                                    <StepLabel
-                                        onClick={() => {
-                                            handleMoreDetails(step)
-                                        }}
-                                        StepIconComponent={(props) =>
-                                            <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                <p>{convertDate(step.created_date, "medium")}</p>
-                                                <ColorlibStepIcon
-                                                    {...props}
-                                                    extraParams={{
-                                                        step
-                                                    }}
-                                                />
-                                            </WrapperMark>
-                                        }
-                                        extraParams={{ type: 'valor1' }}
-                                    >
-                                        <div
-                                            style={{ border: 'none', padding: '10px 0' }}
-                                            className='d-flex flex-column justify-content-center align-items-center'
+                {isLoading ?
+                    <Loading />
+                    :
+                    <Overflow onScroll={handleScroll} ref={ref} >
+                        <Box sx={{ width: '100%' }}>
+                            <Stepper alternativeLabel activeStep={steps.length - 1}>
+                                {steps.map((step, index) => (
+                                    <Step key={index}>
+                                        <StepLabel
+                                            onClick={() => {
+                                                handleMoreDetails(step)
+                                            }}
+                                            StepIconComponent={(props) =>
+                                                <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
+                                                    <p>{convertDate(step.created_date, "medium")}</p>
+                                                    <ColorlibStepIcon
+                                                        {...props}
+                                                        extraParams={{
+                                                            step
+                                                        }}
+                                                    />
+                                                </WrapperMark>
+                                            }
+                                            extraParams={{ type: 'valor1' }}
                                         >
-                                            <TitleStyled>
-                                                {step.title}
-                                            </TitleStyled>
-                                            <SummaryStyled>{step.description.substring(0, 30)}...</SummaryStyled>
-                                        </div>
-                                    </StepLabel>
-                                </Step>
-                            ))}
-                        </Stepper>
-                    </Box>
-                </Overflow >
+                                            <div
+                                                style={{ border: 'none', padding: '10px 0' }}
+                                                className='d-flex flex-column justify-content-center align-items-center'
+                                            >
+                                                <TitleStyled>
+                                                    {step.title}
+                                                </TitleStyled>
+                                                <SummaryStyled>{step.description.substring(0, 30)}...</SummaryStyled>
+                                            </div>
+                                        </StepLabel>
+                                    </Step>
+                                ))}
+                            </Stepper>
+                        </Box>
+                    </Overflow >}
             </>
             :
             <Section>

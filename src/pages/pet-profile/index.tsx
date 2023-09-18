@@ -240,7 +240,7 @@ function ProfilePetPage() {
                                 <Container className="d-flex flex-column flex-md-row align-items-center justify-content-md-between justify-content-center">
 
                                     <div className="d-flex flex-column">
-                                        <div className="mb-4 d-flex gap-2 flex-wrap  justify-content-center align-items-center flex-row">
+                                        <div className="mb-4 d-flex gap-2 flex-wrap justify-content-center justify-content-md-start align-items-center flex-row">
                                             <ButtonStyled
                                                 variant="body2" className="d-flex align-items-center justify-content-center"
                                                 onClick={handleDrawer}
