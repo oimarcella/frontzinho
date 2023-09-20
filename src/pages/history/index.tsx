@@ -180,6 +180,9 @@ export default function HistoryPage() {
         api.get(`/pets/${params.petId}/timeline`)
             .then(response => {
                 setSteps(response.data);
+
+                urlParams.get("origin") == "iframe" &&
+                    setSteps([response.data[response.data.length - 3], response.data[response.data.length - 2], response.data[response.data.length - 1]]);
             })
             .catch(error => {
                 console.log(`Erro: ${error}`);
@@ -225,10 +228,6 @@ export default function HistoryPage() {
         }
     }, [modalMoreDetails]);
 
-    useEffect(() => {
-        urlParams.get("origin") == "iframe" &&
-            setSteps([steps[steps.length - 3], steps[steps.length - 2], steps[steps.length - 1]]);
-    }, [urlParams.get("origin"), steps])
 
     return (
         urlParams.get("origin") == "iframe" ?
