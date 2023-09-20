@@ -52,7 +52,7 @@ const AppRoutes = () => {
           <Route path={`${ERoutes.CLINIC}/:clinicId`} element={<PanelPage />} />
           <Route path={`${ERoutes.PET}/:petId`} element={<ProfilePetPage />} />
           <Route path={`${ERoutes.TIMELINE}/:petId`} element={<HistoryPage />} />
-          <Route path={`${ERoutes.CREATE_TIMELINE}/:petId`} element={<CreateNewTimelinePoint />} />
+          <Route path={`${ERoutes.CREATE_TIMELINE}/:petId/:petName`} element={<CreateNewTimelinePoint />} />
           <Route path={`${ERoutes.REGISTER_VETERINARIAN}`} element={<RegisterVeterinarianPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage404 />} />

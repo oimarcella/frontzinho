@@ -93,7 +93,6 @@ function ProfilePetPage() {
     async function getPetsByClinicId(clinicId: number) {
         const { data } = await api.get(`/clinicas/${clinicId}/pets`);
         setPets(data);
-        console.log("🚀 ~ file: index.tsx:93 ~ getPetsByClinicId ~ data:", data)
     }
 
     async function getAllClinics() {
@@ -177,14 +176,22 @@ function ProfilePetPage() {
         setTimeout(() => { setIsLoading(false) }, 1000);
 
         if (isGuardian) {
-            getUserPets(user.id)
+            // é tutor
+            console.log("Sou tutor!");
+
+            getUserPets(user.id);
             getConnectedClinics(pet.id);
             getNotConnectedClinics(pet.id);
         }
         else if (user.role === "clinica") {
-            getPetsByClinicId(user.id)
+            // é clínica
+            console.log("Sou clínica!");
+
+            getPetsByClinicId(user.id);
         }
         else {
+            // é veterinário
+            console.log("Sou veterinário!");
             getVetById(user.id);
             getPetsByClinicId(clinicId); //verificar de qual clinica o veterinario
         }
@@ -250,13 +257,13 @@ function ProfilePetPage() {
                                             </ButtonStyled>
                                             <ButtonStyled variant="body2" className="d-flex align-items-center">
                                                 <a
-                                                    href={`${ERoutes.CREATE_TIMELINE}/${pet.id}`}
+                                                    href={`${ERoutes.CREATE_TIMELINE}/${pet.id}/${pet.name}`}
                                                     style={{ fontWeight: "bold" }}>
                                                     <Add />
                                                 </a>
                                                 {width > 1000 &&
                                                     <a
-                                                        href={`${ERoutes.CREATE_TIMELINE}/${pet.id}`}
+                                                        href={`${ERoutes.CREATE_TIMELINE}/${pet.id}/${pet.name}`}
                                                         style={{ fontWeight: "bold" }}>Novo registro</a>
                                                 }
                                             </ButtonStyled>

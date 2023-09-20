@@ -19,6 +19,7 @@ type TimelinePointT = {
 
 type QueryParamsT = {
     petId: string;
+    petName: string;
 };
 
 function CreateNewTimelinePoint() {
@@ -60,22 +61,22 @@ function CreateNewTimelinePoint() {
         }
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         api.get(`/pets/${params.petId}/timeline`)
             .then(response => {
                 console.log(response);
             })
-    }, [params.petId])
+    }, [params.petId])*/
 
 
     return (
         <Section>
             <Container>
                 <HeaderPage
-                    textToStyle="Novo"
+                    textToStyle={`${params.petName}`}
                     style={{ color: "#FF41AD" }}
                     title="Linha do tempo"
-                    text="Novo registro"
+                    text={`Novo registro para ${params.petName}`}
                 />
 
                 <Form
