@@ -22,6 +22,7 @@ type PetT = {
 
 const ClinicPets = () => {
     const [clinic, setClinic] = useState();
+    const [isLoading, setLoading] = useState(false);
     const [pets, setPets] = useState<Array<PetT>>([]);
     const userLogged = useSelector(selectUser);
     const typeUserLogged = userLogged.role === "clinica" ? "clinica" : "vet";
@@ -52,6 +53,7 @@ const ClinicPets = () => {
     }
 
     useEffect(() => {
+        setLoading(true);
         if (typeUserLogged === "vet") {
             getVetById(userLogged.id)
                 .then(vet => getPetsByClinicId(vet.clinica_id));
@@ -59,7 +61,7 @@ const ClinicPets = () => {
         else {
             getPetsByClinicId(userLogged.id);
         }
-
+        setLoading(false);
     }, [userLogged.id])
 
     const MyOverlay = ({ id, children, title }: { id: any, children: ReactNode, title: string }) => (
@@ -72,41 +74,42 @@ const ClinicPets = () => {
         <ContainerStyled>
             <Section>
                 <h3>Pacientes</h3>
-
                 {
-                    pets.length > 0 ?
-                        <Swiper
-                            className="mt-3"
-                            spaceBetween={viewWidth > 1000 ? 30 : 10}
-                            slidesPerView={slidesPerView}
-                            onSlideChange={() => { }}
-                            onSwiper={(swiper) => { }}
-                        >
-                            {
-                                pets.map((pet, index) => {
-                                    return (
-                                        <SwiperSlide key={index}>
-                                            <CardStyled
-                                                style={{ background: generatePastelColor(index) }}
-                                                className="d-flex flex-column align-items-center justify-content-center"
-                                            >
-                                                <img
-                                                    src={"/images/another_animals.svg"}
-                                                    alt={pet.name}
-                                                />
-                                                {pet.name}
-                                                <div className="d-flex align-items-center">
-                                                    <MyOverlay title="Ver paciente" id={pet.name}><RemoveRedEye className="icon-actions" onClick={() => navigate(`${ERoutes.PET}/${pet.id}`)} /></MyOverlay>
-                                                </div>
-                                            </CardStyled>
-                                        </SwiperSlide>
-                                    )
-                                })
-                            }
-                        </Swiper>
+                    isLoading ?
+                        <Loading />
                         :
-                        <p>Nenhum pet para mostrar.</p>
-
+                        pets.length > 0 ?
+                            <Swiper
+                                className="mt-3"
+                                spaceBetween={viewWidth > 1000 ? 30 : 10}
+                                slidesPerView={slidesPerView}
+                                onSlideChange={() => { }}
+                                onSwiper={(swiper) => { }}
+                            >
+                                {
+                                    pets.map((pet, index) => {
+                                        return (
+                                            <SwiperSlide key={index}>
+                                                <CardStyled
+                                                    style={{ background: generatePastelColor(index) }}
+                                                    className="d-flex flex-column align-items-center justify-content-center"
+                                                >
+                                                    <img
+                                                        src={"/images/another_animals.svg"}
+                                                        alt={pet.name}
+                                                    />
+                                                    {pet.name}
+                                                    <div className="d-flex align-items-center">
+                                                        <MyOverlay title="Ver paciente" id={pet.name}><RemoveRedEye className="icon-actions" onClick={() => navigate(`${ERoutes.PET}/${pet.id}`)} /></MyOverlay>
+                                                    </div>
+                                                </CardStyled>
+                                            </SwiperSlide>
+                                        )
+                                    })
+                                }
+                            </Swiper>
+                            :
+                            <p>Nenhum pet para mostrar.</p>
                 }
             </Section>
         </ContainerStyled>
