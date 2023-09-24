@@ -207,7 +207,7 @@ function ProfilePetPage() {
     }, [pet.id]);
 
     useEffect(() => {
-        setUrl(prev => prev = currentUrl === "localhost:5173" ? `http://localhost:5173/linha-do-tempo/${params.petId}` : `https://frontzinho.vercel.app/linha-do-tempo/${params.petId}`)
+        setUrl(prev => prev = currentUrl === "localhost:5173" ? `http://localhost:5173/linha-do-tempo/${params.petId}` : `https://petpass-front.vercel.app/linha-do-tempo/${params.petId}`)
     }, [params.petId])
 
     const MyOverlay = ({ id, children, title }: { id: any, children: ReactNode, title: string }) => (
