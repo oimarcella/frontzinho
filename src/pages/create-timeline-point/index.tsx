@@ -1,13 +1,14 @@
 import { Col, Container, Form, Row } from "react-bootstrap";
 import HeaderPage from "../../components/layout/components/headerPage/headerPage";
 import { MouseEventHandler, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { show } from "../../redux/toastSlice";
 import api from "../../services/api";
 import { EHttpResponse } from "../../core/enums/http-responses";
 import Button from "../../components/layout/components/button/button";
 import { useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/styles/sections";
+import { selectUser } from "../../redux/userSlice";
 
 type TimelinePointT = {
     title: string;
@@ -15,6 +16,8 @@ type TimelinePointT = {
     description: string;
     vet: string;
     clinic: string;
+    created_by_id: number,
+    created_by_role: string
 };
 
 type QueryParamsT = {
@@ -28,10 +31,15 @@ function CreateNewTimelinePoint() {
     const [isLoading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const params = useParams<QueryParamsT>();
+    const userLogged = useSelector(selectUser);
 
     async function send() {
         try {
-            const { data } = await api.post(`/pets/${params.petId}/timeline`, timelinePoint);
+            const { data } = await api.post(`/pets/${params.petId}/timeline`, {
+                ...timelinePoint,
+                created_by_id: userLogged.id,
+                created_by_role: userLogged.role,
+            });
             dispatch(show({ message: `Novo registro na linha do tempo!`, type: "success" }));
             setLoading(false);
 
