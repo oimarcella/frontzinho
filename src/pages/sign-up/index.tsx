@@ -151,18 +151,23 @@ const SignUpPage = () => {
             {
                 username: user.username,
                 email: user.email,
-                name: user.name,
-                lastname: user.lastname,
+                name: `${user.name} ${user.lastname}`,
+                //lastname: user.lastname,
                 document: user.cpf,
                 phone_number: user.phone,
                 pwd: user.password,
+                address: company.street,
+                number: company.addressNumber,
+                zip_code: company.zipCode,
+                neighborhood: company.neighborhood,
             }
 
 
         try {
             const { data } = await api.post(path, body);
 
-            await addServices(data.id);
+            typeUser === "company" &&
+                await addServices(data.id);
 
             setLoading(false);
 
