@@ -60,7 +60,12 @@ const RegisterVeterinarianPage = () => {
             setLoading(false);
             if (error.response.status && typeof error.response.status === 'number') {
                 const status = error.response.status;
-                const errorMessage = EHttpResponse[status as keyof typeof EHttpResponse];
+                let errorMessage = EHttpResponse[status as keyof typeof EHttpResponse];
+
+                if (error.response.data.message === "Unable to create vet. Username marcella.amorim already exists") {
+                    errorMessage = "O nome de usuário já existe para um veterinário"
+                }
+
                 dispatch(show({ message: errorMessage, type: "danger", delay: 4000 }));
             } else {
                 dispatch(show({ message: "Não foi possível finalizar o cadastro", type: "danger", delay: 4000 }));
@@ -137,7 +142,7 @@ const RegisterVeterinarianPage = () => {
                             <Col lg={4} sm={12}>
                                 <Form.Group className="mb-3" controlId="name">
                                     <Form.Control value={vet.username} required type="text" placeholder="Nome de usuário" onChange={e => setVet(prev => ({ ...prev, username: e.target.value }))} />
-                                    {vet.username && <small>Sugestão de nome de usuário. Altere se preferir.</small>}
+                                    {vet.username && <small>Sugestão de nome de usuário. Verifique se é válido.</small>}
                                 </Form.Group>
                             </Col>
                         </Row>
