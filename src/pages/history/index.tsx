@@ -111,7 +111,6 @@ export default function HistoryPage() {
     const ref = useRef<HTMLDivElement | null>(null);
     const { width } = useWindowDimensions();
     const [steps, setSteps] = useState<Array<StepT>>([]);
-    //console.log("🚀 ~ file: index.tsx:108 ~ HistoryPage ~ steps:", steps)
     const [modalMoreDetails, setModalMoreDetails] = useState<StepT>({
         title: "",
         description: "",
@@ -122,7 +121,6 @@ export default function HistoryPage() {
         created_by_id: 0,
         created_by_role: ""
     } as StepT);
-    console.log("🚀 ~ file: index.tsx:121 ~ HistoryPage ~ modalMoreDetails:", modalMoreDetails)
     const [isLoading, setIsLoading] = useState(false);
     const [userFound, setUserFound] = useState<UserFoundT>();
 
@@ -147,7 +145,6 @@ export default function HistoryPage() {
             .then(response => {
                 response.data &&
                     setUserFound(response.data);
-                console.log("🚀 ~ file: index.tsx:151 ~ findByRoleAndId ~ response.data:", response.data)
 
                 dispatch(showModal({
                     bodyNode: moreDetailsElement,
