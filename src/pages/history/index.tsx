@@ -31,6 +31,10 @@ type QueryParamsT = {
     petId: string;
 };
 
+type UserFoundT = {
+    name: string;
+};
+
 type StepT = {
     title: string;
     type: string;
@@ -38,6 +42,8 @@ type StepT = {
     clinic: string;
     vet: string;
     created_date: Date | any;
+    created_by_id: number,
+    created_by_role: string
 }
 
 const ColorlibStepIconRoot = styled('div')<{
@@ -90,7 +96,7 @@ function ColorlibStepIcon(props: MyStepIconPropsT) {
 
     return (
         <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-            {icons[String(extraParams.step.type.toUpperCase())]}
+            {icons[String(extraParams.step?.type.toUpperCase())]}
         </ColorlibStepIconRoot>
     );
 }
@@ -105,6 +111,7 @@ export default function HistoryPage() {
     const ref = useRef<HTMLDivElement | null>(null);
     const { width } = useWindowDimensions();
     const [steps, setSteps] = useState<Array<StepT>>([]);
+    //console.log("🚀 ~ file: index.tsx:108 ~ HistoryPage ~ steps:", steps)
     const [modalMoreDetails, setModalMoreDetails] = useState<StepT>({
         title: "",
         description: "",
@@ -112,8 +119,12 @@ export default function HistoryPage() {
         clinic: "",
         created_date: "",
         type: "",
+        created_by_id: 0,
+        created_by_role: ""
     } as StepT);
+    console.log("🚀 ~ file: index.tsx:121 ~ HistoryPage ~ modalMoreDetails:", modalMoreDetails)
     const [isLoading, setIsLoading] = useState(false);
+    const [userFound, setUserFound] = useState<UserFoundT>();
 
     const moreDetailsElement = <div>
         <div className='d-flex justify-content-between mb-4'>
@@ -128,13 +139,34 @@ export default function HistoryPage() {
             <Typography variant="body2">Descrição</Typography>
             <p>{modalMoreDetails.description}</p>
         </div>
+        <small>Criado por: {userFound?.name}</small>
     </div>;
 
+    function findByRoleAndId(role: string, id: number) {
+        return api.get(`/${role}s/${id}`)
+            .then(response => {
+                response.data &&
+                    setUserFound(response.data);
+                console.log("🚀 ~ file: index.tsx:151 ~ findByRoleAndId ~ response.data:", response.data)
+
+                dispatch(showModal({
+                    bodyNode: moreDetailsElement,
+                    hasHeader: false
+                }));
+            })
+            .catch(error => {
+                console.log(`Erro: ${error}`);
+                console.log("history: Não foi possível buscar dados necessarios.");
+            });
+    }
+
     function openModal() {
-        dispatch(showModal({
-            bodyNode: moreDetailsElement,
-            hasHeader: false
-        }));
+        setIsLoading(true);
+        findByRoleAndId(modalMoreDetails.created_by_role, modalMoreDetails.created_by_id);
+        setTimeout(function () {
+            setIsLoading(false);
+        }, 2000);
+
     }
 
     function handleMoreDetails(step: StepT) {
@@ -145,7 +177,9 @@ export default function HistoryPage() {
             type: step.type,
             description: step.description,
             vet: step.vet,
-            clinic: step.clinic
+            clinic: step.clinic,
+            created_by_id: step.created_by_id,
+            created_by_role: step.created_by_role
         }));
         openModal();
     }
@@ -181,8 +215,13 @@ export default function HistoryPage() {
             .then(response => {
                 setSteps(response.data);
 
-                urlParams.get("origin") == "iframe" &&
-                    setSteps([response.data[response.data.length - 3], response.data[response.data.length - 2], response.data[response.data.length - 1]]);
+                (urlParams.get("origin") == "iframe" && response.data.length > 3) ?
+                    setSteps([response.data[response.data.length - 3], response.data[response.data.length - 2], response.data[response.data.length - 1]])
+                    :
+                    setSteps(response.data);
+
+                console.log(response.data)
+
             })
             .catch(error => {
                 console.log(`Erro: ${error}`);
@@ -211,22 +250,25 @@ export default function HistoryPage() {
                         <Typography variant="body2">Descrição</Typography>
                         <p>{modalMoreDetails.description}</p>
                     </div>
+                    <small>Criado por: {userFound?.name}</small>
                 </div>
             );
 
-            dispatch(
+            findByRoleAndId(modalMoreDetails.created_by_role, modalMoreDetails.created_by_id);
+
+            /*dispatch(
                 showModal({
                     bodyNode: moreDetailsElement,
                     hasHeader: false
                 })
-            );
+            );*/
         };
 
         // Abre o modal sempre que modalMoreDetails for atualizado
         if (modalMoreDetails.title !== '') {
             openModalWithUpdatedDetails();
         }
-    }, [modalMoreDetails]);
+    }, [modalMoreDetails, userFound?.name]);
 
 
     return (
@@ -238,39 +280,43 @@ export default function HistoryPage() {
                     :
                     <Overflow onScroll={handleScroll} ref={ref} >
                         <Box sx={{ width: '100%' }}>
-                            <Stepper alternativeLabel activeStep={2}>
-                                {steps.map((step, index) => (
-                                    <Step key={index}>
-                                        <StepLabel
-                                            onClick={() => {
-                                                handleMoreDetails(step)
-                                            }}
-                                            StepIconComponent={(props) =>
-                                                <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                    <p>{convertDate(step.created_date, "medium")}</p>
-                                                    <ColorlibStepIcon
-                                                        {...props}
-                                                        extraParams={{
-                                                            step
-                                                        }}
-                                                    />
-                                                </WrapperMark>
-                                            }
-                                            extraParams={{ type: 'valor1' }}
-                                        >
-                                            <div
-                                                style={{ border: 'none', padding: '10px 0' }}
-                                                className='d-flex flex-column justify-content-center align-items-center'
+                            {steps.length > 0 ?
+                                <Stepper alternativeLabel activeStep={steps.length - 1}>
+                                    {steps.map((step, index) => (
+                                        <Step key={index}>
+                                            <StepLabel
+                                                onClick={() => {
+                                                    handleMoreDetails(step)
+                                                }}
+                                                StepIconComponent={(props) =>
+                                                    <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
+                                                        <p>{convertDate(step?.created_date, "medium")}</p>
+                                                        <ColorlibStepIcon
+                                                            {...props}
+                                                            extraParams={{
+                                                                step
+                                                            }}
+                                                        />
+                                                    </WrapperMark>
+                                                }
+                                                extraParams={{ type: 'valor1' }}
                                             >
-                                                <TitleStyled>
-                                                    {step.title}
-                                                </TitleStyled>
-                                                <SummaryStyled>{step.description.substring(0, 30)}...</SummaryStyled>
-                                            </div>
-                                        </StepLabel>
-                                    </Step>
-                                ))}
-                            </Stepper>
+                                                <div
+                                                    style={{ border: 'none', padding: '10px 0' }}
+                                                    className='d-flex flex-column justify-content-center align-items-center'
+                                                >
+                                                    <TitleStyled>
+                                                        {step?.title}
+                                                    </TitleStyled>
+                                                    <SummaryStyled>{step?.description.substring(0, 30)}...</SummaryStyled>
+                                                </div>
+                                            </StepLabel>
+                                        </Step>
+                                    ))}
+                                </Stepper>
+                                :
+                                <p>Nada para mostrar no momento</p>
+                            }
                         </Box>
                     </Overflow >}
             </>
@@ -280,38 +326,42 @@ export default function HistoryPage() {
                     {/*@ts-ignore */}
                     <Overflow onScroll={handleScroll} ref={ref} >
                         <Box sx={{ width: '100%' }}>
-                            <Stepper alternativeLabel activeStep={steps.length - 1}>
-                                {steps.map((step, index) => (
-                                    <Step key={index}>
-                                        <StepLabel
-                                            onClick={() => {
-                                                handleMoreDetails(step)
-                                            }}
-                                            StepIconComponent={(props) =>
-                                                <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                    <p>{convertDate(step.created_date, "long")}</p>
-                                                    <ColorlibStepIcon
-                                                        {...props}
-                                                        extraParams={{
-                                                            step
-                                                        }}
-                                                    />
-                                                </WrapperMark>
-                                            }
-                                            extraParams={{ type: 'valor1' }}
-                                        >
-                                            <div
-                                                style={{ border: 'none', padding: '10px 0' }}
-                                                className='d-flex flex-column justify-content-center align-items-center'
+                            {steps.length > 0 ?
+                                <Stepper alternativeLabel activeStep={steps.length - 1}>
+                                    {steps.map((step, index) => (
+                                        <Step key={index}>
+                                            <StepLabel
+                                                onClick={() => {
+                                                    handleMoreDetails(step)
+                                                }}
+                                                StepIconComponent={(props) =>
+                                                    <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
+                                                        <p>{convertDate(step?.created_date, "long")}</p>
+                                                        <ColorlibStepIcon
+                                                            {...props}
+                                                            extraParams={{
+                                                                step
+                                                            }}
+                                                        />
+                                                    </WrapperMark>
+                                                }
+                                                extraParams={{ type: 'valor1' }}
                                             >
-                                                <TitleStyled>
-                                                    {step.title}
-                                                </TitleStyled>
-                                            </div>
-                                        </StepLabel>
-                                    </Step>
-                                ))}
-                            </Stepper>
+                                                <div
+                                                    style={{ border: 'none', padding: '10px 0' }}
+                                                    className='d-flex flex-column justify-content-center align-items-center'
+                                                >
+                                                    <TitleStyled>
+                                                        {step?.title}
+                                                    </TitleStyled>
+                                                </div>
+                                            </StepLabel>
+                                        </Step>
+                                    ))}
+                                </Stepper>
+                                :
+                                <p>Nada para mostrar no momento</p>
+                            }
                         </Box>
                     </Overflow >
 
