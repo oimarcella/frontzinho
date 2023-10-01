@@ -21,6 +21,7 @@ import ProfilePetPage from "../pages/pet-profile";
 import RegisterVeterinarianPage from "../pages/register-veterinarian";
 import MyAccount from "../pages/my-account";
 import CreateNewTimelinePoint from "../pages/create-timeline-point";
+import ClinicProfile from "../pages/clinic-profile";
 
 const AppRoutes = () => {
   const modal = useSelector(selectModal);
@@ -49,7 +50,7 @@ const AppRoutes = () => {
           <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
           <Route path={ERoutes.PANEL} element={<PanelPage />} />
           <Route path={ERoutes.TIMELINE} element={<HistoryPage />} />
-          <Route path={`${ERoutes.CLINIC}/:clinicId`} element={<PanelPage />} />
+          <Route path={`${ERoutes.CLINIC}/:clinicId`} element={<ClinicProfile />} />
           <Route path={`${ERoutes.PET}/:petId`} element={<ProfilePetPage />} />
           <Route path={`${ERoutes.TIMELINE}/:petId`} element={<HistoryPage />} />
           <Route path={`${ERoutes.CREATE_TIMELINE}/:petId/:petName`} element={<CreateNewTimelinePoint />} />

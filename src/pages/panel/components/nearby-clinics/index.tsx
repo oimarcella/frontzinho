@@ -10,10 +10,23 @@ import { CardStyled } from "./styles";
 import { Store } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../../../core/enums/routes";
+import api from "../../../../services/api";
+
+type ClinicT = {
+    name: string;
+    address: string;
+    number: string;
+    neighborhood: string;
+    role: string;
+    cnpj: string;
+    zip_code: string;
+    id: number;
+    services: Array<{ id: number, name: string }>;
+}
 
 const NearbyClinics = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [clinics, setClinics] = useState<Array<string>>([]);
+    const [clinics, setClinics] = useState<Array<ClinicT>>([]);
     const viewWidth = useWindowDimensions().width;
     const slidesPerView = viewWidth > 1000 ? 3.3 :
         viewWidth > 400 ?
@@ -24,12 +37,19 @@ const NearbyClinics = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        setClinics(["Amor&Pet", "Health Clinic", "Bem saúde Veterinário", "Hospital Pet Amor 24h", "Hospital Veterinário Eicke Buckowtz"]);
+
+        api.get(ERoutes.CLINIC)
+            .then(response => {
+                setClinics(response.data);
+            })
+            .catch(error => {
+                console.log(`Erro: ${error.message}`);
+            })
         setIsLoading(false);
     }, []);
 
-    function handleClickCard() {
-        navigate(`${ERoutes.CLINIC}/${1}`);
+    function handleClickCard(id: number) {
+        navigate(`${ERoutes.CLINIC}/${id}`);
     }
 
     return (
@@ -59,13 +79,13 @@ const NearbyClinics = () => {
                                 return (
                                     <SwiperSlide key={index}>
                                         <CardStyled
-                                            onClick={handleClickCard}
+                                            onClick={() => handleClickCard(clinic.id)}
                                             className="d-flex align-items-center justify-content-center flex-row">
                                             {/* 
                                                 TODO - Colocar o logo da clinica aqui se ela tiver, senão, será o ícone
                                             */}
                                             <Store className="me-2" />
-                                            <h6 className="ellipsis mb-0">{clinic}</h6>
+                                            <h6 className="ellipsis mb-0">{clinic.name}</h6>
                                         </CardStyled>
                                     </SwiperSlide>
                                 )
