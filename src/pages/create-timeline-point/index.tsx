@@ -6,9 +6,10 @@ import { show } from "../../redux/toastSlice";
 import api from "../../services/api";
 import { EHttpResponse } from "../../core/enums/http-responses";
 import Button from "../../components/layout/components/button/button";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/styles/sections";
 import { selectUser } from "../../redux/userSlice";
+import { ERoutes } from "../../core/enums/routes";
 
 type TimelinePointT = {
     title: string;
@@ -32,6 +33,7 @@ function CreateNewTimelinePoint() {
     const dispatch = useDispatch();
     const params = useParams<QueryParamsT>();
     const userLogged = useSelector(selectUser);
+    const navigate = useNavigate();
 
     async function send() {
         try {
@@ -42,7 +44,7 @@ function CreateNewTimelinePoint() {
             });
             dispatch(show({ message: `Novo registro na linha do tempo!`, type: "success" }));
             setLoading(false);
-
+            navigate(`${ERoutes.PET}/${params.petId}`);
         } catch (error: any) {
             setLoading(false);
             if (error.response.status && typeof error.response.status === 'number') {
@@ -68,14 +70,6 @@ function CreateNewTimelinePoint() {
             send();
         }
     }
-
-    /*useEffect(() => {
-        api.get(`/pets/${params.petId}/timeline`)
-            .then(response => {
-                console.log(response);
-            })
-    }, [params.petId])*/
-
 
     return (
         <Section>
