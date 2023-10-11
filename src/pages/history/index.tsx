@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import { ContainerStyled, Overflow, SummaryStyled, TitleStyled, WrapperMark } from './styles';
+import {
+    ContainerStyled,
+    FilterOptions,
+    HeaderPet,
+    Overflow, SummaryStyled, TitleStyled, WrapperMark
+} from './styles';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -25,6 +30,8 @@ import HeaderPage from '../../components/layout/components/headerPage/headerPage
 import { ERoutes } from '../../core/enums/routes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { Container } from 'react-bootstrap';
+import { isSameDay, isSameMonth, isSameWeek, subMonths } from 'date-fns';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
@@ -133,6 +140,7 @@ export default function HistoryPage() {
     const ref = useRef<HTMLDivElement | null>(null);
     const { width } = useWindowDimensions();
     const [steps, setSteps] = useState<Array<StepT>>([]);
+    const [filteredSteps, setFilteredSteps] = useState<Array<StepT>>([]);
     const [modalMoreDetails, setModalMoreDetails] = useState<StepT>({
         title: "",
         description: "",
@@ -147,11 +155,12 @@ export default function HistoryPage() {
     const [userFound, setUserFound] = useState<UserFoundT>();
     const [pet, setPet] = useState({} as PetT);
     const navigate = useNavigate();
+    const [filter, setFilter] = useState("DEFAULT");
 
     const moreDetailsElement = <div>
         <div className='d-flex justify-content-between mb-4'>
             <Typography variant='body2' style={{ color: '#0b344e' }}>{modalMoreDetails.title}</Typography>
-            <Typography variant='body2' style={{ color: '#0b344e' }}>{convertDate(modalMoreDetails.created_date, "long")}</Typography>
+            <Typography variant='body2' style={{ color: '#0b344e' }}>{convertDate(modalMoreDetails.created_date, { dateStyle: "long" })}</Typography>
         </div>
         <Typography variant='body2' style={{ color: '#0b344e' }}>Atendimento feito por: {modalMoreDetails.vet}</Typography>
         <Typography variant='body2' style={{ color: '#0b344e' }}>Clínica: {modalMoreDetails.clinic}</Typography>
@@ -233,6 +242,7 @@ export default function HistoryPage() {
 
     useEffect(() => {
         setIsLoading(true);
+
         api.get(`/pets/${params.petId}/timeline`)
             .then(response => {
                 setSteps(response.data);
@@ -241,7 +251,6 @@ export default function HistoryPage() {
                     setSteps([response.data[response.data.length - 3], response.data[response.data.length - 2], response.data[response.data.length - 1]])
                     :
                     setSteps(response.data);
-
             })
             .catch(error => {
                 console.log(`Erro: ${error}`);
@@ -261,7 +270,7 @@ export default function HistoryPage() {
 
         setTimeout(function () { setIsLoading(false); }, 2000);
 
-    }, [params.petId])
+    }, [params.petId, filter])
 
     //resolve a questão de assincronismo do react e a atualizacao do conteudo do modal
     useEffect(() => {
@@ -271,7 +280,7 @@ export default function HistoryPage() {
                 <div>
                     <div className='d-flex justify-content-between mb-4'>
                         <Typography variant='body2' style={{ color: '#0b344e' }}>{modalMoreDetails.title}</Typography>
-                        <Typography variant='body2' style={{ color: '#0b344e' }}>{convertDate(modalMoreDetails.created_date, "long")}</Typography>
+                        <Typography variant='body2' style={{ color: '#0b344e' }}>{convertDate(modalMoreDetails.created_date, { dateStyle: "long" })}</Typography>
                     </div>
                     <Typography variant='body2' style={{ color: '#0b344e' }}>Atendimento feito por: {modalMoreDetails.vet}</Typography>
                     <Typography variant='body2' style={{ color: '#0b344e' }}>Clínica: {modalMoreDetails.clinic}</Typography>
@@ -286,13 +295,6 @@ export default function HistoryPage() {
             );
 
             findByRoleAndId(modalMoreDetails.created_by_role, modalMoreDetails.created_by_id);
-
-            /*dispatch(
-                showModal({
-                    bodyNode: moreDetailsElement,
-                    hasHeader: false
-                })
-            );*/
         };
 
         // Abre o modal sempre que modalMoreDetails for atualizado
@@ -301,6 +303,50 @@ export default function HistoryPage() {
         }
     }, [modalMoreDetails, userFound?.name]);
 
+    function handleFilter(filterParam?: string) {
+        !filterParam ? setFilter("DEFAULT")
+            :
+            setFilter(filterParam);
+
+        filterParam &&
+            filterTimeline(filterParam);
+    }
+
+    function filterTimeline(filter: string) {
+        const today = new Date();
+
+        switch (filter) {
+            case "TODAY": {
+                setFilteredSteps(steps.filter(step => {
+                    if (isSameDay(new Date(step.created_date), today)) {
+                        return step
+                    }
+                }));
+                break;
+            }
+            case "THIS_WEEK": {
+                setFilteredSteps(steps.filter(step => {
+                    if (isSameWeek(new Date(step.created_date), today)) return step
+                }));
+                break;
+            }
+            case "THIS_MONTH": {
+                setFilteredSteps(steps.filter(step => {
+                    if (isSameMonth(new Date(step.created_date), today)) return step
+                }));
+                break;
+            }
+            case "LAST_MONTH": {
+                setFilteredSteps(steps.filter(step => {
+                    if (isSameMonth(new Date(step.created_date), subMonths(today, 1))) return step
+                }));
+                break;
+            }
+            default:
+                setFilteredSteps([]); // Handle the default case with an empty array or any other desired behavior
+                break;
+        }
+    }
 
     return (
         urlParams.get("origin") == "iframe" ?
@@ -309,7 +355,7 @@ export default function HistoryPage() {
                 {isLoading ?
                     <Loading />
                     :
-                    <Overflow onScroll={handleScroll} ref={ref} >
+                    <Overflow onScroll={handleScroll} ref={ref} > {/* IFrame */}
                         <Box sx={{ width: '100%' }}>
                             {steps.length > 0 ?
                                 <Stepper alternativeLabel activeStep={steps.length - 1}>
@@ -368,55 +414,113 @@ export default function HistoryPage() {
                         Voltar
                     </Link>
 
-                    <div className="d-flex flex-column align-items-center justify-content-center mt-4">
-                        <small className="mb-4">Até o momento {pet.name} tem <strong>{steps.length} {steps.length > 1 ? "registros" : "registro"}</strong> na linha do tempo.</small>
+                    <HeaderPet className='d-flex flex flex-column align-items-center'>
+                        <img src={`/images/${pet.specie == "cachorro" ? "dog" : pet.specie == "gato" ? "cat" : "another_animals"}.svg`} />
+                        <strong className='name'>{pet.name}</strong>
+                        <small className="mb-4"> Até o momento {pet.name} tem <strong>{steps.length} {steps.length > 1 ? "registros" : "registro"}</strong> na linha do tempo.</small>
+                    </HeaderPet>
+
+                    <FilterOptions className='d-flex flex-wrap'>
+                        <span className={filter === "TODAY" ? "active" : ""} onClick={() => filter === "TODAY" ? handleFilter() : handleFilter("TODAY")}>Hoje</span>
+                        <span className={filter === "THIS_WEEK" ? "active" : ""} onClick={() => filter === "THIS_WEEK" ? handleFilter() : handleFilter("THIS_WEEK")}>Essa semana</span>
+                        <span className={filter === "THIS_MONTH" ? "active" : ""} onClick={() => filter === "THIS_MONTH" ? handleFilter() : handleFilter("THIS_MONTH")}>Esse mês</span>
+                        <span className={filter === "LAST_MONTH" ? "active" : ""} onClick={() => filter === "LAST_MONTH" ? handleFilter() : handleFilter("LAST_MONTH")}>Mês passado</span>
+                    </FilterOptions>
+
+                    <div className="d-flex flex-column align-items-center justify-content-center">
 
                         {/*@ts-ignore */}
                         <Overflow onScroll={handleScroll} ref={ref}>
                             <Box sx={{ width: '100%' }}>
-                                {steps.length > 0 ?
-                                    <Stepper alternativeLabel activeStep={steps.length - 1}>
-                                        {steps.map((step, index) => (
-                                            <Step key={index}>
-                                                <StepLabel
-                                                    onClick={() => {
-                                                        handleMoreDetails(step)
-                                                    }}
-                                                    StepIconComponent={(props) =>
-                                                        <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                            <p>{convertDate(step?.created_date, { dateStyle: 'medium' })}</p>
-                                                            <small>às {convertDate(step?.created_date, { timeStyle: 'short' })}</small>
-                                                            <ColorlibStepIcon
-                                                                {...props}
-                                                                extraParams={{
-                                                                    step
-                                                                }}
-                                                            />
-                                                        </WrapperMark>
-                                                    }
-                                                    extraParams={{ type: 'valor1' }}
-                                                >
-                                                    <div
-                                                        style={{ border: 'none', padding: '10px 0' }}
-                                                        className='d-flex flex-column justify-content-center align-items-center'
-                                                    >
-                                                        <TitleStyled>
-                                                            {step?.title}
-                                                            <SummaryStyled>{step?.description.substring(0, 30)}...</SummaryStyled>
-                                                        </TitleStyled>
-                                                    </div>
-                                                </StepLabel>
-                                            </Step>
-                                        ))}
-                                    </Stepper>
+                                {filter === "DEFAULT" ?
+                                    <>
+                                        {steps.length > 0 ?
+                                            <Stepper style={{ border: "1px solid red" }} alternativeLabel activeStep={steps.length - 1}>
+                                                {steps.map((step, index) => (
+                                                    <Step key={index}>
+                                                        <StepLabel
+                                                            onClick={() => {
+                                                                handleMoreDetails(step)
+                                                            }}
+                                                            StepIconComponent={(props) =>
+                                                                <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
+                                                                    <p>{convertDate(step?.created_date, { dateStyle: 'medium' })}</p>
+                                                                    <small>às {convertDate(step?.created_date, { timeStyle: 'short' })}</small>
+                                                                    <ColorlibStepIcon
+                                                                        {...props}
+                                                                        extraParams={{
+                                                                            step
+                                                                        }}
+                                                                    />
+                                                                </WrapperMark>
+                                                            }
+                                                            extraParams={{ type: 'valor1' }}
+                                                        >
+                                                            <div
+                                                                style={{ border: 'none', padding: '10px 0' }}
+                                                                className='d-flex flex-column justify-content-center align-items-center'
+                                                            >
+                                                                <TitleStyled>
+                                                                    {step?.title}
+                                                                    <SummaryStyled>{step?.description.substring(0, 30)}...</SummaryStyled>
+                                                                </TitleStyled>
+                                                            </div>
+                                                        </StepLabel>
+                                                    </Step>
+                                                ))}
+                                            </Stepper>
+                                            :
+                                            <p>Nada para mostrar no momento</p>
+                                        }
+                                    </>
                                     :
-                                    <p>Nada para mostrar no momento</p>
+                                    <>
+                                        {
+                                            filteredSteps.length > 0 ?
+                                                <Stepper alternativeLabel activeStep={filteredSteps.length + 1}>
+                                                    {filteredSteps.map((step, index) => (
+                                                        <Step key={index}>
+                                                            <StepLabel
+                                                                onClick={() => {
+                                                                    handleMoreDetails(step)
+                                                                }}
+                                                                StepIconComponent={(props) =>
+                                                                    <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
+                                                                        <p>{convertDate(step?.created_date, { dateStyle: 'medium' })}</p>
+                                                                        <small>às {convertDate(step?.created_date, { timeStyle: 'short' })}</small>
+                                                                        <ColorlibStepIcon
+                                                                            {...props}
+                                                                            extraParams={{
+                                                                                step
+                                                                            }}
+                                                                        />
+                                                                    </WrapperMark>
+                                                                }
+                                                                extraParams={{ type: 'valor1' }}
+                                                            >
+                                                                <div
+                                                                    style={{ border: 'none', padding: '10px 0' }}
+                                                                    className='d-flex flex-column justify-content-center align-items-center'
+                                                                >
+                                                                    <TitleStyled>
+                                                                        {step?.title}
+                                                                        <SummaryStyled>{step?.description.substring(0, 30)}...</SummaryStyled>
+                                                                    </TitleStyled>
+                                                                </div>
+                                                            </StepLabel>
+                                                        </Step>
+                                                    ))}
+                                                </Stepper>
+                                                :
+                                                <p>Nada encontrado no filtro</p>
+                                        }
+                                    </>
                                 }
                             </Box>
-                        </Overflow >
+                        </Overflow>
                     </div>
 
-                </ContainerStyled >
+                </ContainerStyled>
             </Section>
     );
 }
