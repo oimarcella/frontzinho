@@ -15,7 +15,7 @@ import {
 import { styled } from '@mui/material';
 import { StepIconProps } from '@mui/material/StepIcon';
 import { showModal } from '../../redux/modalSlice';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import useWindowDimensions from '../../core/hooks/useWindowDimensions';
 import api from '../../services/api';
 import Loading from '../../components/layout/components/loading';
@@ -23,6 +23,8 @@ import { show } from '../../redux/toastSlice';
 import { Section } from '../../components/layout/components/section/sections';
 import HeaderPage from '../../components/layout/components/headerPage/headerPage';
 import { ERoutes } from '../../core/enums/routes';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowAltCircleLeft, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
@@ -234,8 +236,6 @@ export default function HistoryPage() {
                     :
                     setSteps(response.data);
 
-                console.log(response.data)
-
             })
             .catch(error => {
                 console.log(`Erro: ${error}`);
@@ -356,8 +356,12 @@ export default function HistoryPage() {
                         text={"Linha do tempo completa"}
                     />
 
+                    <Link to={`${ERoutes.PET}/${params.petId}`}>
+                        <FontAwesomeIcon className="me-2" icon={faArrowLeft} />
+                        Voltar
+                    </Link>
 
-                    <div className="d-flex flex-column align-items-center justify-content-center">
+                    <div className="d-flex flex-column align-items-center justify-content-center mt-4">
                         <small className="mb-4">Até o momento {pet.name} tem <strong>{steps.length} {steps.length > 1 ? "registros" : "registro"}</strong> na linha do tempo.</small>
 
                         {/*@ts-ignore */}

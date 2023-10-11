@@ -334,9 +334,9 @@ function ProfilePetPage() {
 
                                         </div>
                                     </Section>
-                                    <Section>
+                                    {/*<Section>
                                         <h3 className="mb-4">O que vamos fazer hoje? <span className="soon tag">Em breve</span></h3>
-                                    </Section>
+                                        </Section>*/}
                                 </>
 
                             }
