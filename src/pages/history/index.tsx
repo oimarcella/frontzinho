@@ -15,12 +15,14 @@ import {
 import { styled } from '@mui/material';
 import { StepIconProps } from '@mui/material/StepIcon';
 import { showModal } from '../../redux/modalSlice';
-import { Section } from '../../components/layout/components/styles/sections';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useWindowDimensions from '../../core/hooks/useWindowDimensions';
 import api from '../../services/api';
 import Loading from '../../components/layout/components/loading';
 import { show } from '../../redux/toastSlice';
+import { Section } from '../../components/layout/components/section/sections';
+import HeaderPage from '../../components/layout/components/headerPage/headerPage';
+import { ERoutes } from '../../core/enums/routes';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
@@ -34,6 +36,19 @@ type QueryParamsT = {
 type UserFoundT = {
     name: string;
 };
+
+type PetT = {
+    size: string;
+    gender: string;
+    age: string;
+    id: number;
+    breed: string;
+    specie: string;
+    name: string;
+    description: string;
+    weight: number;
+    castrated: boolean;
+}
 
 type StepT = {
     title: string;
@@ -123,6 +138,8 @@ export default function HistoryPage() {
     } as StepT);
     const [isLoading, setIsLoading] = useState(false);
     const [userFound, setUserFound] = useState<UserFoundT>();
+    const [pet, setPet] = useState({} as PetT);
+    const navigate = useNavigate();
 
     const moreDetailsElement = <div>
         <div className='d-flex justify-content-between mb-4'>
@@ -137,7 +154,7 @@ export default function HistoryPage() {
             <Typography variant="body2">Descrição</Typography>
             <p>{modalMoreDetails.description}</p>
         </div>
-        <small>Criado por: {userFound?.name}</small>
+        <small>Criado por: {userFound?.name ? userFound?.name : "Não informado"}</small>
     </div>;
 
     function findByRoleAndId(role: string, id: number) {
@@ -223,9 +240,20 @@ export default function HistoryPage() {
             .catch(error => {
                 console.log(`Erro: ${error}`);
                 dispatch(show({ message: "Não foi possível carregar os dados da linha do tempo.", type: "error" }));
-            })
+                navigate(`${ERoutes.PET}/${params.petId}`);
+            });
 
-        setTimeout(function () { setIsLoading(false); }, 2000)
+        api.get(`/pets/${params.petId}`)
+            .then(response => {
+                setPet(response.data);
+            })
+            .catch(error => {
+                console.log(`Erro: ${error}`);
+                dispatch(show({ message: "Não foi possível encontrar dados necessários.", type: "error" }));
+                navigate(`${ERoutes.PET}/${params.petId}`);
+            });
+
+        setTimeout(function () { setIsLoading(false); }, 2000);
 
     }, [params.petId])
 
@@ -319,48 +347,61 @@ export default function HistoryPage() {
             </>
             :
             <Section>
-                <ContainerStyled className="d-flex align-items-center">
-                    {/*@ts-ignore */}
-                    <Overflow onScroll={handleScroll} ref={ref} >
-                        <Box sx={{ width: '100%' }}>
-                            {steps.length > 0 ?
-                                <Stepper alternativeLabel activeStep={steps.length - 1}>
-                                    {steps.map((step, index) => (
-                                        <Step key={index}>
-                                            <StepLabel
-                                                onClick={() => {
-                                                    handleMoreDetails(step)
-                                                }}
-                                                StepIconComponent={(props) =>
-                                                    <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                        <p>{convertDate(step?.created_date, "long")}</p>
-                                                        <ColorlibStepIcon
-                                                            {...props}
-                                                            extraParams={{
-                                                                step
-                                                            }}
-                                                        />
-                                                    </WrapperMark>
-                                                }
-                                                extraParams={{ type: 'valor1' }}
-                                            >
-                                                <div
-                                                    style={{ border: 'none', padding: '10px 0' }}
-                                                    className='d-flex flex-column justify-content-center align-items-center'
+                <ContainerStyled>
+
+                    <HeaderPage
+                        textToStyle={"completa"}
+                        style={{ color: "#FF41AD" }}
+                        title="Tudo oque você precisa saber!"
+                        text={"Linha do tempo completa"}
+                    />
+
+
+                    <div className="d-flex flex-column align-items-center justify-content-center">
+                        <small className="mb-4">Até o momento {pet.name} tem <strong>{steps.length} {steps.length > 1 ? "registros" : "registro"}</strong> na linha do tempo.</small>
+
+                        {/*@ts-ignore */}
+                        <Overflow onScroll={handleScroll} ref={ref}>
+                            <Box sx={{ width: '100%' }}>
+                                {steps.length > 0 ?
+                                    <Stepper alternativeLabel activeStep={steps.length - 1}>
+                                        {steps.map((step, index) => (
+                                            <Step key={index}>
+                                                <StepLabel
+                                                    onClick={() => {
+                                                        handleMoreDetails(step)
+                                                    }}
+                                                    StepIconComponent={(props) =>
+                                                        <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
+                                                            <p>{convertDate(step?.created_date, "long")}</p>
+                                                            <ColorlibStepIcon
+                                                                {...props}
+                                                                extraParams={{
+                                                                    step
+                                                                }}
+                                                            />
+                                                        </WrapperMark>
+                                                    }
+                                                    extraParams={{ type: 'valor1' }}
                                                 >
-                                                    <TitleStyled>
-                                                        {step?.title}
-                                                    </TitleStyled>
-                                                </div>
-                                            </StepLabel>
-                                        </Step>
-                                    ))}
-                                </Stepper>
-                                :
-                                <p>Nada para mostrar no momento</p>
-                            }
-                        </Box>
-                    </Overflow >
+                                                    <div
+                                                        style={{ border: 'none', padding: '10px 0' }}
+                                                        className='d-flex flex-column justify-content-center align-items-center'
+                                                    >
+                                                        <TitleStyled>
+                                                            {step?.title}
+                                                        </TitleStyled>
+                                                    </div>
+                                                </StepLabel>
+                                            </Step>
+                                        ))}
+                                    </Stepper>
+                                    :
+                                    <p>Nada para mostrar no momento</p>
+                                }
+                            </Box>
+                        </Overflow >
+                    </div>
 
                 </ContainerStyled >
             </Section>

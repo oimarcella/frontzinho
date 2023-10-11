@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 // Import Swiper styles
 import 'swiper/css';
-import { Section } from "../../../../components/layout/components/styles/sections";
 import { ContainerStyled } from "../../styles";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/userSlice";
@@ -14,10 +13,13 @@ import { RemoveRedEye } from "@material-ui/icons";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../../../core/enums/routes";
+import { Section } from "../../../../components/layout/components/section/sections";
+import PetCard from "../../../../components/layout/components/petCard";
 
 type PetT = {
     name: string;
     id: number;
+    specie: string;
 }
 
 const ClinicPets = () => {
@@ -48,8 +50,10 @@ const ClinicPets = () => {
     }
 
     async function getPetsByClinicId(clinicId: number) {
+        console.log("🚀 ~ file: index.tsx:53 ~ getPetsByClinicId ~ clinicId:", clinicId)
         const { data } = await api.get(`/clinicas/${clinicId}/pets`);
         setPets(data);
+        console.log("🚀 ~ file: index.tsx:56 ~ getPetsByClinicId ~ data:", data)
     }
 
     useEffect(() => {
@@ -90,19 +94,7 @@ const ClinicPets = () => {
                                     pets.map((pet, index) => {
                                         return (
                                             <SwiperSlide key={index}>
-                                                <CardStyled
-                                                    style={{ background: generatePastelColor(index) }}
-                                                    className="d-flex flex-column align-items-center justify-content-center"
-                                                >
-                                                    <img
-                                                        src={"/images/another_animals.svg"}
-                                                        alt={pet.name}
-                                                    />
-                                                    {pet.name}
-                                                    <div className="d-flex align-items-center">
-                                                        <MyOverlay title="Ver paciente" id={pet.name}><RemoveRedEye className="icon-actions" onClick={() => navigate(`${ERoutes.PET}/${pet.id}`)} /></MyOverlay>
-                                                    </div>
-                                                </CardStyled>
+                                                <PetCard index={index} pet={pet} />
                                             </SwiperSlide>
                                         )
                                     })

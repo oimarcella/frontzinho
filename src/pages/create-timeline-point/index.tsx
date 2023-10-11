@@ -7,7 +7,7 @@ import api from "../../services/api";
 import { EHttpResponse } from "../../core/enums/http-responses";
 import Button from "../../components/layout/components/button/button";
 import { useNavigate, useParams } from "react-router-dom";
-import { Section } from "../../components/layout/components/styles/sections";
+import { Section } from "../../components/layout/components/section/sections";
 import { selectUser } from "../../redux/userSlice";
 import { ERoutes } from "../../core/enums/routes";
 
@@ -44,7 +44,8 @@ function CreateNewTimelinePoint() {
             });
             dispatch(show({ message: `Novo registro na linha do tempo!`, type: "success" }));
             setLoading(false);
-            navigate(`${ERoutes.PET}/${params.petId}`);
+            navigate(`${ERoutes.PET}/${params.petId}`)
+
         } catch (error: any) {
             setLoading(false);
             if (error.response.status && typeof error.response.status === 'number') {

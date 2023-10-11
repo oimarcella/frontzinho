@@ -4,13 +4,13 @@ import Loading from "../../../../components/layout/components/loading";
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useWindowDimensions from "../../../../core/hooks/useWindowDimensions";
-import { Section } from "../../../../components/layout/components/styles/sections";
 import { Card } from "react-bootstrap";
 import { CardStyled } from "./styles";
 import { Store } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../../../core/enums/routes";
 import api from "../../../../services/api";
+import { Section } from "../../../../components/layout/components/section/sections";
 
 type ClinicT = {
     name: string;

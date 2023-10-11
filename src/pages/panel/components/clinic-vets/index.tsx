@@ -11,9 +11,9 @@ import Button from "../../../../components/layout/components/button/button";
 import Loading from "../../../../components/layout/components/loading";
 import api from "../../../../services/api";
 import { show } from "../../../../redux/toastSlice";
-import { Section } from "../../../../components/layout/components/styles/sections";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../../../core/enums/routes";
+import { Section } from "../../../../components/layout/components/section/sections";
 
 type VetT = {
     role: string,

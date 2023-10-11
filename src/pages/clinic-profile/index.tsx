@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { ERoutes } from "../../core/enums/routes";
-import { Section } from "../../components/layout/components/styles/sections";
+import { Section } from "../../components/layout/components/section/sections";
 import Loading from "../../components/layout/components/loading";
 
 type RouteParamsT = {

@@ -39,13 +39,13 @@ export const BodyStyled = styled(Container)`
     }
 
     .ver-mais{
-        color: var(--light-blue-500);
+        color: var(--pink-500);
         text-transform: uppercase;
         font-size: 10px;
         font-weight: bold;
         
         :hover{
-            color: var(--light-blue-300);
+            color: var(--pink-550);
         }
     }
 

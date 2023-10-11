@@ -13,9 +13,10 @@ import Button from "../../../../components/layout/components/button/button";
 import Loading from "../../../../components/layout/components/loading";
 import api from "../../../../services/api";
 import { show } from "../../../../redux/toastSlice";
-import { Section } from "../../../../components/layout/components/styles/sections";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../../../core/enums/routes";
+import { Section } from "../../../../components/layout/components/section/sections";
+import PetCard from "../../../../components/layout/components/petCard";
 
 type PetT = {
     id?: number;
@@ -428,7 +429,27 @@ const YourPets = () => {
                                         {(petIsLoading && petIsLoading === pet.id) ?
                                             <Loading />
                                             :
-                                            <CardStyled
+                                            <PetCard index={index} pet={pet} deletePet={deletePet} editPet={handleEditPet} />
+                                        }
+                                    </SwiperSlide>
+                                )
+                            })
+                        }
+                    </Swiper>
+                    :
+                    isLoading ?
+                        <Loading />
+                        :
+                        <p>Nenhum pet por enquanto</p>
+                }
+            </Section>
+        </>
+    )
+}
+
+export default YourPets;
+
+{/*<CardStyled
                                                 className="d-flex flex-column align-items-center justify-content-center"
                                                 style={{ background: generatePastelColor(index) }}
                                             >
@@ -477,21 +498,4 @@ const YourPets = () => {
                                                     </div>
                                                 </div>
                                                 {pet.name}
-                                            </CardStyled>}
-                                    </SwiperSlide>
-                                )
-                            })
-                        }
-                    </Swiper>
-                    :
-                    isLoading ?
-                        <Loading />
-                        :
-                        <p>Nenhum pet por enquanto</p>
-                }
-            </Section>
-        </>
-    )
-}
-
-export default YourPets;
+                                                    </CardStyled>*/}

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import HeaderPage from "../../components/layout/components/headerPage/headerPage";
-import { Section } from "../../components/layout/components/styles/sections";
+import { Section } from "../../components/layout/components/section/sections";
 import { selectUser } from "../../redux/userSlice";
 import { MouseEventHandler, useEffect, useState } from "react";
 import api from "../../services/api";

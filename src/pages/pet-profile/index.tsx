@@ -3,7 +3,7 @@ import { BodyStyled, HeaderStyled, ButtonStyled, DrawerStyled, CompanyConnectedS
 import { ReactNode, useEffect, useState } from "react";
 import api from "../../services/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Section } from "../../components/layout/components/styles/sections";
+import { Section } from "../../components/layout/components/section/sections";
 import { Add, LinkOff, LinkOutlined, Pets } from "@material-ui/icons";
 import { ERoutes } from "../../core/enums/routes";
 import { WifiProtectedSetup } from "@mui/icons-material";
@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "../../components/layout/components/button/button";
 import { show } from "../../redux/toastSlice";
 import { delay } from "@reduxjs/toolkit/dist/utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 type QueryParamsT = {
     petId: string;
@@ -340,11 +342,17 @@ function ProfilePetPage() {
                             }
                             <Section>
                                 <div className="d-flex align-items-center mb-4">
-                                    <h3>Linha do tempo</h3>
-                                    <Link className="ms-3 ver-mais" to={`${ERoutes.TIMELINE}/${pet.id}`}>Ver mais</Link>
+                                    <div className="d-flex flex-column">
+                                        <h3>Linha do tempo</h3>
+                                        <small>
+                                            Esses são os últimos 3 registros feitos na linha do tempo do pet.
+                                            Para conferir registros mais antigos confira a linha do tempo completa, clicando em <strong>Ver mais informações</strong> abaixo da linha do tempo.
+                                        </small>
+                                    </div>
+
                                 </div>
                                 {/*@ts-ignore*/}
-                                <div>
+                                <div className="d-flex flex-column align-items-center">
                                     <iframe
                                         id="myIframe"
                                         src={`${url}?origin=${"iframe"}`}
@@ -352,6 +360,11 @@ function ProfilePetPage() {
                                         height="220px"
                                         title="Timeline"
                                     />
+                                    <Link className="ms-3 ver-mais" to={`${ERoutes.TIMELINE}/${pet.id}`}>
+                                        Ver mais informações
+                                        <FontAwesomeIcon className="ms-1" icon={faArrowRight} />
+                                    </Link>
+
                                 </div>
                             </Section>
                         </BodyStyled>
