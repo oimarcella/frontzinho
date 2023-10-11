@@ -380,7 +380,7 @@ export default function HistoryPage() {
                                                 extraParams={{ type: 'valor1' }}
                                             >
                                                 <div
-                                                    style={{ border: 'none', padding: '10px 0' }}
+                                                    style={{ border: 'none', padding: '10px 0', width: "fit-content" }}
                                                     className='d-flex flex-column justify-content-center align-items-center'
                                                 >
                                                     <TitleStyled>
@@ -435,7 +435,7 @@ export default function HistoryPage() {
                                 {filter === "DEFAULT" ?
                                     <>
                                         {steps.length > 0 ?
-                                            <Stepper style={{ border: "1px solid red" }} alternativeLabel activeStep={steps.length - 1}>
+                                            <Stepper alternativeLabel activeStep={steps.length - 1}>
                                                 {steps.map((step, index) => (
                                                     <Step key={index}>
                                                         <StepLabel
