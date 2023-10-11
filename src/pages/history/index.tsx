@@ -355,13 +355,14 @@ export default function HistoryPage() {
                 {isLoading ?
                     <Loading />
                     :
-                    <Overflow onScroll={handleScroll} ref={ref} > {/* IFrame */}
+                    <Overflow onScroll={handleScroll} ref={ref}> {/* IFrame */}
                         <Box sx={{ width: '100%' }}>
                             {steps.length > 0 ?
                                 <Stepper alternativeLabel activeStep={steps.length - 1}>
                                     {steps.map((step, index) => (
-                                        <Step key={index}>
+                                        <Step key={index} className='d-flex align-items-center justify-content-center'>
                                             <StepLabel
+                                                style={{ width: "fit-content" }}
                                                 onClick={() => {
                                                     handleMoreDetails(step)
                                                 }}
@@ -420,11 +421,14 @@ export default function HistoryPage() {
                         <small className="mb-4"> Até o momento {pet.name} tem <strong>{steps.length} {steps.length > 1 ? "registros" : "registro"}</strong> na linha do tempo.</small>
                     </HeaderPet>
 
-                    <FilterOptions className='d-flex flex-wrap'>
-                        <span className={filter === "TODAY" ? "active" : ""} onClick={() => filter === "TODAY" ? handleFilter() : handleFilter("TODAY")}>Hoje</span>
-                        <span className={filter === "THIS_WEEK" ? "active" : ""} onClick={() => filter === "THIS_WEEK" ? handleFilter() : handleFilter("THIS_WEEK")}>Essa semana</span>
-                        <span className={filter === "THIS_MONTH" ? "active" : ""} onClick={() => filter === "THIS_MONTH" ? handleFilter() : handleFilter("THIS_MONTH")}>Esse mês</span>
-                        <span className={filter === "LAST_MONTH" ? "active" : ""} onClick={() => filter === "LAST_MONTH" ? handleFilter() : handleFilter("LAST_MONTH")}>Mês passado</span>
+                    <FilterOptions className='d-flex flex-column'>
+                        <h5>Busque por período</h5>
+                        <div className="d-flex flex-wrap">
+                            <span className={filter === "TODAY" ? "active" : ""} onClick={() => filter === "TODAY" ? handleFilter() : handleFilter("TODAY")}>Hoje</span>
+                            <span className={filter === "THIS_WEEK" ? "active" : ""} onClick={() => filter === "THIS_WEEK" ? handleFilter() : handleFilter("THIS_WEEK")}>Essa semana</span>
+                            <span className={filter === "THIS_MONTH" ? "active" : ""} onClick={() => filter === "THIS_MONTH" ? handleFilter() : handleFilter("THIS_MONTH")}>Esse mês</span>
+                            <span className={filter === "LAST_MONTH" ? "active" : ""} onClick={() => filter === "LAST_MONTH" ? handleFilter() : handleFilter("LAST_MONTH")}>Mês passado</span>
+                        </div>
                     </FilterOptions>
 
                     <div className="d-flex flex-column align-items-center justify-content-center">

@@ -12,10 +12,10 @@ export const TimelineContentStyled = styled(TimelineContent)`
 `;
 
 export const Overflow = styled.div`
-    width: 100vw;
+    width: 100%;
     overflow: hidden;
     overflow-x: auto;
-        margin-top: 40px;
+    margin-top: 40px;
 `;
 
 
@@ -45,8 +45,14 @@ export const HeaderStyled = styled.div`
 `;
 
 export const FilterOptions = styled.div`
-    max-width: 30%;
+    //max-width: 30%;
     margin: 40px 0;
+
+    h5{
+        font-weight: 600;
+        font-size: 16px;
+        color:var(--dark-blue-500);
+    }
 
     span{
         cursor: pointer;
@@ -58,6 +64,10 @@ export const FilterOptions = styled.div`
 
         font-size: 14px;
         transition: all ease-in-out .3s;
+
+        &:first-of-type{
+            margin-left: 0;
+        }
 
         &.active{
             background: var(--pink-500);
@@ -72,9 +82,9 @@ export const FilterOptions = styled.div`
         }
     }
 
-    @media(max-width: 1000px){
+    /*@media(max-width: 1000px){
         max-width: 100%;
-    }
+    }*/
 `;
 
 export const HeaderPet = styled.div`
@@ -139,7 +149,7 @@ export const WrapperMark = styled.span`
 `;
 
 export const TitleStyled = styled(Typography)`
-    color: var(--light-blue-300)!important;
+    color: var(--light-blue-500)!important;
     font-weight: bold!important;
     font-size: 12px!important;
 
@@ -152,6 +162,7 @@ export const TitleStyled = styled(Typography)`
 export const SummaryStyled = styled.p`
     color: var(--dark-blue-500)!important;
     font-size: 12px!important;
+    font-weight: 400;
 
     overflow: hidden;
     text-overflow: ellipsis;
