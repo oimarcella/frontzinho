@@ -36,6 +36,20 @@ export const WrapperMark = styled.span`
             padding: 5px 8px;
         }
     }
+    small{
+        padding: 5px 10px;
+        margin-top: -5px;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 10px;
+        color: var(--pink-500);
+        font-weight: bold!important;
+            
+        @media(max-width:1000px){
+            font-size: 9px!important;
+            padding: 5px 8px;
+        }
+    }
 `;
 
 export const TitleStyled = styled(Typography)`

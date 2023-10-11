@@ -24,7 +24,7 @@ import { Section } from '../../components/layout/components/section/sections';
 import HeaderPage from '../../components/layout/components/headerPage/headerPage';
 import { ERoutes } from '../../core/enums/routes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowAltCircleLeft, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
@@ -61,6 +61,11 @@ type StepT = {
     created_date: Date | any;
     created_by_id: number,
     created_by_role: string
+}
+
+type OptionsConvertDateT = {
+    dateStyle?: string;
+    timeStyle?: string;
 }
 
 const ColorlibStepIconRoot = styled('div')<{
@@ -151,7 +156,6 @@ export default function HistoryPage() {
         <Typography variant='body2' style={{ color: '#0b344e' }}>Atendimento feito por: {modalMoreDetails.vet}</Typography>
         <Typography variant='body2' style={{ color: '#0b344e' }}>Clínica: {modalMoreDetails.clinic}</Typography>
 
-
         <div className='mt-4 d-flex flex-column'>
             <Typography variant="body2">Descrição</Typography>
             <p>{modalMoreDetails.description}</p>
@@ -211,9 +215,11 @@ export default function HistoryPage() {
         }
     };
 
-    function convertDate(date: any, style: string = "short") {
+    function convertDate(date: any, options: OptionsConvertDateT) {
+        const { dateStyle, timeStyle } = options;
+
         //@ts-ignore
-        return new Date(date).toLocaleDateString('pt-BR', { dateStyle: style });
+        return new Date(date).toLocaleString(navigator.language, { dateStyle, timeStyle });
     }
 
     useEffect(() => {
@@ -315,7 +321,8 @@ export default function HistoryPage() {
                                                 }}
                                                 StepIconComponent={(props) =>
                                                     <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                        <p>{convertDate(step?.created_date, "medium")}</p>
+                                                        <p>{convertDate(step?.created_date, { dateStyle: 'medium' })}</p>
+                                                        <small>às {convertDate(step?.created_date, { timeStyle: 'short' })}</small>
                                                         <ColorlibStepIcon
                                                             {...props}
                                                             extraParams={{
@@ -377,7 +384,8 @@ export default function HistoryPage() {
                                                     }}
                                                     StepIconComponent={(props) =>
                                                         <WrapperMark className='d-flex align-items-center justify-content-center flex-column'>
-                                                            <p>{convertDate(step?.created_date, "long")}</p>
+                                                            <p>{convertDate(step?.created_date, { dateStyle: 'medium' })}</p>
+                                                            <small>às {convertDate(step?.created_date, { timeStyle: 'short' })}</small>
                                                             <ColorlibStepIcon
                                                                 {...props}
                                                                 extraParams={{
@@ -394,6 +402,7 @@ export default function HistoryPage() {
                                                     >
                                                         <TitleStyled>
                                                             {step?.title}
+                                                            <SummaryStyled>{step?.description.substring(0, 30)}...</SummaryStyled>
                                                         </TitleStyled>
                                                     </div>
                                                 </StepLabel>
