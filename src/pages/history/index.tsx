@@ -380,7 +380,7 @@ export default function HistoryPage() {
                                                 extraParams={{ type: 'valor1' }}
                                             >
                                                 <div
-                                                    style={{ border: 'none', padding: '10px 0', width: "fit-content" }}
+                                                    style={{ border: 'none', padding: '10px 0' }}
                                                     className='d-flex flex-column justify-content-center align-items-center'
                                                 >
                                                     <TitleStyled>
