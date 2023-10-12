@@ -15,6 +15,8 @@ import {
     useLoadScript,
 } from "@react-google-maps/api";
 import axios from "axios";
+import { ContentCopy } from "@mui/icons-material";
+import MToolTip from "../../components/layout/components/mtooltip";
 
 type RouteParamsT = {
     clinicId: string;
@@ -35,9 +37,9 @@ type ClinicT = {
 const ClinicProfile = () => {
     const routeParams = useParams<RouteParamsT>();
     const [clinic, setClinic] = useState<ClinicT>({} as ClinicT);
+    console.log("🚀 ~ file: index.tsx:40 ~ ClinicProfile ~ clinic:", clinic)
     const [loading, setLoading] = useState(false);
     const [localization, setLocalization] = useState<{ address: string, lat: number, lng: number }>({} as { address: string, lat: number, lng: number });
-    //console.log("🚀 ~ file: index.tsx:40 ~ ClinicProfile ~ localization:", localization)
     const markers = [localization];
     const [mapRef, setMapRef] = useState();
     const [isOpen, setIsOpen] = useState(false);
@@ -45,6 +47,7 @@ const ClinicProfile = () => {
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${localization.address}&key=${import.meta.env.VITE_REACT_APP_GOOGLE_API_KEY}`;
     //const center = useMemo(() => ({ lat: localization.lat, lng: localization.lng }), []); //Starts with clinic cordinators
     const [zoom, setZoom] = useState(10);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         console.clear()
@@ -87,6 +90,12 @@ const ClinicProfile = () => {
         googleMapsApiKey: import.meta.env.VITE_REACT_APP_GOOGLE_API_KEY || "",
     });
 
+    function copyAddress() {
+        navigator.clipboard.writeText(`${clinic.address}, ${clinic.neighborhood}, ${clinic.number}, ${clinic.zip_code}`);
+        setCopied(true);
+        setTimeout(() => { setCopied(false) }, 1000);
+    }
+
     //@ts-ignore
     const handleMarkerClick = (id, lat, lng, address) => {
         //@ts-ignore 
@@ -105,7 +114,7 @@ const ClinicProfile = () => {
                     <HeaderStyled>
                         <Section>
                             <Container className="d-flex justify-content-between align-items-center flex-column flex-lg-row">
-                                <div className="d-flex flex-column">
+                                <div className="d-flex flex-column align-items-center">
                                     <h4>Clínica/Hospital</h4>
                                     <span className="d-flex align-items-center">
                                         <Store className="me-2" />
@@ -128,7 +137,14 @@ const ClinicProfile = () => {
                             <Container>
                                 <div className="d-flex flex-column mb-4">
                                     <h3 className="mb-3">Endereço</h3>
-                                    <p> {clinic.address}, {clinic.neighborhood}, nº {clinic.number} CEP {clinic.zip_code}</p>
+                                    <div className="d-flex align-items-center">
+                                        <p className="me-4">{clinic.address}, {clinic.neighborhood}, nº {clinic.number} CEP {clinic.zip_code}</p>
+
+                                        <MToolTip title="Copiar" id="copiar" className="d-flex justify-content-center align-items-center flex-column">
+                                            <ContentCopy onClick={copyAddress} />
+                                            {copied && <small style={{ color: "green" }}>Copiado!</small>}
+                                        </MToolTip>
+                                    </div>
 
                                     <div style={{ height: "80vw", width: "80vw" }}>
                                         {(!isLoaded && loading) ? (
