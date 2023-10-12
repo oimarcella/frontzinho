@@ -2,11 +2,19 @@ import { Container } from "react-bootstrap";
 import { BodyStyled, HeaderStyled, ServicesTags, ProfileClinicPageStyled } from "./styles";
 import { Store } from "@material-ui/icons";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import api from "../../services/api";
 import { ERoutes } from "../../core/enums/routes";
 import { Section } from "../../components/layout/components/section/sections";
 import Loading from "../../components/layout/components/loading";
+/*Google maps */
+import {
+    GoogleMap,
+    InfoWindow,
+    Marker,
+    useLoadScript,
+} from "@react-google-maps/api";
+import axios from "axios";
 
 type RouteParamsT = {
     clinicId: string;
@@ -28,6 +36,15 @@ const ClinicProfile = () => {
     const routeParams = useParams<RouteParamsT>();
     const [clinic, setClinic] = useState<ClinicT>({} as ClinicT);
     const [loading, setLoading] = useState(false);
+    const [localization, setLocalization] = useState<{ address: string, lat: number, lng: number }>({} as { address: string, lat: number, lng: number });
+    //console.log("🚀 ~ file: index.tsx:40 ~ ClinicProfile ~ localization:", localization)
+    const markers = [localization];
+    const [mapRef, setMapRef] = useState();
+    const [isOpen, setIsOpen] = useState(false);
+    const [infoWindowData, setInfoWindowData] = useState<{ id: any, address: any }>();
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${localization.address}&key=${import.meta.env.VITE_REACT_APP_GOOGLE_API_KEY}`;
+    //const geocodingapi = `https://api.opencagedata.com/geocode/v1/json?q=${clinic.address}&key=${import.meta.env.VITE_REACT_APP_GEOCODINGAPI_KEY}`;
+    const center = useMemo(() => ({ lat: localization.lat, lng: localization.lng }), []); //Starts with clinic cordinators
 
     useEffect(() => {
         setLoading(true);
@@ -40,7 +57,42 @@ const ClinicProfile = () => {
                 console.log(`Erro: ${error.message}`);
                 setLoading(false);
             })
+
+        //console.log("CLínica:", clinic.address)
+        //console.log("URL:", `https://api.opencagedata.com/geocode/v1/json?q=${clinic.address}&key=${import.meta.env.VITE_REACT_APP_GEOCODINGAPI_KEY}`)
+
+        axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${clinic.address}&key=${import.meta.env.VITE_REACT_APP_GEOCODINGAPI_KEY}`)
+            .then(response => {
+                //response.data?.results[0] && console.log(response.data?.results[0].formatted, response.data?.results[0].geometry);
+                setLocalization({ address: response.data?.results[0].formatted, ...response.data?.results[0].geometry })
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error('Erro ao obter dados de geolocalização:', error);
+
+                setLoading(false);
+            })
     }, [routeParams.clinicId])
+
+    //@ts-ignore
+    const onLoad = (map) => {
+        const bounds = new google.maps.LatLngBounds();
+        markers?.forEach(({ lat, lng }) => bounds.extend({ lat, lng }));
+        map.fitBounds(bounds);
+    };
+
+    const { isLoaded } = useLoadScript({
+        googleMapsApiKey: import.meta.env.VITE_REACT_APP_GOOGLE_API_KEY || "",
+    });
+
+    //@ts-ignore
+    const handleMarkerClick = (id, lat, lng, address) => {
+        //@ts-ignore 
+        mapRef?.panTo({ lat, lng });
+        //@ts-ignore
+        setInfoWindowData({ id, address });
+        setIsOpen(true);
+    };
 
     return (
         <ProfileClinicPageStyled>
@@ -62,7 +114,7 @@ const ClinicProfile = () => {
                                     {
                                         clinic.services && clinic.services.length > 0 &&
                                         clinic.services.map(service =>
-                                            <span className="d-flex align-items-center">{service.name}</span>
+                                            <span key={service.name} className="d-flex align-items-center">{service.name}</span>
                                         )
                                     }
                                 </ServicesTags>
@@ -75,7 +127,42 @@ const ClinicProfile = () => {
                                 <div className="d-flex flex-column mb-4">
                                     <h3 className="mb-3">Endereço</h3>
                                     <p> {clinic.address}, {clinic.neighborhood}, nº {clinic.number} CEP {clinic.zip_code}</p>
-                                    <p></p>
+
+                                    <div style={{ height: "30vw", width: "80vw" }}>
+                                        {!isLoaded ? (
+                                            <h1>Buscando mapa...</h1>
+                                        ) : (
+                                            <>
+                                                <h3 className="mb-3">Região</h3>
+                                                <GoogleMap
+                                                    //onLoad={onLoad}
+                                                    mapContainerClassName="map-container"
+                                                    center={center}
+                                                    zoom={15}
+                                                >
+                                                    {markers.map(({ address, lat, lng }, ind) => (
+                                                        <Marker
+                                                            key={ind}
+                                                            position={{ lat, lng }}
+                                                            onClick={() => {
+                                                                handleMarkerClick(ind, lat, lng, address);
+                                                            }}
+                                                        >
+                                                            {isOpen && infoWindowData?.id === ind && (
+                                                                <InfoWindow
+                                                                    onCloseClick={() => {
+                                                                        setIsOpen(false);
+                                                                    }}
+                                                                >
+                                                                    <h3>{infoWindowData.address}</h3>
+                                                                </InfoWindow>
+                                                            )}
+                                                        </Marker>
+                                                    ))}
+                                                </GoogleMap>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
                             </Container>
                         </Section>

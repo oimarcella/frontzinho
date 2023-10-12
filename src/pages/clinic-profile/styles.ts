@@ -66,6 +66,10 @@ export const HeaderStyled = styled.div`
 `;
 
 export const BodyStyled = styled(Container)`
+    .map-container {
+    height: 100%;
+    width: 100%;
+    }
     h3{
         font-weight: bold;
         font-size: 1rem;
