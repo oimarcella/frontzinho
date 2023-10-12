@@ -43,10 +43,11 @@ const ClinicProfile = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [infoWindowData, setInfoWindowData] = useState<{ id: any, address: any }>();
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${localization.address}&key=${import.meta.env.VITE_REACT_APP_GOOGLE_API_KEY}`;
-    //const geocodingapi = `https://api.opencagedata.com/geocode/v1/json?q=${clinic.address}&key=${import.meta.env.VITE_REACT_APP_GEOCODINGAPI_KEY}`;
-    const center = useMemo(() => ({ lat: localization.lat, lng: localization.lng }), []); //Starts with clinic cordinators
+    //const center = useMemo(() => ({ lat: localization.lat, lng: localization.lng }), []); //Starts with clinic cordinators
+    const [zoom, setZoom] = useState(10);
 
     useEffect(() => {
+        console.clear()
         setLoading(true);
         api.get(`${ERoutes.CLINIC}/${routeParams.clinicId}`)
             .then(response => {
@@ -59,25 +60,26 @@ const ClinicProfile = () => {
             })
 
         //console.log("CLínica:", clinic.address)
-        //console.log("URL:", `https://api.opencagedata.com/geocode/v1/json?q=${clinic.address}&key=${import.meta.env.VITE_REACT_APP_GEOCODINGAPI_KEY}`)
+        console.log("URL:", `https://api.opencagedata.com/geocode/v1/json?q=${clinic.address}`) //&key=${import.meta.env.VITE_REACT_APP_GEOCODINGAPI_KEY}
 
-        axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${clinic.address}&key=${import.meta.env.VITE_REACT_APP_GEOCODINGAPI_KEY}`)
-            .then(response => {
-                //response.data?.results[0] && console.log(response.data?.results[0].formatted, response.data?.results[0].geometry);
-                setLocalization({ address: response.data?.results[0].formatted, ...response.data?.results[0].geometry })
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error('Erro ao obter dados de geolocalização:', error);
+        clinic.address &&
+            axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${clinic.address}&key=${import.meta.env.VITE_REACT_APP_GEOCODINGAPI_KEY}`)
+                .then(response => {
+                    setLocalization({ address: response.data?.results[0].formatted, ...response.data?.results[0].geometry })
+                    setLoading(false);
+                    setZoom(15);
+                })
+                .catch(error => {
+                    console.error('Erro ao obter dados de geolocalização:', error);
 
-                setLoading(false);
-            })
-    }, [routeParams.clinicId])
+                    setLoading(false);
+                })
+    }, [routeParams.clinicId, clinic.address])
 
     //@ts-ignore
     const onLoad = (map) => {
         const bounds = new google.maps.LatLngBounds();
-        markers?.forEach(({ lat, lng }) => bounds.extend({ lat, lng }));
+        markers?.forEach(({ lat, lng }) => bounds.extend({ lat: Number(lat), lng: Number(lng) }));
         map.fitBounds(bounds);
     };
 
@@ -128,16 +130,16 @@ const ClinicProfile = () => {
                                     <h3 className="mb-3">Endereço</h3>
                                     <p> {clinic.address}, {clinic.neighborhood}, nº {clinic.number} CEP {clinic.zip_code}</p>
 
-                                    <div style={{ height: "30vw", width: "80vw" }}>
-                                        {!isLoaded ? (
+                                    <div style={{ height: "80vw", width: "80vw" }}>
+                                        {(!isLoaded && loading) ? (
                                             <h1>Buscando mapa...</h1>
-                                        ) : (
+                                        ) : (isLoaded && !loading) ? (
                                             <>
                                                 <h3 className="mb-3">Região</h3>
                                                 <GoogleMap
                                                     //onLoad={onLoad}
                                                     mapContainerClassName="map-container"
-                                                    center={center}
+                                                    center={{ lat: localization.lat, lng: localization.lng }}
                                                     zoom={15}
                                                 >
                                                     {markers.map(({ address, lat, lng }, ind) => (
@@ -161,7 +163,10 @@ const ClinicProfile = () => {
                                                     ))}
                                                 </GoogleMap>
                                             </>
-                                        )}
+                                        )
+                                            :
+                                            <h3>Não foi possível carregar o mapa da região</h3>
+                                        }
                                     </div>
                                 </div>
                             </Container>
