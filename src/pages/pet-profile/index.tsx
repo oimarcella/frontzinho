@@ -310,7 +310,7 @@ function ProfilePetPage() {
                             {isGuardian &&
                                 <>
                                     <Section>
-                                        <h3 className="mb-2">Conexões<span className="new tag">Novidade</span></h3>
+                                        <h3 className="mb-2">Conexões</h3>
                                         <small>Administre as conexões aqui. Clicando no ícone <LinkOff style={{ width: "20px" }} /> você desfaz a conexão do seu pet com a clínica.</small>
                                         <div className="mt-4 d-flex flex-wrap gap-2">
                                             {
@@ -335,7 +335,7 @@ function ProfilePetPage() {
                                         </div>
                                     </Section>
                                     {/*<Section>
-                                        <h3 className="mb-4">O que vamos fazer hoje? <span className="soon tag">Em breve</span></h3>
+                                        <h3 className="mb-4">O que vamos fazer hoje?</h3>
                                         </Section>*/}
                                 </>
 
