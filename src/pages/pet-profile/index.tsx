@@ -357,7 +357,7 @@ function ProfilePetPage() {
                                         id="myIframe"
                                         src={`${url}?origin=${"iframe"}`}
                                         width="100%"
-                                        height="220px"
+                                        height="300px"
                                         title="Timeline"
                                     />
                                     <Link className="ms-3 ver-mais" to={`${ERoutes.TIMELINE}/${pet.id}`}>

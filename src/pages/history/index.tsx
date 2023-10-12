@@ -31,7 +31,7 @@ import { ERoutes } from '../../core/enums/routes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Container } from 'react-bootstrap';
-import { isSameDay, isSameMonth, isSameWeek, subMonths } from 'date-fns';
+import { addDays, isSameDay, isSameMonth, isSameWeek, subDays, subMonths, subWeeks } from 'date-fns';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
@@ -324,9 +324,23 @@ export default function HistoryPage() {
                 }));
                 break;
             }
+            case "YESTERDAY": {
+                setFilteredSteps(steps.filter(step => {
+                    if (isSameDay(new Date(step.created_date), subDays(today, 1))) {
+                        return step
+                    }
+                }));
+                break;
+            }
             case "THIS_WEEK": {
                 setFilteredSteps(steps.filter(step => {
                     if (isSameWeek(new Date(step.created_date), today)) return step
+                }));
+                break;
+            }
+            case "THIS_WEEK": {
+                setFilteredSteps(steps.filter(step => {
+                    if (isSameWeek(new Date(step.created_date), subWeeks(today, 1))) return step
                 }));
                 break;
             }
@@ -425,9 +439,12 @@ export default function HistoryPage() {
                         <h5>Busque por período</h5>
                         <div className="d-flex flex-wrap">
                             <span className={filter === "TODAY" ? "active" : ""} onClick={() => filter === "TODAY" ? handleFilter() : handleFilter("TODAY")}>Hoje</span>
+                            <span className={filter === "YESTERDAY" ? "active" : ""} onClick={() => filter === "YESTERDAY" ? handleFilter() : handleFilter("YESTERDAY")}>Ontem</span>
                             <span className={filter === "THIS_WEEK" ? "active" : ""} onClick={() => filter === "THIS_WEEK" ? handleFilter() : handleFilter("THIS_WEEK")}>Essa semana</span>
+                            <span className={filter === "LAST_WEEK" ? "active" : ""} onClick={() => filter === "LAST_WEEK" ? handleFilter() : handleFilter("LAST_WEEK")}>Semana passada</span>
                             <span className={filter === "THIS_MONTH" ? "active" : ""} onClick={() => filter === "THIS_MONTH" ? handleFilter() : handleFilter("THIS_MONTH")}>Esse mês</span>
                             <span className={filter === "LAST_MONTH" ? "active" : ""} onClick={() => filter === "LAST_MONTH" ? handleFilter() : handleFilter("LAST_MONTH")}>Mês passado</span>
+                            <span onClick={() => handleFilter()}>Limpar filtro</span>
                         </div>
                     </FilterOptions>
 
