@@ -111,6 +111,19 @@ export const HeaderPet = styled.div`
     small{
         margin-top: 20px;
     }
+
+    a{
+        background: var(--pink-500);
+        color: #fff;
+        padding: 10px 10px;
+        border-radius: 8px;
+
+        transition: ease-in-out all .3s;
+
+        :hover{
+            background-color: var(--pink-550);
+        }
+    }
 `;
 
 export const WrapperMark = styled.span`

@@ -32,6 +32,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Container } from 'react-bootstrap';
 import { addDays, isSameDay, isSameMonth, isSameWeek, subDays, subMonths, subWeeks } from 'date-fns';
+import { Add } from '@material-ui/icons';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
@@ -156,6 +157,7 @@ export default function HistoryPage() {
     const [pet, setPet] = useState({} as PetT);
     const navigate = useNavigate();
     const [filter, setFilter] = useState("DEFAULT");
+    const today = new Date();
 
     const moreDetailsElement = <div>
         <div className='d-flex justify-content-between mb-4'>
@@ -313,8 +315,6 @@ export default function HistoryPage() {
     }
 
     function filterTimeline(filter: string) {
-        const today = new Date();
-
         switch (filter) {
             case "TODAY": {
                 setFilteredSteps(steps.filter(step => {
@@ -432,7 +432,20 @@ export default function HistoryPage() {
                     <HeaderPet className='d-flex flex flex-column align-items-center'>
                         <img src={`/images/${pet.specie == "cachorro" ? "dog" : pet.specie == "gato" ? "cat" : "another_animals"}.svg`} />
                         <strong className='name'>{pet.name}</strong>
-                        <small className="mb-4"> Até o momento {pet.name} tem <strong>{steps.length} {steps.length > 1 ? "registros" : "registro"}</strong> na linha do tempo.</small>
+                        <small className="mb-4"> Até o momento {pet.name} tem <strong>{steps.filter(step => {
+                            if (isSameMonth(new Date(step.created_date), today)) return step
+                        }).length} {steps.filter(step => {
+                            if (isSameMonth(new Date(step.created_date), today)) return step
+                        }).length > 1 ? "registros" : "registro"}</strong> na linha do tempo referente a esse mês.</small>
+
+                        <a
+                            href={`${ERoutes.CREATE_TIMELINE}/${pet.id}/${pet.name}`}
+                            style={{ fontWeight: "bold" }}
+                            className='d-flex align-items-center'
+                        >
+                            <Add className='me-1' />
+                            Novo registro
+                        </a>
                     </HeaderPet>
 
                     <FilterOptions className='d-flex flex-column'>

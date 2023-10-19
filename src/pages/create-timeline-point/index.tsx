@@ -1,15 +1,17 @@
 import { Col, Container, Form, Row } from "react-bootstrap";
 import HeaderPage from "../../components/layout/components/headerPage/headerPage";
-import { MouseEventHandler, useEffect, useState } from "react";
+import { ChangeEvent, MouseEventHandler, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { show } from "../../redux/toastSlice";
 import api from "../../services/api";
 import { EHttpResponse } from "../../core/enums/http-responses";
 import Button from "../../components/layout/components/button/button";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/section/sections";
 import { selectUser } from "../../redux/userSlice";
 import { ERoutes } from "../../core/enums/routes";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 type TimelinePointT = {
     title: string;
@@ -34,6 +36,13 @@ function CreateNewTimelinePoint() {
     const params = useParams<QueryParamsT>();
     const userLogged = useSelector(selectUser);
     const navigate = useNavigate();
+
+    const paramsGDrive = {
+        folderId: import.meta.env.VITE_REACT_APP_NEXT_PUBLIC_FOLDER_ID,
+        clientId: import.meta.env.VITE_REACT_APP_NEXT_PUBLIC_CLIENT_ID,
+        privateKey: import.meta.env.VITE_REACT_APP_NEXT_PUBLIC_PRIVATE_KEY,
+        clientEmail: import.meta.env.VITE_REACT_APP_NEXT_PUBLIC_CLIENT_EMAIL,
+    };
 
     async function send() {
         try {
@@ -81,6 +90,11 @@ function CreateNewTimelinePoint() {
                     title="Linha do tempo"
                     text={`Novo registro para ${params.petName}`}
                 />
+
+                <Link to={`${ERoutes.PET}/${params.petId}`}>
+                    <FontAwesomeIcon className="me-2" icon={faArrowLeft} />
+                    Voltar
+                </Link>
 
                 <Form
                     className="d-flex flex-column align-items-end mt-4"

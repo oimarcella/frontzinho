@@ -4,7 +4,7 @@ import { ReactNode, useEffect, useState } from "react";
 import api from "../../services/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Section } from "../../components/layout/components/section/sections";
-import { Add, LinkOff, LinkOutlined, Pets } from "@material-ui/icons";
+import { Add, LinkOff, LinkOutlined, Pets, Timeline } from "@material-ui/icons";
 import { ERoutes } from "../../core/enums/routes";
 import { WifiProtectedSetup } from "@mui/icons-material";
 import useWindowDimensions from "../../core/hooks/useWindowDimensions";
@@ -255,7 +255,7 @@ function ProfilePetPage() {
                                                 onClick={handleDrawer}
                                             >
                                                 <WifiProtectedSetup />
-                                                {width > 1000 && <strong className="ms-1">Trocar</strong>}
+                                                {width > 1000 && <strong className="ms-1">Ver outro pet</strong>}
                                             </ButtonStyled>
                                             <ButtonStyled variant="body2" className="d-flex align-items-center">
                                                 <a
@@ -275,9 +275,19 @@ function ProfilePetPage() {
                                                     onClick={() => setIsOpenModalConnect(true)}
                                                 >
                                                     <LinkOutlined />
-                                                    {width > 1000 && <strong className="ms-1">Conectar à clínica</strong>}
+                                                    {width > 1000 && <strong className="ms-1">Conectar a uma clínica</strong>}
                                                 </ButtonStyled>
                                             }
+                                            <ButtonStyled
+                                                variant="body2" className="d-flex align-items-center"
+                                            >
+                                                <Timeline />
+                                                {width > 1000 &&
+                                                    <a
+                                                        href={`${ERoutes.TIMELINE}/${pet.id}`}
+                                                        style={{ fontWeight: "bold" }} className="ms-1">Linha do tempo</a>
+                                                }
+                                            </ButtonStyled>
                                         </div>
 
                                         <div className="d-flex flex-md-row flex-column justify-content-center align-items-center justify-content-md-start">
