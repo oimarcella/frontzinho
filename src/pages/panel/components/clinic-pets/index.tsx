@@ -66,11 +66,6 @@ const ClinicPets = () => {
         setLoading(false);
     }, [userLogged.id])
 
-    const MyOverlay = ({ id, children, title }: { id: any, children: ReactNode, title: string }) => (
-        <OverlayTrigger overlay={<Tooltip id={id}>{title}</Tooltip>}>
-            <span style={{ cursor: "pointer" }}>{children}</span>
-        </OverlayTrigger>
-    );
 
     return (
         <ContainerStyled>

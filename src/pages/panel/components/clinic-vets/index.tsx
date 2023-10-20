@@ -14,6 +14,7 @@ import { show } from "../../../../redux/toastSlice";
 import { useNavigate } from "react-router-dom";
 import { ERoutes } from "../../../../core/enums/routes";
 import { Section } from "../../../../components/layout/components/section/sections";
+import { Add } from "@material-ui/icons";
 
 type VetT = {
     role: string,
@@ -79,7 +80,7 @@ const ClinicVets = () => {
     return (
         <>
             <Section>
-                <div className="d-flex align-items-center justify-content-start mb-2">
+                <div className="d-flex align-items-center justify-content-start">
                     <h3>Veterinários da sua clínica</h3>
                     <Button
                         onClick={handleAdd}
@@ -90,9 +91,11 @@ const ClinicVets = () => {
                             height: "30px"
                         }}>+</Button>
                 </div>
+                <small>Aqui estão os veterinários cadastrados, você pode adicionar outros clicando no <Add />.</small>
 
                 {(!isLoading && (vets.length > 0)) ?
                     <Swiper
+                        className="mt-3"
                         spaceBetween={viewWidth > 1000 ? 30 : 10}
                         slidesPerView={slidesPerView}
                         onSlideChange={() => { }}

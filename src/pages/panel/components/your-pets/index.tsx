@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CardStyled } from "./styles";
 import { Form, Col, Row, Modal } from "react-bootstrap";
 import { IconButton, Menu, MenuItem } from "@material-ui/core";
-import { MoreVert } from "@material-ui/icons";
+import { Add, MoreVert } from "@material-ui/icons";
 import { selectUser } from '../../../../redux/userSlice';
 import useWindowDimensions from '../../../../core/hooks/useWindowDimensions';
 import Button from "../../../../components/layout/components/button/button";
@@ -56,13 +56,6 @@ const YourPets = () => {
     if (viewWidth > 1000) slidesPerView = 3.3;
     else if (viewWidth < 400) slidesPerView = 1.3;
     else slidesPerView = 2.3;
-
-    const generatePastelColor = (index: number) => {
-        const baseHue = (index * 137.3) % 360; // Varia o tom da cor com base no índice
-        const saturation = 70; // Defi3e a saturação
-        const lightness = 80; // Define a luminosidade
-        return `hsl(${baseHue}, ${saturation}%, ${lightness}%)`;
-    };
 
     function clearForm() {
         setPet(prevPet => ({
@@ -403,7 +396,7 @@ const YourPets = () => {
             </Modal>
 
             <Section>
-                <div className="d-flex align-items-center justify-content-start mb-2">
+                <div className="d-flex align-items-center justify-content-start">
                     <h3>Seus pets</h3>
                     <Button
                         onClick={handleAddPet}
@@ -414,9 +407,12 @@ const YourPets = () => {
                             height: "30px"
                         }}>+</Button>
                 </div>
+                <small>Aqui estão os seus pets cadastrados, você pode adicionar outros clicando no <Add />.</small>
+
 
                 {(!isLoading && (pets.length > 0)) ?
                     <Swiper
+                        className="mt-3"
                         spaceBetween={viewWidth > 1000 ? 30 : 10}
                         slidesPerView={slidesPerView}
                         onSlideChange={() => { }}
@@ -448,54 +444,3 @@ const YourPets = () => {
 }
 
 export default YourPets;
-
-{/*<CardStyled
-                                                className="d-flex flex-column align-items-center justify-content-center"
-                                                style={{ background: generatePastelColor(index) }}
-                                            >
-                                                <div className="d-flex flex-row-reverse align-items-start justify-content-between">
-                                                    <IconButton
-                                                        aria-label="more"
-                                                        onClick={(e) => handleMoreOptions(e, pet.id)}
-                                                        aria-haspopup="true"
-                                                        aria-controls="long-menu"
-                                                    >
-                                                        <MoreVert />
-                                                    </IconButton>
-                                                    <Menu
-                                                        id={`more-options-${pet.id}-${index}`}
-                                                        anchorOrigin={{
-                                                            vertical: 'bottom',
-                                                            horizontal: 'left',
-                                                        }}
-                                                        transformOrigin={{
-                                                            vertical: 'top',
-                                                            horizontal: 'right',
-                                                        }}
-                                                        aria-labelledby="demo-positioned-button"
-                                                        anchorEl={openMoreOptions as any}
-                                                        keepMounted onClose={handleClose}
-                                                        open={whichMoreOptions === pet.id}
-                                                    >
-                                                        <MenuItem onClick={() => {
-                                                            if (pet.id) deletePet(pet.id)
-                                                        }}>Remover</MenuItem>
-                                                        <MenuItem onClick={() => {
-                                                            if (pet.id) handleEditPet(pet.id)
-                                                        }}>Editar</MenuItem>
-                                                        <MenuItem onClick={() => {
-                                                            if (pet.id) navigate(`${ERoutes.PET}/${pet.id}`);
-                                                        }}>Perfil</MenuItem>
-                                                    </Menu>
-
-                                                    <div className="d-flex justify-content-center">
-                                                        <img
-                                                            src={`/images/${pet.specie == "cachorro" ?
-                                                                "dog" : pet.specie == "gato" ?
-                                                                    "cat" : "another_animals"}.svg`}
-                                                            alt={`${pet.name} - ${pet.specie}`}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                {pet.name}
-                                                    </CardStyled>*/}
