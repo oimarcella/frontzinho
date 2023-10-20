@@ -33,6 +33,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Container } from 'react-bootstrap';
 import { addDays, isSameDay, isSameMonth, isSameWeek, subDays, subMonths, subWeeks } from 'date-fns';
 import { Add } from '@material-ui/icons';
+import ClinicAds from '../../components/layout/components/clinic-ads';
 
 type MyStepIconPropsT = {
     extraParams: Record<string, any>;
@@ -155,7 +156,6 @@ export default function HistoryPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [userFound, setUserFound] = useState<UserFoundT>();
     const [pet, setPet] = useState({} as PetT);
-    console.log("🚀 ~ file: index.tsx:158 ~ HistoryPage ~ pet:", pet)
     const navigate = useNavigate();
     const [filter, setFilter] = useState("DEFAULT");
     const today = new Date();
@@ -424,8 +424,7 @@ export default function HistoryPage() {
             </>
             :
             <Section>
-                <ContainerStyled>
-
+                <ContainerStyled style={{ marginBottom: '100px' }}>
                     <HeaderPage
                         textToStyle={"completa"}
                         style={{ color: "#FF41AD" }}
@@ -562,8 +561,9 @@ export default function HistoryPage() {
                             </Box>
                         </Overflow>
                     </div>
-
                 </ContainerStyled>
+
+                <ClinicAds orientation="horizontal" quantity={3} />
             </Section>
     );
 }

@@ -34,7 +34,6 @@ const TopBarComponent = () => {
 	const urlParams = new URLSearchParams(location.search);
 	const navigate = useNavigate();
 	const [pets, setPets] = useState<PetT[]>([]);
-	console.log("🚀 ~ file: topbar.tsx:37 ~ TopBarComponent ~ pets:", pets)
 	const [vet, setVet] = useState<VetT>({} as VetT);
 
 	function redirect(link: string) {

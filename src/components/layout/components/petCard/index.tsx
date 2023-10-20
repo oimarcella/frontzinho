@@ -54,9 +54,7 @@ const PetCard = ({ pet, index, ...props }: PetCardT) => {
                         <RemoveRedEye className="icon-actions" onClick={() => navigate(`${ERoutes.PET}/${pet.id}`)} />
                     </MyOverlay>
                     <MyOverlay className="pe-1 ps-1" title="Linha do tempo" id={pet.id}>
-                        <Link to={`${ERoutes.TIMELINE}/${pet.id}`}>
-                            <Timeline />
-                        </Link>
+                        <Timeline className="icon-actions" onClick={() => navigate(`${ERoutes.TIMELINE}/${pet.id}`)} />
                     </MyOverlay>
                     {
                         userLogged.role === "user" &&

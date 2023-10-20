@@ -17,6 +17,7 @@ import { show } from "../../redux/toastSlice";
 import { delay } from "@reduxjs/toolkit/dist/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import ClinicAds from "../../components/layout/components/clinic-ads";
 
 type QueryParamsT = {
     petId: string;
@@ -351,6 +352,9 @@ function ProfilePetPage() {
                                 </>
 
                             }
+
+                            <ClinicAds orientation="horizontal" quantity={3} />
+
                             <Section>
                                 <div className="d-flex align-items-center mb-4">
                                     <div className="d-flex flex-column">
@@ -363,7 +367,7 @@ function ProfilePetPage() {
 
                                 </div>
                                 {/*@ts-ignore*/}
-                                <div className="d-flex flex-column align-items-center">
+                                <div className="d-flex flex-column align-items-center" style={{ marginTop: '100px' }}>
                                     <iframe
                                         id="myIframe"
                                         src={`${url}?origin=${"iframe"}`}
@@ -375,7 +379,6 @@ function ProfilePetPage() {
                                         Ver mais informações
                                         <FontAwesomeIcon className="ms-1" icon={faArrowRight} />
                                     </Link>
-
                                 </div>
                             </Section>
                         </BodyStyled>
