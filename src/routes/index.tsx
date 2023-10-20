@@ -49,7 +49,6 @@ const AppRoutes = () => {
           <Route path={ERoutes.PROFILE} element={<MyAccount />} />
           <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
           <Route path={ERoutes.PANEL} element={<PanelPage />} />
-          <Route path={ERoutes.TIMELINE} element={<HistoryPage />} />
           <Route path={`${ERoutes.CLINIC}/:clinicId`} element={<ClinicProfile />} />
           <Route path={`${ERoutes.PET}/:petId`} element={<ProfilePetPage />} />
           <Route path={`${ERoutes.TIMELINE}/:petId`} element={<HistoryPage />} />

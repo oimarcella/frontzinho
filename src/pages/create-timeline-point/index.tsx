@@ -12,6 +12,7 @@ import { selectUser } from "../../redux/userSlice";
 import { ERoutes } from "../../core/enums/routes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FormStyled } from "./styles";
 
 type TimelinePointT = {
     title: string;
@@ -36,13 +37,7 @@ function CreateNewTimelinePoint() {
     const params = useParams<QueryParamsT>();
     const userLogged = useSelector(selectUser);
     const navigate = useNavigate();
-
-    const paramsGDrive = {
-        folderId: import.meta.env.VITE_REACT_APP_NEXT_PUBLIC_FOLDER_ID,
-        clientId: import.meta.env.VITE_REACT_APP_NEXT_PUBLIC_CLIENT_ID,
-        privateKey: import.meta.env.VITE_REACT_APP_NEXT_PUBLIC_PRIVATE_KEY,
-        clientEmail: import.meta.env.VITE_REACT_APP_NEXT_PUBLIC_CLIENT_EMAIL,
-    };
+    const [clinica, setClinica] = useState({} as { name: string | null });
 
     async function send() {
         try {
@@ -53,7 +48,7 @@ function CreateNewTimelinePoint() {
             });
             dispatch(show({ message: `Novo registro na linha do tempo!`, type: "success" }));
             setLoading(false);
-            navigate(`${ERoutes.PET}/${params.petId}`)
+            navigate(`${ERoutes.TIMELINE}/${params.petId}`)
 
         } catch (error: any) {
             setLoading(false);
@@ -81,6 +76,37 @@ function CreateNewTimelinePoint() {
         }
     }
 
+    function getClinica(clinica_id: number) {
+        api.get(`clinicas/${clinica_id}`)
+            .then(response => {
+                setClinica(response.data);
+                setTimelinePoint(prev => ({ ...prev, clinic: response.data?.name }))
+            })
+            .catch(error => {
+                console.log("Erro ao buscar clinica:", error);
+            })
+    }
+
+    useEffect(() => {
+        if (userLogged.role === "vet") {
+
+            let vet: { clinica_id: number | null } = { clinica_id: null };
+            api.get(`vets/${userLogged.id}`)
+                .then(response => {
+                    vet = response.data;
+                    getClinica(response.data.clinica_id)
+                })
+                .catch(error => {
+                    console.log("Erro ao buscar dados do veterinario:", error);
+                })
+
+
+            setTimelinePoint(prev => ({ ...prev, vet: userLogged.name }));
+
+
+        }
+    }, [userLogged.role]);
+
     return (
         <Section>
             <Container>
@@ -96,7 +122,7 @@ function CreateNewTimelinePoint() {
                     Voltar
                 </Link>
 
-                <Form
+                <FormStyled
                     className="d-flex flex-column align-items-end mt-4"
                     validated={validated}
                     onSubmit={handleSubmit}
@@ -110,14 +136,48 @@ function CreateNewTimelinePoint() {
                             </Col>
                             <Col xs={12} md={3}>
                                 <Form.Group className="mb-3" controlId="vet">
-                                    <Form.Control value={timelinePoint.vet} required type="text" placeholder="Veterinário" onChange={e => setTimelinePoint(prev => ({ ...prev, vet: e.target.value }))} />
+                                    {userLogged.role === "vet" ?
+                                        <Form.Control value={timelinePoint.vet} required type="text"
+                                            disabled
+                                            placeholder="Veterinário"
+                                            onChange={e => setTimelinePoint(prev => ({ ...prev, vet: e.target.value }))} />
+                                        :
+                                        <Form.Control value={timelinePoint.vet} required type="text"
+                                            placeholder="Veterinário"
+                                            onChange={e => setTimelinePoint(prev => ({ ...prev, vet: e.target.value }))} />
+                                    }
                                 </Form.Group>
                             </Col>
-                            <Col xs={12} md={3}>
-                                <Form.Group className="mb-3" controlId="clinic">
-                                    <Form.Control value={timelinePoint.clinic} required type="text" placeholder="Clínica" onChange={e => setTimelinePoint(prev => ({ ...prev, clinic: e.target.value }))} />
-                                </Form.Group>
-                            </Col>
+                            {userLogged.role === "vet" ?
+                                <Col xs={12} md={3}>
+                                    <Form.Group className="mb-3" controlId="clinic">
+                                        <Form.Control
+                                            value={timelinePoint.clinic} required
+                                            disabled
+                                            type="text"
+                                            placeholder="Clínica"
+                                            onChange={e => setTimelinePoint(prev => ({ ...prev, clinic: e.target.value }))} />
+                                    </Form.Group>
+                                </Col>
+                                :
+                                userLogged.role === "clinica" ?
+                                    <Col xs={12} md={3}>
+                                        <Form.Group className="mb-3" controlId="clinic">
+                                            <Form.Control
+                                                disabled
+                                                value={userLogged.name} required
+                                                type="text"
+                                                placeholder="Clínica"
+                                                onChange={e => setTimelinePoint(prev => ({ ...prev, clinic: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                                    :
+                                    <Col xs={12} md={3}>
+                                        <Form.Group className="mb-3" controlId="clinic">
+                                            <Form.Control value={timelinePoint.clinic} required type="text" placeholder="Clínica" onChange={e => setTimelinePoint(prev => ({ ...prev, clinic: e.target.value }))} />
+                                        </Form.Group>
+                                    </Col>
+                            }
                             <Col xs={12} md={3}>
                                 <Form.Select aria-label="Tipo do registro"
                                     value={timelinePoint.type}
@@ -134,7 +194,10 @@ function CreateNewTimelinePoint() {
                         <Row className="mt-3 mt-lg-0">
                             <Col xs={12}>
                                 <Form.Group className="mb-3" controlId="description">
-                                    <Form.Control as="textarea" value={timelinePoint.description} required type="text" placeholder="Description" onChange={e => setTimelinePoint(prev => ({ ...prev, description: e.target.value }))} />
+                                    <Form.Control as="textarea" value={timelinePoint.description} required type="text" placeholder="Description" onChange={e => setTimelinePoint(prev => ({
+                                        ...prev,
+                                        description: e.target.value
+                                    }))} />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -149,7 +212,7 @@ function CreateNewTimelinePoint() {
                     >
                         {isLoading ? 'Carregando…' : 'Criar'}
                     </Button>
-                </Form >
+                </FormStyled>
             </Container >
         </Section >
     )

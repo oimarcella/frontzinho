@@ -2,10 +2,14 @@ import { Drawer, Typography } from "@material-ui/core";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
 
+interface Props {
+    gender?: string; // backgroundColor é opcional
+}
+
 export const ProfilePetPageStyled = styled.div``;
 
-export const HeaderStyled = styled.div`
-    background: var(--light-blue-100);
+export const HeaderStyled = styled.div<Props>`
+    background-color: ${props => props.gender === "macho" ? `var(--light-blue-100)` : `var(--pink-100)`};
     margin-top: 1px;
 
     img{
@@ -81,11 +85,12 @@ export const CompanyConnectedStyled = styled.div`
     }
 `;
 
-export const ButtonStyled = styled(Typography)`
+export const ButtonStyled = styled(Typography) <Props>`
     cursor: pointer;
     transition: all ease-in-out .3s;
 
-    background: var(--light-blue-300);
+    background: ${props => props.gender === "macho" ? `var(--light-blue-200)` : `var(--pink-450)`};
+
     font-size: 11px;
     width: fit-content;
     padding: 8px 10px;

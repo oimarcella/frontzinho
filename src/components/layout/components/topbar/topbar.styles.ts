@@ -1,10 +1,25 @@
 import { Nav, Navbar, NavbarBrand } from "react-bootstrap";
 import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
+
+export const LinkStyledName = styled(Link)`
+    position: relative;
+
+    span{
+        position: absolute;
+        bottom:20px;
+        left: 40%;
+        color: var(--light-blue-400);
+        font-style: italic;
+        font-weight: 400;
+        font-size: 12px;
+    }
+`;
+
 export const NavBarStyled = styled(Navbar)`
-    padding: 20px 1rem;
+    padding: 30px 1rem;
     z-index: 3;
     /*Quando estiver na rota home o navbar será absolute*/
     /*Nas outras ele será relative

@@ -130,6 +130,7 @@ function ProfilePetPage() {
         }
         catch (error) {
             console.log("Erro ao tentar conectar pet à clínica");
+            console.log("🚀 ~ file: index.tsx:166 ~ connectPet ~ pet:", pet)
             dispatch(
                 show({ message: "Não foi possível conectar-se à clínica no momento", delay: 4000, type: "error" })
             );
@@ -179,7 +180,6 @@ function ProfilePetPage() {
 
         if (isGuardian) {
             // é tutor
-            console.log("Sou tutor!");
 
             getUserPets(user.id);
             getConnectedClinics(pet.id);
@@ -187,13 +187,10 @@ function ProfilePetPage() {
         }
         else if (user.role === "clinica") {
             // é clínica
-            console.log("Sou clínica!");
-
             getPetsByClinicId(user.id);
         }
         else {
             // é veterinário
-            console.log("Sou veterinário!");
             getVetById(user.id);
             getPetsByClinicId(clinicId); //verificar de qual clinica o veterinario
         }
@@ -209,13 +206,13 @@ function ProfilePetPage() {
     }, [pet.id]);
 
     useEffect(() => {
-        setUrl(prev => prev = currentUrl === "localhost:5173" ? `http://localhost:5173/linha-do-tempo/${params.petId}` : `https://petpass-front.vercel.app/linha-do-tempo/${params.petId}`)
+        setUrl(prev => prev = currentUrl === "localhost:5173" ? `http://localhost:5173/linha-do-tempo/${params.petId}` : `https://petpass-front.vercel.app/linha-do-tempo/${params.petId}`);
     }, [params.petId])
 
     const MyOverlay = ({ id, children, title }: { id: any, children: ReactNode, title: string }) => (
-        <OverlayTrigger overlay={<Tooltip id={id}>{title}</Tooltip>}>
+        <OverlayTrigger overlay={< Tooltip id={id} > {title}</Tooltip>}>
             <a href="#">{children}</a>
-        </OverlayTrigger>
+        </OverlayTrigger >
     );
 
     return (
@@ -244,20 +241,22 @@ function ProfilePetPage() {
                                 </Form>
                             </Modal.Body>
                         </Modal>
-                        <HeaderStyled>
+                        <HeaderStyled gender={pet.gender}>
                             <Section>
                                 <Container className="d-flex flex-column flex-md-row align-items-center justify-content-md-between justify-content-center">
 
                                     <div className="d-flex flex-column">
                                         <div className="mb-4 d-flex gap-2 flex-wrap justify-content-center justify-content-md-start align-items-center flex-row">
                                             <ButtonStyled
+                                                gender={pet.gender}
                                                 variant="body2" className="d-flex align-items-center justify-content-center"
                                                 onClick={handleDrawer}
                                             >
                                                 <WifiProtectedSetup />
                                                 {width > 1000 && <strong className="ms-1">Ver outro pet</strong>}
                                             </ButtonStyled>
-                                            <ButtonStyled variant="body2" className="d-flex align-items-center">
+                                            <ButtonStyled
+                                                gender={pet.gender} variant="body2" className="d-flex align-items-center">
                                                 <a
                                                     href={`${ERoutes.CREATE_TIMELINE}/${pet.id}/${pet.name}`}
                                                     style={{ fontWeight: "bold" }}>
@@ -271,6 +270,7 @@ function ProfilePetPage() {
                                             </ButtonStyled>
                                             {isGuardian &&
                                                 <ButtonStyled
+                                                    gender={pet.gender}
                                                     variant="body2" className="d-flex align-items-center"
                                                     onClick={() => setIsOpenModalConnect(true)}
                                                 >
@@ -279,6 +279,7 @@ function ProfilePetPage() {
                                                 </ButtonStyled>
                                             }
                                             <ButtonStyled
+                                                gender={pet.gender}
                                                 variant="body2" className="d-flex align-items-center"
                                             >
                                                 <Timeline />
@@ -293,7 +294,7 @@ function ProfilePetPage() {
                                         <div className="d-flex flex-md-row flex-column justify-content-center align-items-center justify-content-md-start">
                                             <img src={`/images/${pet.specie == "cachorro" ? "dog" : pet.specie == "gato" ? "cat" : "another_animals"}.svg`} />
                                             <div className="d-flex flex-column ms-0 ms-md-4 my-4 my-md-0 align-items-center align-items-md-start">
-                                                <strong>{pet.name}</strong>
+                                                <strong>{pet.name || "..."}</strong>
                                                 <div className="wrapper-text">
                                                     <p>{pet.description ? pet.description : "Sem descrição"}</p>
                                                 </div>

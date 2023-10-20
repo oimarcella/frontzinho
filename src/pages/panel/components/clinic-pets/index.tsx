@@ -50,10 +50,8 @@ const ClinicPets = () => {
     }
 
     async function getPetsByClinicId(clinicId: number) {
-        console.log("🚀 ~ file: index.tsx:53 ~ getPetsByClinicId ~ clinicId:", clinicId)
         const { data } = await api.get(`/clinicas/${clinicId}/pets`);
         setPets(data);
-        console.log("🚀 ~ file: index.tsx:56 ~ getPetsByClinicId ~ data:", data)
     }
 
     useEffect(() => {
@@ -78,6 +76,9 @@ const ClinicPets = () => {
         <ContainerStyled>
             <Section>
                 <h3>Pacientes</h3>
+                <small>Os pacientes conectados à clínica aparecem aqui.
+                    Caso necessite de acesso ao perfil de algum pet que não aparece nesta seção, solicite ao tutor que faça a conexão com a clínica.
+                </small>
                 {
                     isLoading ?
                         <Loading />

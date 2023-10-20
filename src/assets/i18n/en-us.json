@@ -5,5 +5,6 @@
   "topbar_testimonials_link": "Testimonials",
   "topbar_recommendation_link": "Recommendation",
   "topbar_profile_link": "Account",
-  "topbar_historic_link": "Historical"
+  "topbar_historic_link": "Timeline",
+  "topbar_panel_link": "Home"
 }

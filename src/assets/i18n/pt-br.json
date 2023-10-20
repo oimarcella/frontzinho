@@ -5,6 +5,7 @@
   "topbar_testimonials_link": "Depoimentos",
   "topbar_recommendation_link": "Indicação",
   "topbar_profile_link": "Perfil",
-  "topbar_historic_link": "Histórico",
-  "topbar_historic_create" : "Criar ponto na linha do tempo"
+  "topbar_historic_link": "Linha do tempo",
+  "topbar_historic_create": "Criar ponto na linha do tempo",
+  "topbar_panel_link": "Início"
 }

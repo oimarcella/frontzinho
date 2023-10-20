@@ -1,7 +1,7 @@
-import { Delete, Edit, RemoveRedEye } from "@material-ui/icons";
+import { Delete, Edit, RemoveRedEye, Timeline } from "@material-ui/icons";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { CardStyled } from "./styles";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ERoutes } from "../../../../core/enums/routes";
 import { ReactNode } from "react";
 import { useSelector } from "react-redux";
@@ -50,7 +50,14 @@ const PetCard = ({ pet, index, ...props }: PetCardT) => {
                 />
                 {pet.name}
                 <div className="mt-3 d-flex align-items-center">
-                    <MyOverlay className="pe-1 ps-1" title="Perfil" id={pet.name}><RemoveRedEye className="icon-actions" onClick={() => navigate(`${ERoutes.PET}/${pet.id}`)} /></MyOverlay>
+                    <MyOverlay className="pe-1 ps-1" title="Perfil" id={pet.name}>
+                        <RemoveRedEye className="icon-actions" onClick={() => navigate(`${ERoutes.PET}/${pet.id}`)} />
+                    </MyOverlay>
+                    <MyOverlay className="pe-1 ps-1" title="Linha do tempo" id={pet.id}>
+                        <Link to={`${ERoutes.TIMELINE}/${pet.id}`}>
+                            <Timeline />
+                        </Link>
+                    </MyOverlay>
                     {
                         userLogged.role === "user" &&
                         <>

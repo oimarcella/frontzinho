@@ -155,6 +155,7 @@ export default function HistoryPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [userFound, setUserFound] = useState<UserFoundT>();
     const [pet, setPet] = useState({} as PetT);
+    console.log("🚀 ~ file: index.tsx:158 ~ HistoryPage ~ pet:", pet)
     const navigate = useNavigate();
     const [filter, setFilter] = useState("DEFAULT");
     const today = new Date();
@@ -233,18 +234,19 @@ export default function HistoryPage() {
         return new Date(date).toLocaleString(navigator.language, { dateStyle, timeStyle });
     }
 
-    useEffect(() => {
-        const el = ref.current;
-        if (width) {
-            if (el) {
-                el.scrollLeft = el.scrollWidth - el.clientWidth;
-            }
-        }
-    }, [width]);
+    function getPetById() {
+        api.get(`/pets/${params.petId}`)
+            .then(response => {
+                setPet(response.data);
+            })
+            .catch(error => {
+                console.log(`Erro: ${error}`);
+                dispatch(show({ message: "Não foi possível encontrar dados necessários do pet.", type: "error" }));
+                navigate(`${ERoutes.PET}/${params.petId}`);
+            });
+    }
 
-    useEffect(() => {
-        setIsLoading(true);
-
+    function getTimelinePet() {
         api.get(`/pets/${params.petId}/timeline`)
             .then(response => {
                 setSteps(response.data);
@@ -259,20 +261,27 @@ export default function HistoryPage() {
                 dispatch(show({ message: "Não foi possível carregar os dados da linha do tempo.", type: "error" }));
                 navigate(`${ERoutes.PET}/${params.petId}`);
             });
+    }
 
-        api.get(`/pets/${params.petId}`)
-            .then(response => {
-                setPet(response.data);
-            })
-            .catch(error => {
-                console.log(`Erro: ${error}`);
-                dispatch(show({ message: "Não foi possível encontrar dados necessários.", type: "error" }));
-                navigate(`${ERoutes.PET}/${params.petId}`);
-            });
+    useEffect(() => {
+        const el = ref.current;
+        if (width) {
+            if (el) {
+                el.scrollLeft = el.scrollWidth - el.clientWidth;
+            }
+        }
+    }, [width]);
+
+    useEffect(() => {
+        setIsLoading(true);
+
+        getTimelinePet();
+
+        getPetById();
 
         setTimeout(function () { setIsLoading(false); }, 2000);
 
-    }, [params.petId, filter])
+    }, [params.petId]) //filter como dependencia
 
     //resolve a questão de assincronismo do react e a atualizacao do conteudo do modal
     useEffect(() => {
@@ -338,7 +347,7 @@ export default function HistoryPage() {
                 }));
                 break;
             }
-            case "THIS_WEEK": {
+            case "LAST_WEEK": {
                 setFilteredSteps(steps.filter(step => {
                     if (isSameWeek(new Date(step.created_date), subWeeks(today, 1))) return step
                 }));
