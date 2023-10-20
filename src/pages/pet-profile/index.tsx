@@ -36,8 +36,6 @@ type PetT = {
     castrated: boolean;
 }
 
-/*TODO - O que vamos fazer hoje? */
-
 function ProfilePetPage() {
     const currentUrl = window.location.host;
     const params = useParams<QueryParamsT>();

@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Drawer, Typography } from "@mui/material";
 import { TimelineContent, TimelineItem } from "@mui/lab";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
@@ -185,5 +185,62 @@ export const SummaryStyled = styled.p`
 
     @media(max-width:1000px){
         font-size: 10px!important;
+    }
+`;
+
+export const ButtonStyled = styled(Typography)`
+    cursor: pointer;
+    transition: all ease-in-out .3s;
+
+    background: var(--light-blue-200);
+
+    font-size: 11px;
+    width: fit-content;
+    padding: 8px 10px;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
+
+
+    :hover{
+        background: var(--light-blue-200);
+    }
+`;
+
+export const DrawerStyled = styled(Drawer)`
+    ul{
+        width: 400px;
+        list-style: none;
+        padding: 0;
+        height: 100%;
+        background: var(--light-blue-80);
+        max-height: 100%;
+        overflow-y: auto;
+        margin-bottom: 0;
+        
+        @media (max-width: 1000px) {
+            width: 90vw;
+        }
+    }
+    li{
+        cursor: pointer;
+        padding: .8rem;
+        width: 100%;
+        transition: all ease-in-out .3s;
+        
+        :hover{
+            background: var(--light-blue-500) !important;
+            color: #fff;
+        }
+    }
+    li:nth-child(odd){
+        padding: .8rem;
+        width: 100%;
+        background: var(--light-blue-100);
+        
+        :hover{
+            background: var(--light-blue-500) !important;
+            color: #fff;
+        }
     }
 `;
