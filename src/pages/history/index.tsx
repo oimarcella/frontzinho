@@ -401,7 +401,6 @@ export default function HistoryPage() {
 
     async function getPetsByClinicId(clinicId: number) {
         const { data } = await api.get(`/clinicas/${clinicId}/pets`);
-        console.log("🚀 ~ file: index.tsx:405 ~ getPetsByClinicId ~ data:", data)
         setPets(data);
     }
 
