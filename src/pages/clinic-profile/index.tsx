@@ -138,19 +138,22 @@ const ClinicProfile = () => {
     function connectServiceAndClinic(service: number) {
         console.log("conectar-serviço")
 
+        const newservice = services.find(s => s.id === service);
+
         api.post(`${ERoutes.CLINIC}/conectar-serviço`, {
             clinica: userLogged.id,
             servico: service
         })
             .then(response => {
-                dispatch(show(
-                    show({ message: "Serviço adicionado!", delay: 4000, type: "success" })
-                ));
+                dispatch(
+                    show({ message: "Serviço adicionado!", type: "success" })
+                );
 
                 if (!clinic.services) {
                     clinic.services = [];
                 }
-                const newServicesArray = [...clinic.services, { name: otherService, id: service }];
+                const newServicesArray = [...clinic.services, { name: newservice?.name || "", id: service }];
+
                 setClinic(prev => ({
                     ...prev,
                     services: newServicesArray
@@ -158,9 +161,9 @@ const ClinicProfile = () => {
             })
             .catch(error => {
                 console.log("Error:", error);
-                dispatch(show(
-                    show({ message: "Não foi possível conectar serviço", delay: 4000, type: "error" })
-                ));
+                dispatch(
+                    show({ message: "Não foi possível conectar serviço", type: "error" })
+                );
             })
             .finally(() => {
                 setOtherService("");
@@ -174,15 +177,11 @@ const ClinicProfile = () => {
             name: service
         })
             .then(response => {
-                dispatch(show(
-                    show({ message: "Serviço criado!", delay: 4000, type: "info" })
-                ));
+                dispatch(show({ message: "Serviço criado!", type: "info" }));
             })
             .catch(error => {
                 console.log("Error:", error);
-                dispatch(show(
-                    show({ message: "Não foi possível criar serviço", delay: 4000, type: "error" })
-                ));
+                dispatch(show({ message: "Não foi possível criar serviço", type: "error" }));
             })
     }
 
@@ -200,9 +199,7 @@ const ClinicProfile = () => {
                 }));
             })
             .catch(error =>
-                dispatch(show(
-                    show({ message: "Não foi possível conectar serviço", delay: 4000, type: "error" })
-                )))
+                dispatch(show({ message: "Não foi possível conectar serviço", type: "danger" })))
     }
 
     function addService() {
