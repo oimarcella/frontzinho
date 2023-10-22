@@ -1,6 +1,6 @@
 import { Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { BodyStyled, HeaderStyled, ServicesTags, ProfileClinicPageStyled } from "./styles";
-import { Add, Check, Edit, Store } from "@material-ui/icons";
+import { Add, Check, Close, Edit, Store } from "@material-ui/icons";
 import { useParams } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import api from "../../services/api";
@@ -79,8 +79,6 @@ const ClinicProfile = () => {
                 setLoading(false);
             })
 
-        //console.log("CLínica:", clinic.address)
-        console.log("URL:", `https://api.opencagedata.com/geocode/v1/json?q=${clinic.address}`) //&key=${import.meta.env.VITE_REACT_APP_GEOCODINGAPI_KEY}
 
         clinic.address &&
             axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${clinic.address}&key=${import.meta.env.VITE_REACT_APP_GEOCODINGAPI_KEY}`)
@@ -122,35 +120,53 @@ const ClinicProfile = () => {
         setIsOpen(true);
     };
 
-    useEffect(() => {
+    function getServices() {
         api.get("/services")
             .then(response => {
                 setServices(response.data);
+                response = response.data;
             })
             .catch(error => {
                 console.log("Error:", error);
             });
+    }
+
+    useEffect(() => {
+        getServices();
     }, [userLogged.role, otherService])
 
-    function connectServiceAndClinic(service: string) {
-        api.post(`/services/${userLogged.id}`, {
-            name: service
+    function connectServiceAndClinic(service: number) {
+        console.log("conectar-serviço")
+
+        api.post(`${ERoutes.CLINIC}/conectar-serviço`, {
+            clinica: userLogged.id,
+            servico: service
         })
             .then(response => {
                 dispatch(show(
                     show({ message: "Serviço adicionado!", delay: 4000, type: "success" })
                 ));
+
+                if (!clinic.services) {
+                    clinic.services = [];
+                }
+                const newServicesArray = [...clinic.services, { name: otherService, id: service }];
+                setClinic(prev => ({
+                    ...prev,
+                    services: newServicesArray
+                }));
             })
             .catch(error => {
                 console.log("Error:", error);
                 dispatch(show(
-                    show({ message: "Não foi possível adicionar serviço", delay: 4000, type: "error" })
+                    show({ message: "Não foi possível conectar serviço", delay: 4000, type: "error" })
                 ));
             })
             .finally(() => {
+                setOtherService("");
                 setIsOpenModal(false);
                 setServiceSelected(0);
-            });
+            })
     }
 
     function createNewService(service: string) {
@@ -168,26 +184,54 @@ const ClinicProfile = () => {
                     show({ message: "Não foi possível criar serviço", delay: 4000, type: "error" })
                 ));
             })
-            .finally(() => {
-                setOtherService("");
-                setIsOpenModal(false);
-                setServiceSelected(0);
-                setIsOpenModal(true);
+    }
+
+    function deleteServiceFromClinic(id: number) {
+        api.delete("/clinicas/conectar-serviço", { data: { clinica: userLogged.id, servico: id } })
+            .then(response => {
+
+                if (!clinic.services) {
+                    clinic.services = [];
+                }
+                const updatedArr = clinic.services.filter(service => service.id != id);
+                setClinic(prev => ({
+                    ...prev,
+                    services: updatedArr
+                }));
             })
+            .catch(error =>
+                dispatch(show(
+                    show({ message: "Não foi possível conectar serviço", delay: 4000, type: "error" })
+                )))
     }
 
     function addService() {
         const serviceFound = services.find(service => {
             if (Number(serviceSelected) === service.id)
                 return service.name;
-        })?.name || otherService;
+        })?.id || otherService;
 
         if (!otherService) {
-            connectServiceAndClinic(serviceFound);
+            if (typeof serviceFound === "number")
+                connectServiceAndClinic(serviceFound);
         }
         else { /*Se o serviço não existir na lista, a clínica pode criar*/
-            createNewService(serviceFound);
-            connectServiceAndClinic(serviceFound);
+            if (typeof serviceFound === "string") {
+                createNewService(`${serviceFound}`);
+
+                api.get("/services")
+                    .then(response => {
+                        setServices(response.data);
+                        const newService = response.data.find(
+                            (service: { name: string, id: number }) =>
+                                otherService === service.name
+                        );
+                        newService && connectServiceAndClinic(newService.id);
+                    })
+                    .catch(error => {
+                        console.log("Error:", error);
+                    });
+            }
         }
 
     }
@@ -236,6 +280,7 @@ const ClinicProfile = () => {
                         {
                             serviceSelected === services.length + 1 &&
                             <Form.Control type="text" placeholder="Digite..." value={otherService}
+                                className="mt-3"
                                 onChange={(e) => setOtherService(e.target.value)}
                             />
                         }
@@ -264,7 +309,9 @@ const ClinicProfile = () => {
                                         {
                                             clinic.services && clinic.services.length > 0 &&
                                             clinic.services.map(service =>
-                                                <span key={service.name} className="d-flex align-items-center">{service.name}</span>
+                                                <span key={service.name} className="d-flex align-items-center">{service.name}
+                                                    <Close style={{ cursor: "pointer" }} onClick={() => deleteServiceFromClinic(service.id)} />
+                                                </span>
                                             )
                                         }
                                         {
