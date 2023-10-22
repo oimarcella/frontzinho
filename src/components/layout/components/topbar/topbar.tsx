@@ -100,6 +100,7 @@ const TopBarComponent = () => {
 														defaultMessage="Perfil"
 													/>
 											</NavLinkStyled>*/}
+
 											<NavLinkStyled as={Link} to={`${ERoutes.PANEL}`}>
 												<FormattedMessage
 													id="topbar_panel_link"
@@ -112,7 +113,14 @@ const TopBarComponent = () => {
 														id="topbar_historic_link"
 														defaultMessage="Linha do tempo"
 													/>
-												</NavLinkStyled>}
+												</NavLinkStyled>
+											}
+											{
+												userLogged.role === "clinica" &&
+												<NavLinkStyled as={Link} to={`${ERoutes.CLINIC}/${userLogged.id}`}>
+													Minha clínica
+												</NavLinkStyled>
+											}
 										</>
 									}
 								</div>

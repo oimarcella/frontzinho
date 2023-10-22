@@ -1,6 +1,6 @@
-import { Container } from "react-bootstrap";
+import { Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { BodyStyled, HeaderStyled, ServicesTags, ProfileClinicPageStyled } from "./styles";
-import { Store } from "@material-ui/icons";
+import { Add, Store } from "@material-ui/icons";
 import { useParams } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import api from "../../services/api";
@@ -17,9 +17,17 @@ import {
 import axios from "axios";
 import { ContentCopy } from "@mui/icons-material";
 import MToolTip from "../../components/layout/components/mtooltip";
+import Button from "../../components/layout/components/button/button";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../../redux/userSlice";
+import { show } from "../../redux/toastSlice";
 
 type RouteParamsT = {
     clinicId: string;
+}
+type ServicesT = {
+    id: number;
+    name: string;
 }
 
 type ClinicT = {
@@ -37,7 +45,6 @@ type ClinicT = {
 const ClinicProfile = () => {
     const routeParams = useParams<RouteParamsT>();
     const [clinic, setClinic] = useState<ClinicT>({} as ClinicT);
-    console.log("🚀 ~ file: index.tsx:40 ~ ClinicProfile ~ clinic:", clinic)
     const [loading, setLoading] = useState(false);
     const [localization, setLocalization] = useState<{ address: string, lat: number, lng: number }>({} as { address: string, lat: number, lng: number });
     const markers = [localization];
@@ -45,9 +52,16 @@ const ClinicProfile = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [infoWindowData, setInfoWindowData] = useState<{ id: any, address: any }>();
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${localization.address}&key=${import.meta.env.VITE_REACT_APP_GOOGLE_API_KEY}`;
-    //const center = useMemo(() => ({ lat: localization.lat, lng: localization.lng }), []); //Starts with clinic cordinators
     const [zoom, setZoom] = useState(10);
     const [copied, setCopied] = useState(false);
+
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [serviceSelected, setServiceSelected] = useState(0);
+    const [services, setServices] = useState<Array<ServicesT>>([]);
+    const userLogged = useSelector(selectUser);
+    const dispatch = useDispatch();
+    const [newService, setNewService] = useState("");
+    const [otherService, setOtherService] = useState("");
 
     useEffect(() => {
         console.clear()
@@ -105,8 +119,108 @@ const ClinicProfile = () => {
         setIsOpen(true);
     };
 
+    useEffect(() => {
+        if (userLogged.role === "user") {
+            api.get("/services")
+                .then(response => {
+                    setServices(response.data);
+                })
+                .catch(error => {
+                    console.log("Error:", error);
+                });
+        }
+    }, [userLogged.role, otherService])
+
+    function connectServiceAndClinic(service: string) {
+        api.post(`/services/${userLogged.id}`, {
+            name: service
+        })
+            .then(response => {
+                dispatch(show(
+                    show({ message: "Serviço adicionado!", delay: 4000, type: "success" })
+                ));
+            })
+            .catch(error => {
+                console.log("Error:", error);
+                dispatch(show(
+                    show({ message: "Não foi possível adicionar serviço", delay: 4000, type: "error" })
+                ));
+            })
+            .finally(() => {
+                setIsOpenModal(false);
+                setServiceSelected(0);
+            });
+    }
+
+    function createNewService(service: string) {
+        api.post(`/services`, {
+            name: service
+        })
+            .then(response => {
+                dispatch(show(
+                    show({ message: "Serviço criado!", delay: 4000, type: "info" })
+                ));
+            })
+            .catch(error => {
+                console.log("Error:", error);
+                dispatch(show(
+                    show({ message: "Não foi possível criar serviço", delay: 4000, type: "error" })
+                ));
+            })
+            .finally(() => {
+                setOtherService("");
+                setIsOpenModal(false);
+                setServiceSelected(0);
+                setIsOpenModal(true);
+            })
+    }
+
+    function addService() {
+        const serviceFound = services.find(service => {
+            if (Number(serviceSelected) === service.id)
+                return service.name;
+        })?.name || otherService;
+
+        if (!otherService) {
+            connectServiceAndClinic(serviceFound);
+        }
+        else { /*Se o serviço não existir na lista, a clínica pode criar*/
+            createNewService(serviceFound);
+            connectServiceAndClinic(serviceFound);
+        }
+
+    }
+
     return (
         <ProfileClinicPageStyled>
+            <Modal show={isOpenModal} onHide={() => setIsOpenModal(false)}>
+                <Modal.Header>Adicione um novo serviço a sua clínica</Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Row>
+                            <Col>
+                                <Form.Select aria-label="Selecione a clínica para conectar seu pet aqui"
+                                    value={serviceSelected}
+                                    onChange={(e) => setServiceSelected(Number(e.target.value))}
+                                >
+                                    <option value={0}>Qual o novo serviço da clínica?</option>
+                                    {services.map(service => <option key={service.id} value={service.id}>{service.name}</option>)}
+                                    <option value={services.length + 1}>Outro não listado</option>
+                                </Form.Select>
+                            </Col>
+                        </Row>
+                        {
+                            serviceSelected === services.length + 1 &&
+                            <Form.Control type="text" placeholder="Digite..." value={otherService}
+                                onChange={(e) => setOtherService(e.target.value)}
+                            />
+                        }
+                        <Button className="mt-3" color="#FF41AD" outlined="none" type="button" onClick={() => addService()}>
+                            Adicionar
+                        </Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
             {loading ?
                 <Loading />
                 :
@@ -122,12 +236,30 @@ const ClinicProfile = () => {
                                     </span>
                                 </div>
                                 <ServicesTags className="d-flex flex-wrap">
-                                    {
-                                        clinic.services && clinic.services.length > 0 &&
-                                        clinic.services.map(service =>
-                                            <span key={service.name} className="d-flex align-items-center">{service.name}</span>
-                                        )
-                                    }
+                                    <>
+                                        {
+                                            clinic.services && clinic.services.length > 0 &&
+                                            clinic.services.map(service =>
+                                                <span key={service.name} className="d-flex align-items-center">{service.name}</span>
+                                            )
+                                        }
+                                        {
+                                            userLogged.role === "clinica" &&
+                                            <span
+                                                key="ADD"
+                                                style={{
+                                                    backgroundColor: "var(--light-blue-100)",
+                                                    color: "var(--dark-blue-500)",
+                                                    border: "1px solid var(--dark-blue-500)",
+                                                    cursor: "pointer"
+                                                }}
+                                                className="d-flex align-items-center"
+                                                onClick={() => setIsOpenModal(true)}
+                                            >
+                                                <Add /> Adicionar
+                                            </span>}
+
+                                    </>
                                 </ServicesTags>
                             </Container>
                         </Section>
@@ -190,7 +322,7 @@ const ClinicProfile = () => {
                     </BodyStyled>
                 </>
             }
-        </ProfileClinicPageStyled>
+        </ProfileClinicPageStyled >
     )
 }
 
