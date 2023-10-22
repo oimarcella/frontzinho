@@ -123,15 +123,13 @@ const ClinicProfile = () => {
     };
 
     useEffect(() => {
-        if (userLogged.role === "user") {
-            api.get("/services")
-                .then(response => {
-                    setServices(response.data);
-                })
-                .catch(error => {
-                    console.log("Error:", error);
-                });
-        }
+        api.get("/services")
+            .then(response => {
+                setServices(response.data);
+            })
+            .catch(error => {
+                console.log("Error:", error);
+            });
     }, [userLogged.role, otherService])
 
     function connectServiceAndClinic(service: string) {
