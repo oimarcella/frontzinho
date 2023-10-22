@@ -327,7 +327,7 @@ const ClinicProfile = () => {
                                         </Form>
                                     }
 
-                                    <div style={{ height: "80vw", width: "80vw" }}>
+                                    <div style={{ height: "60vw", width: "60vw" }}>
                                         {(!isLoaded && loading) ? (
                                             <h1>Buscando mapa...</h1>
                                         ) : (isLoaded && !loading) ? (
