@@ -1,6 +1,6 @@
 import { Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { BodyStyled, HeaderStyled, ServicesTags, ProfileClinicPageStyled } from "./styles";
-import { Add, Store } from "@material-ui/icons";
+import { Add, Check, Edit, Store } from "@material-ui/icons";
 import { useParams } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import api from "../../services/api";
@@ -39,7 +39,7 @@ type ClinicT = {
     cnpj: string;
     zip_code: string;
     id: number;
-    services: Array<{ id: number, name: string }>;
+    services?: Array<{ id: number, name: string }>;
 }
 
 const ClinicProfile = () => {
@@ -62,6 +62,9 @@ const ClinicProfile = () => {
     const dispatch = useDispatch();
     const [newService, setNewService] = useState("");
     const [otherService, setOtherService] = useState("");
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [formEdit, setFormEdit] = useState({} as ClinicT);
 
     useEffect(() => {
         console.clear()
@@ -191,6 +194,29 @@ const ClinicProfile = () => {
 
     }
 
+    function saveAddress() {
+        api.put(`/clinicas/${userLogged.id}`, formEdit)
+            .then(response => {
+                setClinic(prev => ({ ...formEdit, name: prev.name }));
+                setFormEdit({} as ClinicT);
+                setIsEditing(false);
+                dispatch(show({ type: "success", message: "Endereço alterado" }));
+            })
+            .catch(error => {
+                dispatch(show({ type: "error", message: "Não foi possível alterar endereço" }));
+                setFormEdit({} as ClinicT);
+                setIsEditing(false);
+            })
+    }
+
+    const handleFieldChange = (field: string, value: any, changeFunc: Function) => {
+        //@ts-ignore
+        changeFunc(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
     return (
         <ProfileClinicPageStyled>
             <Modal show={isOpenModal} onHide={() => setIsOpenModal(false)}>
@@ -268,15 +294,38 @@ const ClinicProfile = () => {
                         <Section>
                             <Container>
                                 <div className="d-flex flex-column mb-4">
-                                    <h3 className="mb-3">Endereço</h3>
-                                    <div className="d-flex align-items-center">
-                                        <p className="me-4">{clinic.address}, {clinic.neighborhood}, nº {clinic.number} CEP {clinic.zip_code}</p>
+                                    <h3 className="mb-3">Endereço
+                                        {
+                                            userLogged.role === "clinica" &&
+                                            <>
+                                                {!isEditing ?
+                                                    <Edit className="ms-3" onClick={() => setIsEditing(true)} />
+                                                    :
+                                                    <Check style={{ color: "green", cursor: "pointer" }} className="ms-3" onClick={() => saveAddress()} />
+                                                }
+                                            </>
+                                        }
+                                    </h3>
+                                    {!isEditing ?
+                                        <>
+                                            <div className="d-flex align-items-center">
+                                                <p className="me-4">{clinic.address}, {clinic.neighborhood}, nº {clinic.number} CEP {clinic.zip_code}</p>
 
-                                        <MToolTip title="Copiar" id="copiar" className="d-flex justify-content-center align-items-center flex-column">
-                                            <ContentCopy onClick={copyAddress} />
-                                            {copied && <small style={{ color: "green" }}>Copiado!</small>}
-                                        </MToolTip>
-                                    </div>
+                                                <MToolTip title="Copiar" id="copiar" className="d-flex justify-content-center align-items-center flex-column">
+                                                    <ContentCopy onClick={copyAddress} />
+                                                    {copied && <small style={{ color: "green" }}>Copiado!</small>}
+                                                </MToolTip>
+                                            </div>
+                                        </> :
+                                        <Form className="mb-4">
+                                            <Row>
+                                                <Form.Control placeholder="Rua" onChange={e => handleFieldChange("address", e.target.value, setFormEdit)} value={formEdit.address} />
+                                                <Form.Control placeholder="Número" onChange={e => handleFieldChange("number", e.target.value, setFormEdit)} value={formEdit.number} />
+                                                <Form.Control placeholder="Bairro" onChange={e => handleFieldChange("neighborhood", e.target.value, setFormEdit)} value={formEdit.neighborhood} />
+                                                <Form.Control placeholder="CEP" onChange={e => handleFieldChange("zip_code", e.target.value, setFormEdit)} value={formEdit.zip_code} />
+                                            </Row>
+                                        </Form>
+                                    }
 
                                     <div style={{ height: "80vw", width: "80vw" }}>
                                         {(!isLoaded && loading) ? (

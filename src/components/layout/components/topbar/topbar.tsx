@@ -92,7 +92,8 @@ const TopBarComponent = () => {
 								<div className="d-flex flex-column flex-lg-row">
 									{currentRoute !== "/not-found" &&
 										<>
-											{/* MENUS DO USUÁRIO LOGADO */}
+											{/* ********* MENUS DO USUÁRIO LOGADO ******** */}
+
 											{/*userLogged.role !== "vet" &&
 												<NavLinkStyled as={Link} to={ERoutes.PROFILE}>
 													<FormattedMessage
