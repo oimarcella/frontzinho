@@ -45,9 +45,9 @@ const AppRoutes = () => {
         <Route path={ERoutes.HOME} element={<HomePage />} />
         <Route path={ERoutes.ABOUT_US} element={<AboutUsPage />} />
         <Route path={ERoutes.SIGNUP} element={<SignUpPage />} />
+        <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
         <Route element={<PrivateRoute />}>
           <Route path={ERoutes.PROFILE} element={<MyAccount />} />
-          <Route path={ERoutes.DISCOVER} element={<DiscoverPage />} />
           <Route path={ERoutes.PANEL} element={<PanelPage />} />
           <Route path={`${ERoutes.CLINIC}/:clinicId`} element={<ClinicProfile />} />
           <Route path={`${ERoutes.PET}/:petId`} element={<ProfilePetPage />} />
