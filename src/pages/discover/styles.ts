@@ -10,9 +10,32 @@ export const WrapperPage = styled.div`
     }
 `;
 
-export const Hero = styled.div`
+export const HeaderStyled = styled.div`
     //height: 100vh;
     background: var(--light-blue-100);
+
+    h3{
+        font-weight: 400;
+        text-align: center;
+    }
+    p{
+        text-align: center;
+    }
+
+    img{
+        border-radius: none;
+        box-shadow: none;
+        width: 10%;
+
+        @media (max-width: 1000px) {
+            width: 30%;
+        }
+    }
+
+`;
+export const HeroStyled = styled.div`
+    //height: 100vh;
+    background: #fff;
 
     h6, h4{
         font-weight: bolder;

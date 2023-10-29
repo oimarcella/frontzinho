@@ -1,12 +1,28 @@
 import React from "react";
-import { WrapperPage, Hero } from "./styles";
+import { WrapperPage, HeroStyled, HeaderStyled } from "./styles";
 import { Col, Container, Row } from "react-bootstrap";
 import { Section } from "../../components/layout/components/section/sections";
 
 const DiscoverPage = () => {
     return (
         <WrapperPage>
-            <Hero>
+            <HeaderStyled>
+                <Section>
+                    <Container className="d-flex align-items-center flex-md-row flex-column justify-content-center">
+                        <img src="/images/petpass_dark-v1.svg" alt="logo petpass" className="me-md-3 mb-3 mb-0" />
+                        <div>
+                            <h3>
+                                Um sistema para te ajudar no acompanhamento da saúde do seu pet!
+                            </h3>
+                            <p>
+                                Não fique dependente de boletins e consultas para saber oque está acontecendo com seu pet.
+                            </p>
+
+                        </div>
+                    </Container>
+                </Section>
+            </HeaderStyled>
+            <HeroStyled>
                 <Section>
                     <Container>
                         <Row className="d-flex justify-content-center">
@@ -39,8 +55,8 @@ const DiscoverPage = () => {
                         </Row>
                     </Container>
                 </Section>
-            </Hero>
-        </WrapperPage>
+            </HeroStyled>
+        </WrapperPage >
     )
 }
 export default DiscoverPage;
