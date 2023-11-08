@@ -296,7 +296,7 @@ const YourPets = () => {
             <Button color="#FF41AD" outlined="none" type="button" onClick={() => {
                 pet.id && finishEditPet(pet.id)
             }}>
-                Adicionar
+                Salvar
             </Button>
         </Form>
     </>;

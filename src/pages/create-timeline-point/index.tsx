@@ -176,7 +176,7 @@ function CreateNewTimelinePoint() {
                                     :
                                     <Col xs={12} md={3}>
                                         <Form.Group className="mb-3" controlId="clinic">
-                                            <Form.Control value={timelinePoint.clinic} required type="text" placeholder="Clínica x" onChange={e => setTimelinePoint(prev => ({ ...prev, clinic: e.target.value }))} />
+                                            <Form.Control value={timelinePoint.clinic} required type="text" placeholder="Clínica" onChange={e => setTimelinePoint(prev => ({ ...prev, clinic: e.target.value }))} />
                                         </Form.Group>
                                     </Col>
                             }

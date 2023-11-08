@@ -34,7 +34,7 @@ import { ERoutes } from '../../core/enums/routes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { Container } from 'react-bootstrap';
-import { addDays, isSameDay, isSameMonth, isSameWeek, subDays, subMonths, subWeeks } from 'date-fns';
+import { addDays, isSameDay, isSameMonth, isSameWeek, subDays, subHours, subMonths, subWeeks } from 'date-fns';
 import { Add } from '@material-ui/icons';
 import ClinicAds from '../../components/layout/components/clinic-ads';
 import { selectUser } from '../../redux/userSlice';
@@ -239,7 +239,7 @@ export default function HistoryPage() {
         const { dateStyle, timeStyle } = options;
 
         //@ts-ignore
-        return new Date(date).toLocaleString(navigator.language, { dateStyle, timeStyle });
+        return subHours(new Date(date), 3).toLocaleString(navigator.language, { dateStyle, timeStyle });
     }
 
     function getPetById() {
