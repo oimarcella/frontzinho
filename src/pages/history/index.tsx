@@ -400,6 +400,8 @@ export default function HistoryPage() {
     }
 
     async function getPetsByClinicId(clinicId: number) {
+
+        console.log("é clínica recebida ", clinicId)
         const { data } = await api.get(`/clinicas/${clinicId}/pets`);
         setPets(data);
     }
@@ -417,9 +419,11 @@ export default function HistoryPage() {
         }
         else if (userLogged.role === "clinica") {
             // é clínica
+            console.log("aqui", clinicId)
             getPetsByClinicId(userLogged.id);
         }
-        else {
+        else if (userLogged.role === "vet") {
+            console.log('veterinario tambem')
             // é veterinário
             getVetById(userLogged.id);
             getPetsByClinicId(clinicId); //verificar de qual clinica o veterinario
@@ -504,9 +508,9 @@ export default function HistoryPage() {
 
                             <img src={`/images/${pet.specie == "cachorro" ? "dog" : pet.specie == "gato" ? "cat" : "another_animals"}.svg`} />
                             <strong className='name'>{pet.name}</strong>
-                            <small className="mb-4"> Até o momento {pet.name} tem <strong>{steps.filter(step => {
+                            <small className="mb-4"> Até o momento {pet.name} tem <strong>{steps.length > 0 && steps.filter(step => {
                                 if (isSameMonth(new Date(step.created_date), today)) return step
-                            }).length} {steps.filter(step => {
+                            }).length || 0} {steps.length > 0 && steps.filter(step => {
                                 if (isSameMonth(new Date(step.created_date), today)) return step
                             }).length > 1 ? "registros" : "registro"}</strong> na linha do tempo referente a esse mês.</small>
 

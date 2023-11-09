@@ -51,7 +51,6 @@ const ClinicAds = (props: ClinicAdsPropsT) => {
 
         const randomPositions: ClinicT[] = [];
         const copyArr = [...arr];
-        console.clear();
 
         for (let i = 0; i < quantitySolicited; i++) {
             const randomIndex = Math.floor(Math.random() * copyArr.length);
