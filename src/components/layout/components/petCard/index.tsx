@@ -3,9 +3,10 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { CardStyled } from "./styles";
 import { Link, useNavigate } from "react-router-dom";
 import { ERoutes } from "../../../../core/enums/routes";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../redux/userSlice";
+import api from "../../../../services/api";
 
 
 type PetCardT = {
@@ -22,6 +23,7 @@ type PetCardT = {
 const PetCard = ({ pet, index, ...props }: PetCardT) => {
     const navigate = useNavigate();
     const userLogged = useSelector(selectUser);
+    const [petSpecie, setPetSpecie] = useState("");
 
     const generatePastelColor = (index: number) => {
         const baseHue = (index * 137.3) % 360; // Varia o tom da cor com base no índice
@@ -36,6 +38,16 @@ const PetCard = ({ pet, index, ...props }: PetCardT) => {
         </OverlayTrigger>
     );
 
+    useEffect(() => {
+        api.get(`/pets/${pet.id}`)
+            .then(response => {
+                setPetSpecie(response.data.specie);
+            })
+            .catch((error) => {
+                console.log("Não foi possível buscar pelo pet");
+            })
+    }, []);
+
     return (
         <>
             <CardStyled
@@ -43,10 +55,10 @@ const PetCard = ({ pet, index, ...props }: PetCardT) => {
                 className="d-flex flex-column align-items-center justify-content-center"
             >
                 <img
-                    src={`/images/${pet.specie == "cachorro" ?
-                        "dog" : pet.specie == "gato" ?
+                    src={`/images/${petSpecie == "cachorro" ?
+                        "dog" : petSpecie == "gato" ?
                             "cat" : "another_animals"}.svg`}
-                    alt={`${pet.name} - ${pet.specie}`}
+                    alt={`${pet.name} - ${petSpecie}`}
                 />
                 {pet.name}
                 <div className="mt-3 d-flex align-items-center">

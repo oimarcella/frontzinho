@@ -66,9 +66,9 @@ const TopBarComponent = () => {
 			getVetById();
 	}, [userLogged.role])
 
-	useEffect(() => {
+	/* useEffect(() => {
 		getPetsFromIdReceived()
-	}, [userLogged, vet])
+	}, [userLogged, vet])*/
 
 	return (
 		urlParams.get("origin") !== "iframe" ? <NavBarStyled styleMustBeDifferent={styleMustBeDifferent} expand="lg">
@@ -108,14 +108,15 @@ const TopBarComponent = () => {
 													defaultMessage="Início"
 												/>
 											</NavLinkStyled>
-											{pets.length > 0 &&
+											{/*
+											pets.length > 0 &&
 												<NavLinkStyled as={Link} to={`${ERoutes.TIMELINE}/${pets[0].id}`}>
 													<FormattedMessage
 														id="topbar_historic_link"
 														defaultMessage="Linha do tempo"
 													/>
 												</NavLinkStyled>
-											}
+										*/}
 											{
 												userLogged.role === "clinica" &&
 												<NavLinkStyled as={Link} to={`${ERoutes.CLINIC}/${userLogged.id}`}>

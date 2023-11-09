@@ -2,7 +2,7 @@ import { Card, Container } from "react-bootstrap";
 import styled from "styled-components";
 
 export const PagePanel = styled.div`
-    height: 100vh;
+    //height: 100vh;
     padding: 40px 0;
 `;
 
