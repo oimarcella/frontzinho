@@ -335,7 +335,7 @@ export default function HistoryPage() {
         switch (filter) {
             case "TODAY": {
                 setFilteredSteps(steps.filter(step => {
-                    if (isSameDay(new Date(step.created_date), today)) {
+                    if (isSameDay(subHours(new Date(step.created_date), 3), today)) {
                         return step
                     }
                 }));
@@ -343,7 +343,7 @@ export default function HistoryPage() {
             }
             case "YESTERDAY": {
                 setFilteredSteps(steps.filter(step => {
-                    if (isSameDay(new Date(step.created_date), subDays(today, 1))) {
+                    if (isSameDay(subHours(new Date(step.created_date), 3), subDays(today, 1))) {
                         return step
                     }
                 }));
@@ -351,25 +351,25 @@ export default function HistoryPage() {
             }
             case "THIS_WEEK": {
                 setFilteredSteps(steps.filter(step => {
-                    if (isSameWeek(new Date(step.created_date), today)) return step
+                    if (isSameWeek(subHours(new Date(step.created_date), 3), today)) return step
                 }));
                 break;
             }
             case "LAST_WEEK": {
                 setFilteredSteps(steps.filter(step => {
-                    if (isSameWeek(new Date(step.created_date), subWeeks(today, 1))) return step
+                    if (isSameWeek(subHours(new Date(step.created_date), 3), subWeeks(today, 1))) return step
                 }));
                 break;
             }
             case "THIS_MONTH": {
                 setFilteredSteps(steps.filter(step => {
-                    if (isSameMonth(new Date(step.created_date), today)) return step
+                    if (isSameMonth(subHours(new Date(step.created_date), 3), today)) return step
                 }));
                 break;
             }
             case "LAST_MONTH": {
                 setFilteredSteps(steps.filter(step => {
-                    if (isSameMonth(new Date(step.created_date), subMonths(today, 1))) return step
+                    if (isSameMonth(subHours(new Date(step.created_date), 3), subMonths(today, 1))) return step
                 }));
                 break;
             }
