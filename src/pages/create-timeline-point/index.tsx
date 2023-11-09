@@ -40,9 +40,20 @@ function CreateNewTimelinePoint() {
     const [clinica, setClinica] = useState({} as { name: string | null });
 
     async function send() {
+        const body = { ...timelinePoint };
+
+        if (userLogged.role === "user" && !timelinePoint.vet) {
+            Object.assign(body, { vet: "-" });
+        }
+        if (userLogged.role === "user" && !timelinePoint.clinic) {
+            Object.assign(body, { clinic: "-" });
+        }
+
+        console.log(body)
+
         try {
             const { data } = await api.post(`/pets/${params.petId}/timeline`, {
-                ...timelinePoint,
+                ...body,
                 created_by_id: userLogged.id,
                 created_by_role: userLogged.role,
             });
@@ -144,9 +155,14 @@ function CreateNewTimelinePoint() {
                                             placeholder="Veterinário"
                                             onChange={e => setTimelinePoint(prev => ({ ...prev, vet: e.target.value }))} />
                                         :
-                                        <Form.Control value={timelinePoint.vet} required type="text"
-                                            placeholder="Veterinário"
-                                            onChange={e => setTimelinePoint(prev => ({ ...prev, vet: e.target.value }))} />
+                                        userLogged.role === "clinica" ?
+                                            <Form.Control value={timelinePoint.vet} required type="text"
+                                                placeholder="Veterinário"
+                                                onChange={e => setTimelinePoint(prev => ({ ...prev, vet: e.target.value }))} />
+                                            :
+                                            <Form.Control value={timelinePoint.vet} type="text"
+                                                placeholder="Veterinário"
+                                                onChange={e => setTimelinePoint(prev => ({ ...prev, vet: e.target.value }))} />
                                     }
                                 </Form.Group>
                             </Col>
@@ -176,7 +192,7 @@ function CreateNewTimelinePoint() {
                                     :
                                     <Col xs={12} md={3}>
                                         <Form.Group className="mb-3" controlId="clinic">
-                                            <Form.Control value={timelinePoint.clinic} required type="text" placeholder="Clínica" onChange={e => setTimelinePoint(prev => ({ ...prev, clinic: e.target.value }))} />
+                                            <Form.Control value={timelinePoint.clinic} type="text" placeholder="Clínica" onChange={e => setTimelinePoint(prev => ({ ...prev, clinic: e.target.value }))} />
                                         </Form.Group>
                                     </Col>
                             }
